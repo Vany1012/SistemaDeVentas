@@ -7,3 +7,5 @@ const inventarioSchema = new mongoose.Schema(
         activo: {type: Boolean, default: true}
 
 })
+
+module.exports = mongoose.model('Inventario', inventarioSchema);

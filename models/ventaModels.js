@@ -7,3 +7,4 @@ const ventaSchema = new mongoose.Schema(
        listaProductos: {type:[String], default: []}
 
 })
+module.exports = mongoose.model('Venta', ventaSchema);
