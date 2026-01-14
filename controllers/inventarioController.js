@@ -38,9 +38,7 @@ exports.deleteProducto = async (req, res, next) => {
     }
 };
 
-const inventario = require('../models/inventariosModels');
-
-exports.inventario = async (req, res) => {
+exports.verInventario = async (req, res) => {
 	try {
 		const productos = await inventario.find();
 		res.json(productos);
