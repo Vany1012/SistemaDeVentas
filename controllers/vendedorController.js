@@ -5,7 +5,7 @@ const generateToken = (id, rol) => {
 
 exports.registrarVentas = async (req, res) => {
     try {
-        const venta = new Venta(req.body);
+        const venta = new venta(req.body);
         await venta.save();
         res.status(201).json({ message: 'Venta registrada exitosamente' });
     } catch (error) {
@@ -15,8 +15,8 @@ exports.registrarVentas = async (req, res) => {
 ///
 exports.registrarVentas = async (req, res) => {
     try {
-        const { id, fecha, nombrevendedor, listaProductos, cantidadProductos, total } = new Venta(req.body);
-        const exist = await Venta.findOne({ id });
+        const { id, fecha, nombrevendedor, listaProductos, cantidadProductos, total } = new venta(req.body);
+        const exist = await venta.findOne({ id });
         if (exist) {
             return res.status(400).json({ message: 'La venta ya existe' });
         }
