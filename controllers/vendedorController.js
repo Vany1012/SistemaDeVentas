@@ -41,6 +41,3 @@ exports.loginVendedor = async (req, res) => {
         res.status(401).json({message: 'credenciales incorrectas'})
     }
 };
-
-
- 
