@@ -5,7 +5,6 @@ const inventarioSchema = new mongoose.Schema(
         stock: {type: Number, required: true, min: 0},
         categoria: {type: String, required: true, trim: true},
         activo: {type: Boolean, default: true}
-
-})
+    })
 
 module.exports = mongoose.model('Inventario', inventarioSchema);
