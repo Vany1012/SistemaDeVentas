@@ -1,14 +1,14 @@
 const vendedor = require('../models/vendedorModels');
 const jwt = require('../models/vendedorModels');
 
-const generateToken = (role) => {
+const generateToken = (role, vendedorId) => {
     return jwt.sign({role}, process.env.JWT_SECRET, {expiresIn: '8h'});
 };
 
 exports.registerVendedor = async(req, res) =>{
     try{
         if (vendedor.role === 'admin'){
-            const{vendedorName, email, password, role} = req.body;
+            const{vendedorName, email, password, role, vendedorId} = req.body;
             const exist = await vendedor.findOne({email});
             if (exist){
                 return res.status(400).json({message: 'vendedor ya existente'})
@@ -31,9 +31,10 @@ exports.loginVendedor = async (req, res) => {
     console.log(req.vendedor)
     if (vendedor && (await vendedor.matchPassword(password))){
         res.json({
+            vendedorId: vendedor.vendedorId,
             vendedorName : vendedor.vendedorName,
             email: vendedor.email,
-            token: generateToken(vendedor.role),
+            token: generateToken(vendedor.role, vendedor.vendedorId),
             role: vendedor.role
         });
     }else {
