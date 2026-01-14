@@ -27,3 +27,20 @@ exports.registrarVentas = async (req, res) => {
     }
 };
 ///
+
+exports.inventario = async ( req, res ) => {
+    const { email, password } = req.body;
+    const user = await User.findOne ( { email } );
+    if ( user && (await user.matchPassword(password)) ) {
+        res.json ( {
+            _id: user._id,
+            nombre: user.nombre,
+            precio: user.precio,
+            stock: user.stock,
+            categoria: user.categoria,
+            activo: user.activo,
+        } );
+    } else {
+        res.status(401).json( { message: `Wrong credentials` } );
+    }
+};
