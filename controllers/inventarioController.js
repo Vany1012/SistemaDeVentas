@@ -1,6 +1,6 @@
 const Producto = require('../models/inventariosModels');
 
-exports.createProducto = async(req, res, next) =>{
+exports.crearProducto = async(req, res, next) =>{
     try{
         if(req.user.role === req.role && req.role === "admin"){
             const {idProducto, nombre, precio, stock, categoria, activo} = req.body;
@@ -18,7 +18,7 @@ exports.createProducto = async(req, res, next) =>{
     };
 };
 
-exports.deleteProducto = async (req, res, next) => {
+exports.eliminarProducto = async (req, res, next) => {
     try{
         if(req.user.role === req.role && req.role === "admin"){
             const {idProducto} = req.query; //Obtenemos el id del producto
@@ -33,6 +33,22 @@ exports.deleteProducto = async (req, res, next) => {
         }else{
             res.status(401).json({message: 'El vendedor no es admin'});
         }
+    }catch(err){
+        next(err);
+    }
+};
+
+exports.editarProductoPorId = async (req, res, next) => {
+    try{
+        const {q} = req.query; //Obtenemos el id
+        if (!q || q===''){
+        return res.status(400).json({massage: `Necesitas ingresar un ID de producto`})}
+        
+        const producto = await Producto.findOneAndUpdate({idProducto:q, active:true},req.body,{new_: true, runValidators: true})
+        if (!producto){
+            return res.status(404).json({message:`Producto no encontrado por favor revisa si el ID de tu producto es correcto`})}
+
+        res.json(producto)
     }catch(err){
         next(err);
     }
