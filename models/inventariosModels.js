@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const inventarioSchema = new mongoose.Schema(
     {
         idProducto: {type:String, required: true, unique: true},

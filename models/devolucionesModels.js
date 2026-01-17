@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const devolucionSchema = new mongoose.Schema({
     id_venta: { type: mongoose.Schema.Types.ObjectId, ref: 'Venta', required: true },
     id_producto: { type: mongoose.Schema.Types.ObjectId, ref: 'Producto', required: true },

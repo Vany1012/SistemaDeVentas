@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const ventaSchema = new mongoose.Schema(
     {
        fecha: {type: Date, required: true},

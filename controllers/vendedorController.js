@@ -1,35 +1,53 @@
-const vendedor = require('../models/vendedorModels');
-const jwt = require('../models/vendedorModels');
+const Vendedor = require('../models/vendedorModels');
+const jwt = require ('jsonwebtoken');
 
 const generateToken = (role, vendedorId) => {
-    return jwt.sign({role}, process.env.JWT_SECRET, {expiresIn: '8h'});
+    return jwt.sign({role, vendedorId}, process.env.JWT_SECRET, {expiresIn: '1h'});
 };
 
-exports.registerVendedor = async(req, res) =>{
-    try{
-        if (vendedor.role === 'admin'){
-            const{vendedorName, email, password, role, vendedorId} = req.body;
-            const exist = await vendedor.findOne({email});
-            if (exist){
-                return res.status(400).json({message: 'vendedor ya existente'})
-            }
-            const vendedor = await vendedor.create({vendedorName, email, password, role});
-            res.status(201);
+exports.registerVendedor = async (req, res) => {
+    try {
+        const countVendedores = await Vendedor.countDocuments();
+        const isFirstAdmin = countVendedores === 0;
 
-        }else{
-            res.status(401).json({message: 'el vendedor no tiene acceso '})
+        if (!isFirstAdmin && req.vendedor?.role !== 'admin') {
+            return res.status(401).json({ message: 'No tienes permisos de administrador' });
         }
 
-    }catch(e){
-        res.status(500).json({message: 'Error'})
+        const { vendedorName, email, password, role, vendedorId, active } = req.body;
+
+        const exist = await Vendedor.findOne({ email });
+        if (exist) {
+            return res.status(400).json({ message: 'Vendedor ya existente' });
+        }
+
+        const nuevoVendedor = await Vendedor.create({
+            vendedorName,
+            email,
+            password,
+            role: isFirstAdmin ? 'admin' : role, 
+            vendedorId,
+            active
+        });
+
+        res.status(201).json({
+            vendedorName: nuevoVendedor.vendedorName,
+            vendedorId: nuevoVendedor.vendedorId,
+            role: nuevoVendedor.role,
+            email: nuevoVendedor.email,
+            token: generateToken(nuevoVendedor.role, nuevoVendedor.vendedorId)
+        });
+
+    } catch (e) {
+        res.status(500).json({ message: `Error: ` + e.message });
     }
 };
 
 exports.loginVendedor = async (req, res) => {
     const{email,password} = req.body;
-    const vendedor = await vendedor.findOne({email});
+    const vendedor = await Vendedor.findOne({email});
     console.log(req.vendedor)
-    if (vendedor && (await vendedor.matchPassword(password))){
+    if (vendedor && (await vendedor.matchPassword(password)) ){
         res.json({
             vendedorId: vendedor.vendedorId,
             vendedorName : vendedor.vendedorName,
@@ -41,3 +59,9 @@ exports.loginVendedor = async (req, res) => {
         res.status(401).json({message: 'credenciales incorrectas'})
     }
 };
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njg2MTgxNTksImV4cCI6MTc2ODY0Njk1OX0.e1Eva1jf5RjiICvFbuAk-7ll-WNMHjTyBFZBxFKMbZk
+//
+// 
+            //
+       // }

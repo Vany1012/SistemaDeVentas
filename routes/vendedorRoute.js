@@ -3,10 +3,11 @@ const express = require('express');
 const {registerVendedor, loginVendedor} = require('../controllers/vendedorController');
 const vendedorRouter = express.Router();
 
-const {protect, authorizeRoles} = require('../middleware/vendedorMiddleware');
+const {protect} = require('../middleware/vendedorMiddleware');
 
 //instanciamos el router y declaramos dos rutas, login y register.
-vendedorRouter.post('/register', protect, registerVendedor);
+vendedorRouter.route('/register')
+.post(protect, registerVendedor);
 vendedorRouter.post('/login', loginVendedor);
 
 //exportamos router
