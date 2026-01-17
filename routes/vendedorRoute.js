@@ -7,7 +7,7 @@ const {protect} = require('../middleware/vendedorMiddleware');
 
 //instanciamos el router y declaramos dos rutas, login y register.
 vendedorRouter.route('/register')
-.post(protect, registerVendedor);
+.post(registerVendedor);
 vendedorRouter.post('/login', loginVendedor);
 
 //exportamos router
