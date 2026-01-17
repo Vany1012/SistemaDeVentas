@@ -1,7 +1,6 @@
 {
   "name": "sistemadeventas",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -26,5 +25,6 @@
   "bugs": {
     "url": "https://github.com/Vany1012/SistemaDeVentas/issues"
   },
-  "homepage": "https://github.com/Vany1012/SistemaDeVentas#readme"
+  "homepage": "https://github.com/Vany1012/SistemaDeVentas#readme",
+  "description": ""
 }

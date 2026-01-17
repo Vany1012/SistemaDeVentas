@@ -11,9 +11,7 @@ const vendedorSchema = new mongoose.Schema({
     active: { type: Boolean, default: true }
 });
 
-// USANDO PROMESAS (Sin el parámetro next para evitar el TypeError)
 vendedorSchema.pre('save', async function () {
-    // Si el password no se modificó, no hacemos nada (Mongoose entiende el return en funciones async)
     if (!this.isModified('password')) {
         return;
     }
@@ -29,4 +27,3 @@ vendedorSchema.methods.matchPassword = async function (enteredPassword) {
 
 module.exports = mongoose.model('vendedor', vendedorSchema);
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJ2ZW5kZWRvcklkIjoiNzg5IiwiaWF0IjoxNzY4NjIyMzQ3LCJleHAiOjE3Njg2NTExNDd9.tS5ZPWct58_3Wmk9f1Dx1ni8KqnvVtnC4ymgLy4BTr4

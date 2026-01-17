@@ -8,7 +8,7 @@ exports.protect = async (req, res, next) => {
         try{
             const token = req.headers.authorization.split(' ')[1];
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.vendedor = await Vendedor.findOne({vendedorId:decoded.vendedorId}).select('-password');
+            req.vendedor = await Vendedor.findById(decoded.id).select('-password');
             req.role = decoded.role
 
             next();

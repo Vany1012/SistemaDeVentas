@@ -1,8 +1,8 @@
 const Vendedor = require('../models/vendedorModels');
 const jwt = require ('jsonwebtoken');
 
-const generateToken = (role, vendedorId) => {
-    return jwt.sign({role, vendedorId}, process.env.JWT_SECRET, {expiresIn: '1h'});
+const generateToken = (role, id) => {
+    return jwt.sign({role, id}, process.env.JWT_SECRET, {expiresIn: '1h'});
 };
 
 exports.registerVendedor = async (req, res) => {
@@ -35,7 +35,7 @@ exports.registerVendedor = async (req, res) => {
             vendedorId: nuevoVendedor.vendedorId,
             role: nuevoVendedor.role,
             email: nuevoVendedor.email,
-            token: generateToken(nuevoVendedor.role, nuevoVendedor.vendedorId)
+            token: generateToken(nuevoVendedor.role, nuevoVendedor._id)
         });
 
     } catch (e) {
@@ -59,9 +59,3 @@ exports.loginVendedor = async (req, res) => {
         res.status(401).json({message: 'credenciales incorrectas'})
     }
 };
-
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njg2MTgxNTksImV4cCI6MTc2ODY0Njk1OX0.e1Eva1jf5RjiICvFbuAk-7ll-WNMHjTyBFZBxFKMbZk
-//
-// 
-            //
-       // }
