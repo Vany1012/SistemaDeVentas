@@ -3,8 +3,15 @@ const inventarioRouter = express.Router();
 const inventarioController = require('../controllers/inventarioController');
 const { protect } = require('../middleware/vendedorMiddleware');
 
-inventarioRouter.post('/crearProducto', protect, inventarioController.crearProducto);
-inventarioRouter.delete('/eliminarProducto', protect, inventarioController.eliminarProducto);
-inventarioRouter.get('/verInventario', protect, inventarioController.verInventario);
+inventarioRouter.route('/crearProducto')
+        .post ( protect, inventarioController.crearProducto );
 
+inventarioRouter.route('/eliminarProducto')
+        .patch ( protect, inventarioController.eliminarProducto );
+
+inventarioRouter.route('/verInventario')
+        .get ( inventarioController.verInventario );
+
+inventarioRouter.route('/editarProductoPorId')
+        .put ( protect, inventarioController.editarProductoPorId );
 module.exports = inventarioRouter;

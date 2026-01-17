@@ -16,11 +16,14 @@ exports.registerVendedor = async (req, res) => {
 
         const { vendedorName, email, password, role, vendedorId, active } = req.body;
 
-        const exist = await Vendedor.findOne({ email });
-        if (exist) {
-            return res.status(400).json({ message: 'Vendedor ya existente' });
+        const emailExist = await Vendedor.findOne({ email });
+        if (emailExist) {
+            return res.status(400).json({ message: 'El email ya existe en el sistema' });
         }
-
+        const idExist = await Vendedor.findOne({ vendedorId });
+        if (idExist) {
+            return res.status(400).json({ message: 'El ID de vendedor ya existe en el sistema' });
+        }
         const nuevoVendedor = await Vendedor.create({
             vendedorName,
             email,
@@ -52,7 +55,7 @@ exports.loginVendedor = async (req, res) => {
             vendedorId: vendedor.vendedorId,
             vendedorName : vendedor.vendedorName,
             email: vendedor.email,
-            token: generateToken(vendedor.role, vendedor.vendedorId),
+            token: generateToken(vendedor.role, vendedor._id),
             role: vendedor.role
         });
     }else {
