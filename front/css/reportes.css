@@ -1,0 +1,128 @@
+/* Reset básico */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Body */
+body { 
+    background: linear-gradient(135deg, #2c3e50, #34495e, #3498db); 
+    min-height: 100vh; 
+    font-family: sans-serif; 
+    padding: 20px 0; 
+}
+
+/* Container */
+.container { 
+    background-color: #1e293b; 
+    border-radius: 20px; 
+    padding: 40px; 
+    margin: 0 auto; 
+    width: 95%; 
+    max-width: 1200px; 
+    box-shadow: 0 15px 35px rgba(44, 62, 80, 0.4); 
+}
+
+#head{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 25px;
+}
+
+#verReportes{
+    height: 50px;
+    filter: invert(100%);
+}
+
+h2 { 
+    color: #f7f7f7e1; 
+    text-align: center; 
+    margin-bottom: 40px; 
+    font-size: 2.2rem; 
+    font-weight: bold; 
+}
+
+/* Grid de tarjetas */
+.cards-container { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 25px; 
+}
+
+/* Tarjetas de reporte */
+.report-card { 
+    background: linear-gradient(135deg, #1e40af, #1e293b); 
+    border-radius: 20px; 
+    padding: 30px; 
+    text-align: center; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+    transition: all 0.3s; 
+}
+
+.report-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 20px 40px rgba(30, 64, 175, 0.4); 
+}
+
+.card-header { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 15px; 
+    margin-bottom: 15px; 
+}
+
+.card-icon { 
+    font-size: 2.5rem; 
+}
+
+.report-card h3 { 
+    color: #f1f5f9; 
+    font-size: 1.3rem; 
+    font-weight: 600; 
+    margin: 0; 
+}
+
+.card-number { 
+    color: #3b82f6; 
+    font-size: 3rem; 
+    font-weight: bold; 
+    margin-bottom: 10px; 
+}
+
+.card-trend { 
+    padding: 10px 20px; 
+    border-radius: 25px; 
+    font-weight: 600; 
+    font-size: 0.95rem; 
+}
+
+.card-trend.up { 
+    background: rgba(16, 185, 129, 0.2); 
+    color: #10b981; 
+}
+
+.card-trend.down { 
+    background: rgba(239, 68, 68, 0.2); 
+    color: #ef4444; 
+}
+
+.card-trend.alert { 
+    background: rgba(251, 191, 36, 0.2); 
+    color: #f59e0b; 
+}
+
+/* Responsive */
+@media (max-width: 768px) { 
+    .container { 
+        margin: 20px; 
+        padding: 30px 20px; 
+    }
+    
+    .cards-container { 
+        grid-template-columns: 1fr; 
+        gap: 20px; 
+    }
+    
+    .card-number { 
+        font-size: 2.2rem; 
+    }
+}
