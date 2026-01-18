@@ -1,0 +1,153 @@
+/* Reset básico */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Body */
+body { 
+    background: linear-gradient(135deg, #2c3e50, #34495e, #3498db); 
+    min-height: 100vh; 
+    font-family: sans-serif; 
+    padding: 20px 0; 
+}
+
+/* Container */
+.container { 
+    background-color: #1e293b; 
+    border-radius: 20px; 
+    padding: 30px; 
+    margin: 0 auto; 
+    width: 98%; 
+    max-width: 1400px; 
+    box-shadow: 0 15px 35px rgba(44, 62, 80, 0.4); 
+}
+
+/* Header con botón */
+.header-section { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 30px; 
+    flex-wrap: wrap; 
+    gap: 15px; 
+}
+
+#verInventario{
+    height: 50px;
+    filter: invert(100%);
+}
+
+h2 { 
+    color: #f1f5f9; 
+    font-size: 2rem; 
+    font-weight: bold; 
+}
+
+.btn-agregar { 
+    background: linear-gradient(135deg, #10b981, #059669); 
+    color: white; 
+    border: none; 
+    padding: 12px 25px; 
+    border-radius: 12px; 
+    font-size: 1rem; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: all 0.3s; 
+}
+
+.btn-agregar:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); 
+}
+
+/* Tabla */
+.table-container { 
+    background-color: #1e293b; 
+    border-radius: 15px; 
+    overflow: hidden; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+}
+
+th, td { 
+    padding: 16px 12px; 
+    text-align: left; 
+    color: #f1f5f9; 
+}
+
+th { 
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+    font-weight: 600; 
+    font-size: 0.9rem; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px; 
+    text-align: center;
+}
+
+td { 
+    border-bottom: 1px solid #475569; 
+}
+
+tr:hover { 
+    background: rgba(71, 85, 105, 0.3); 
+}
+
+#btn{
+    display: flex;
+    justify-content: center;
+}
+
+/* Botones de acción */
+.btn-editar, .btn-eliminar { 
+    padding: 8px 16px; 
+    border: none; 
+    border-radius: 8px; 
+    font-size: 0.85rem; 
+    font-weight: 500; 
+    cursor: pointer; 
+    margin-right: 8px; 
+    transition: all 0.3s; 
+}
+
+.btn-editar { 
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+    color: white; 
+}
+
+.btn-editar:hover { 
+    transform: translateY(-1px); 
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); 
+}
+
+.btn-eliminar { 
+    background: linear-gradient(135deg, #ef4444, #dc2626); 
+    color: white; 
+}
+
+.btn-eliminar:hover { 
+    transform: translateY(-1px); 
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4); 
+}
+
+/* Responsive */
+@media (max-width: 768px) { 
+    .header-section { 
+        flex-direction: column; 
+        text-align: center; 
+    }
+    
+    .container { 
+        margin: 20px; 
+        padding: 25px 20px; 
+    }
+    
+    table { 
+        font-size: 0.9rem; 
+    }
+    
+    th, td { 
+        padding: 12px 8px; 
+    }
+}
