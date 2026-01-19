@@ -1,81 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/crearProducto.css">
-    <script src="js/crearProducto.js" defer></script>
-    <title>Crear Producto</title>
+  <meta charset="UTF-8">
+  <title>Crear Producto</title>
+  <link rel="stylesheet" href="css/crearProducto.css">
 </head>
+
 <body>
-    <main>
-        <section class="container">
-            <div id="head">
-            <img id="editarProducto" src="./img/editarProducto.png" alt="Imagen de un lápiz trazando una caja">
-            <h2>Crear Producto</h2>
-            </div>
-            <form action="" id="create-product-form">
-                <div class="form-row">
-                    <div class="input-whit-icon">
-                        <label for="folio">Folio del producto</label>
-                        <div class="input-wrapper">
-                            <i class="input-icon">#</i>
-                            <input type="number" id="folio" name="folio" required="required"/>
-                        </div>
-                    </div>
-                    <div class="input-whit-icon">
-                        <label for="nombre">Nombre del producto</label>
-                        <div class="input-wrapper">
-                            <i class="input-icon">📝</i>
-                            <input type="text" id="nombre" name="nombre" required="required"/>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-whit-icon">
-                        <label for="precio">Precio</label>
-                        <div class="input-wrapper">
-                            <i class="input-icon">$</i>
-                            <input type="number" id="precio" name="precio" min="0" required="required" placeholder="0.00"/>
-                        </div>
-                    </div>
-                    <div class="input-whit-icon">
-                        <label for="stock">Stock</label>
-                         <div class="input-wrapper">
-                            <i class="input-icon">📋</i>
-                            <input type="number" id="stock" name="stock" min="0" required="required"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="input-whit-icon">
-                        <label for="categoria">Categoría</label>
-                        <div class="input-wrapper">
-                            <i class="input-icon">📂</i>
-                            <select id="categoria" required="required">
-                            <option value="seleccion">Selecciona la categoria</option>
-                            <option value="bebidas">Bebidas</option>
-                            <option value="alimentos">Alimentos</option>
-                            <option value="electronica">Electrónica</option>
-                            <option value="otro">Otro</option>
-                        </select>
-                        </div>
-                    </div>
-                    <div class="input-whit-icon">
-                        <label for="activo">Activo</label>
-                        <div class="input-wrapper">
-                            <select  id="activo" required="required">
-                            <option value="si">Si</option>
-                            <option value="no">No</option>
-                        </select>
-                        </div>
-                        
-                    </div>
-                </div>
-                <button type="submit">Agregar Producto</button>
-            </form>
-        </section>
-    </main>
+<!--Contenedor principal-->
+  <main class="container">
+    <h2>Crear Producto</h2>
+    <!--Formulario-->
+    <form action="" id="product-form">
+      <div class="form">
+        <div class="res">
+          <label>Nombre del producto</label>
+          <input type="text" placeholder="Ingrese el nombre" required>
+        </div>
+
+        <div class="res">
+        <label>Folio del producto</label>
+          <input type="text" placeholder="Ingrese el folio" required>
+        </div>
+
+        <div class="res">
+          <label>Precio</label>
+          <input type="number" placeholder="$0.00" min="0" required>
+        </div>
+
+        <div class="res">
+          <label>Stock</label>
+          <input type="number" placeholder="Cantidad" min="0" required>
+        </div>
+
+        <div class="res">
+          <label>Categoría</label>
+          <select id="categoria" name="categoria" required>
+            <option>Bebidas</option>
+            <option>Alimentos</option>
+            <option>Ortros</option>
+          </select>
+        </div>
+
+        <div class="res">
+          <label>Activo</label>
+          <select id="activo" name="activo" required>
+            <option value="yes">Si</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="createBtn" class="createBtn">Crear Producto</button>
+    </form>
+  </main>
+
 </body>
 </html>
