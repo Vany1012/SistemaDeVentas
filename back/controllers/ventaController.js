@@ -23,7 +23,7 @@ exports.registrarVentas = async (req, res) => {
             //Busca el producto mediante el idProducto y checa si está activo
                 const producto = await Producto.findOne({ idProducto, activo: true });
                 if (!producto) {
-                    return res.status(404).json({ message: `Producto con Id:${idProducto} no encontrado`});
+                    return res.status(404).json({ message: `Producto con Id:${idProducto} no encontrado` });
                 }
                 if (producto.stock < cantidad) {
                     return res.status(400).json({ message:`Stock insuficiente para ${producto.nombre}. Stock Disponible: ${producto.stock}`});
