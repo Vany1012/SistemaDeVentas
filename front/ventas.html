@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-mx">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/ventas.js" defer></script>
+    <link rel="stylesheet" href="css/ventas.css">
+    <title>Registar Venta</title>
+</head>
+<body>
+    <h2>Registrar Venta</h2>
+    <!--Datos de la venta (fecha y vendedor)-->
+    <section class="venta-info">
+        <label>
+            Fecha
+            <input type="date" id="fecha-venta">
+        </label>
+        <label>
+            Vendedor
+            <input type="text" id="vendedor">
+        </label>
+
+    </section>
+    
+    <section class="productos-section">
+        <h3>Productos vendidos</h3>
+        <!-- Contenedor para mostrar los productos -->
+         <div class="productos-vendidos" id="productos-vendidos">
+
+            <!--Aqui se van a mostrar los productos en este div vacío que se muestran al hacer click
+            gracias a la función de ventas.js-->
+
+         </div>
+
+         <button id="btn-agregar-producto">
+            Agregar producto
+        </button>
+
+    </section>
+    
+    <!-- Sección para mostrar los totales -->
+    <section class="totales-section">
+        <div>
+            <span>Total de productos:</span>
+            <span id="total-productos">0</span>
+        </div>
+        <div>
+            <span>Total venta:</span>
+            <span id="total-venta">$0.00</span>
+        </div>
+    </section>
+    
+     <button id="btn-registrar-venta">
+        Registrar venta
+    </button>
+
+</body>
+</html>
