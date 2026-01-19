@@ -41,7 +41,7 @@ body, html {
 h2 {
     color: white;
     margin-bottom: 1rem;
-    font-size: 2rem;
+    font-size: 180%;
     text-align: center;
 }
 
@@ -59,7 +59,7 @@ h2 {
 
 label {
     color: #cfd8dc;
-    font-size: 1rem;
+    font-size: 90%;
     margin: 0.8rem 0 0.4rem 0;
 }
 
@@ -68,7 +68,7 @@ input, select {
     border: none;
     border-radius: 8px;
     color: white;
-    font-size: 1rem;
+    font-size: 90%;
     padding: 0.5rem;
     width: 35vw;
 }
@@ -108,16 +108,16 @@ button {
     }
 
     label {
-        font-size: 110%;
+        font-size: auto;
     }
 
     input, select {
         font-size: 110%;
         padding: 0.5rem;
-        width: 90%;
+        width: auto;
     }
     .res {
-        width: 40%;
+        width: 32%;
     }
 
     button {
@@ -129,7 +129,7 @@ button {
     }
 }
 
-@media (min-width: 768px){
+@media (min-width: 769px){
     .container {
         width: 80%;
         max-width: 800px;
@@ -146,17 +146,17 @@ button {
     }
 
     .res {
-        width: 48%;
+        width: 31%;
         margin-bottom: 1.5rem;
     }
 
     label {
-        font-size: 130%;
+        font-size: auto;
         margin: 0.5rem 0;
     }
 
     input, select {
-        font-size: 130%;
+        font-size: auto;
         padding: 0.75rem;
         width: 100%;
     }
@@ -164,8 +164,8 @@ button {
     button {
         font-size: 140%;
         padding: 1.2rem;
-        width: 100%;
-        margin-top: 2rem;
+        width: 80%;
+        margin: 1rem 0 0 0;
         transition: background-color 0.3s ease;
     }
 
