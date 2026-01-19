@@ -1,4 +1,4 @@
-* {
+/* {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
@@ -7,40 +7,60 @@ body {
     align-items: center;
     background-color: #0984e3;
     display: flex;
-    height: 100vh;
     justify-content: center;
     margin: 0;
+}
+*/
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+body, html {
+    align-items: center;
+    background: linear-gradient(to bottom right, rgb(20, 23, 36), #0984e3);
+    display: flex;
+    justify-content: center;
+    font-family: sans-serif;
+    font-size: 16px;
+    height: 100vh;
+    width: 100vw;
 }
 
 .container {
     background-color: #2d3436;
     border-radius: 12px;
-    max-width: 380px;
-    padding: 30px 40px;
-    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+    width: 90%;
 }
 
 h2 {
     color: white;
-    margin-bottom: 25px;
+    margin-bottom: 1rem;
+    font-size: 2rem;
     text-align: center;
 }
 
 .form{
-    display: grid;
-    grid-template-columns: 1fr 1fr; /*las dos columnas del mismo ancho*/
-    gap: 15px 20px; /*define el espacio entre columnas*/
-}
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-around;
+    }
 
 .res {
     display: flex;
     flex-direction: column;
+    width: auto;
 }
 
 label {
     color: #cfd8dc;
-    font-size: 14px;
-    margin-bottom: 6px;
+    font-size: 1rem;
+    margin: 0.8rem 0 0.4rem 0;
 }
 
 input, select {
@@ -48,10 +68,9 @@ input, select {
     border: none;
     border-radius: 8px;
     color: white;
-    font-size: 14px;
-    max-width: 100%;
-    padding: 10px 12px;
-    width: 100%;
+    font-size: 1rem;
+    padding: 0.5rem;
+    width: 35vw;
 }
 
 input::placeholder {
@@ -63,26 +82,94 @@ select {
 }
 
 button {
-    background-color: #00c6ff;
+    background-color: #078aae;
     border: none;
     border-radius: 10px;
     color: white;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1.1rem;
     font-weight: bold;
     margin-top: 25px;
-    padding: 12px;
-    width: 100%;
+    padding: 0.5rem;
+    width: 55vw;
 }
+
 
 /* Responsive*/
 
-@media (max-width: 500px){
-    
-    .form{
-        display: flex;
-        flex-direction: column;
-        grid-template-columns: 1fr;
-        gap: 18px;
+@media (min-width: 460px) {
+    .container {
+        width: 90%;
+    }
+
+    h2 {
+        margin-bottom: 1rem;
+        font-size: 2.3rem;
+    }
+
+    label {
+        font-size: 110%;
+    }
+
+    input, select {
+        font-size: 110%;
+        padding: 0.5rem;
+        width: 90%;
+    }
+    .res {
+        width: 40%;
+    }
+
+    button {
+        font-size: 110%;
+        font-weight: bold;
+        margin-top: 25px;
+        padding: 1rem;
+        width: 55vw;
+    }
+}
+
+@media (min-width: 768px){
+    .container {
+        width: 80%;
+        max-width: 800px;
+        padding: 3rem;
+    }
+
+    h2 {
+        font-size: 200%;
+        margin-bottom: 2rem;
+    }
+
+    .form {
+        justify-content: space-between;
+    }
+
+    .res {
+        width: 48%;
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        font-size: 130%;
+        margin: 0.5rem 0;
+    }
+
+    input, select {
+        font-size: 130%;
+        padding: 0.75rem;
+        width: 100%;
+    }
+
+    button {
+        font-size: 140%;
+        padding: 1.2rem;
+        width: 100%;
+        margin-top: 2rem;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0099cc;
     }
 }
