@@ -1,0 +1,22 @@
+* {
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box;
+}
+
+/* Body centrado */
+body { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    font-family: sans-serif; 
+    padding: 20px;
+}
+
+.ticket{
+    border: 2px solid #333;
+    padding: 20px;
+    height: auto;
+    width: 35%;
+}
