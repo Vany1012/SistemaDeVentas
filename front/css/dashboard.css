@@ -1,0 +1,151 @@
+/* --- RESET BÁSICO --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #213244;
+  font-family: Arial, sans-serif;
+  overflow-x: hidden; 
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+/* --- Topbar --- */
+.top-bar {
+  align-items: center;
+  background-color: #19232f;
+  display: flex;
+  font-size: 15px;
+  height: 60px;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
+  color: white;
+}
+
+#menuBtn {
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.user-role {
+  color: white;
+  font-weight: bold;
+}
+
+/* --- Menú Hamburguesa --- */
+#hamburgerLinks {
+  background-color: #141b24;
+  position: fixed;
+  top: 60px; 
+  left: -260px; 
+  width: 250px;
+  height: calc(100vh - 60px); 
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  transition: left 0.3s ease-in-out; 
+  z-index: 999;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+}
+
+#hamburgerLinks a {
+  color: #c2c5aa;
+  padding: 15px;
+  border-bottom: 1px solid #2c3e50;
+  transition: 0.2s;
+}
+
+#hamburgerLinks a:hover {
+  background-color: #213244;
+  color: white;
+  padding-left: 20px;
+}
+
+#hamburgerLinks.active {
+  left: 0;
+}
+
+/* --- Contenido Principal --- */
+.content {
+  margin-top: 60px; 
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem; /* Espacio entre tarjetas */
+  width: 100%;
+}
+
+/* Wrapper del link para que no rompa el grid */
+.card-link {
+  display: block;
+}
+
+/* --- Tarjetas --- */
+.cards {
+  background-color: #c2c5aa;
+  border-radius: 10px;
+  width: 100%; 
+  min-height: 250px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease, background-color 0.3s;
+  cursor: pointer;
+  padding: 20px;
+}
+
+.cards:hover {
+  transform: translateY(-5px);
+  background-color: #e0e2d1; 
+}
+
+.cards img {
+  width: 80px; 
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.cards h5 {
+  font-size: 1.2rem;
+  color: #19232f;
+  text-align: center;
+}
+
+/* --- Responsividad --- */
+
+/* Móvil */
+@media (max-width: 768px) {
+  
+  #hamburgerLinks {
+    left: 0;
+    width: 100%;
+    height: auto; 
+    top: -400px; 
+    border-bottom: 2px solid #c2c5aa;
+    transition: top 0.3s ease-in-out;
+  }
+
+  #hamburgerLinks.active {
+    top: 60px;
+    left: 0;
+  }
+
+  .content {
+    padding: 1rem;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
