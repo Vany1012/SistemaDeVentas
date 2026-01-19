@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/editarProducto.css">
+    <script src="js/editarProducto.js" defer></script>
+    <title>Editar Producto</title>
+</head>
+<body>
+    <main>
+        <section class="container">
+            <div id="head">
+            <img id="editarProducto" src="./img/editarProducto.png" alt="Imagen de un lápiz trazando una caja">
+            <h2>Editar Producto</h2>
+            </div>
+            <form action="" id="edit-product-form">
+                <div class="form-row">
+                    <div class="input-whit-icon">
+                        <label for="folio">Folio del producto</label>
+                        <div class="input-wrapper">
+                            <i class="input-icon">#</i>
+                            <input type="number" id="folio" name="folio" required="required"/>
+                        </div>
+                    </div>
+                    <div class="input-whit-icon">
+                        <label for="nombre">Nombre del producto</label>
+                        <div class="input-wrapper">
+                            <i class="input-icon">📝</i>
+                            <input type="text" id="nombre" name="nombre" required="required"/>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-whit-icon">
+                        <label for="precio">Precio</label>
+                        <div class="input-wrapper">
+                            <i class="input-icon">$</i>
+                            <input type="number" id="precio" name="precio" min="0" required="required" placeholder="0.00"/>
+                        </div>
+                    </div>
+                    <div class="input-whit-icon">
+                        <label for="stock">Stock</label>
+                         <div class="input-wrapper">
+                            <i class="input-icon">📋</i>
+                            <input type="number" id="stock" name="stock" min="0" required="required"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="input-whit-icon">
+                        <label for="categoria">Categoría</label>
+                        <div class="input-wrapper">
+                            <i class="input-icon">📂</i>
+                            <select id="categoria" required="required">
+                            <option value="seleccion">Selecciona la categoria</option>
+                            <option value="bebidas">Bebidas</option>
+                            <option value="alimentos">Alimentos</option>
+                            <option value="electronica">Electrónica</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                        </div>
+                    </div>
+                    <div class="input-whit-icon">
+                        <label for="activo">Activo</label>
+                        <div class="input-wrapper">
+                            <select  id="activo" required="required">
+                            <option value="si">Si</option>
+                            <option value="no">No</option>
+                        </select>
+                        </div>
+                        
+                    </div>
+                </div>
+                <button type="submit">Actualizar Producto</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
