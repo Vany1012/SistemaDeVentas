@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Producto</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+<!--Contenedor principal-->
+  <main class="container">
+    <h2>Crear Producto</h2>
+    <!--Formulario-->
+    <form action="" id="product-form">
+      <div class="form">
+        <div class="res">
+          <label>Nombre del producto</label>
+          <input type="text" placeholder="Ingrese el nombre" required>
+        </div>
+
+        <div class="res">
+        <label>Folio del producto</label>
+          <input type="text" placeholder="Ingrese el folio" required>
+        </div>
+
+        <div class="res">
+          <label>Precio</label>
+          <input type="number" placeholder="$0.00" min="0" required>
+        </div>
+
+        <div class="res">
+          <label>Stock</label>
+          <input type="number" placeholder="Cantidad" min="0" required>
+        </div>
+
+        <div class="res">
+          <label>Categoría</label>
+          <select id="categoria" name="categoria" required>
+            <option>Bebidas</option>
+            <option>Alimentos</option>
+            <option>Ortros</option>
+          </select>
+        </div>
+
+        <div class="res">
+          <label>Activo</label>
+          <select id="activo" name="activo" required>
+            <option value="yes">Si</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="createBtn" class="createBtn">Crear Producto</button>
+    </form>
+  </main>
+
+</body>
+</html>
