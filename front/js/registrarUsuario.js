@@ -1,9 +1,10 @@
 
+
 const formulario = document.getElementById('registrarUsuario-form');
 
 formulario.addEventListener('submit', async (e) => {
     e.preventDefault(); // Evita que se recargue la página
-
+/*
     // 1. Obtener el token del administrador (si usas autenticación)
     const token = localStorage.getItem('token'); 
 
@@ -12,7 +13,7 @@ formulario.addEventListener('submit', async (e) => {
         alert('Error: No has iniciado sesión. Necesitas ser admin para registrar usuarios.');
         // window.location.href = 'login.html'; // Descomenta para redirigir
         return;
-    }
+    }*/
 
     // 2. Armar el objeto con los datos (IDs del HTML)
     const nuevoUsuario = {

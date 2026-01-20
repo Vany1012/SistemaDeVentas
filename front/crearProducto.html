@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crear Producto</title>
-  <link rel="stylesheet" href="css/crearProducto.css"> 
+  <link rel="stylesheet" href="css/crearProducto.css">
+   <script src="js/crearProducto.js" defer></script>
 </head>
 
 <body>
@@ -12,33 +13,34 @@
   <main class="container">
     <h2>Crear Producto</h2>
     <!--Formulario-->
+    <form id="producto-form">
       <div class="form">
         <div class="res">
           <label>Nombre del producto</label>
-          <input type="text" placeholder="Ingrese el nombre" required>
+          <input type="text"id="nombre"  placeholder="Ingrese el nombre" required>
         </div>
 
         <div class="res">
         <label>Folio del producto</label>
-          <input type="text" placeholder="Ingrese el folio" required>
+          <input type="text" id="idProducto" placeholder="Ingrese el folio" required>
         </div>
 
         <div class="res">
           <label>Precio</label>
-          <input type="number" placeholder="$0.00" min="0" required>
+          <input type="number" id="precio" placeholder="$0.00" min="0" required>
         </div>
 
         <div class="res">
           <label>Stock</label>
-          <input type="number" placeholder="Cantidad" min="0" required>
+          <input type="number" id="stock" placeholder="Cantidad" min="0" required>
         </div>
 
         <div class="res">
           <label>Categoría</label>
           <select id="categoria" name="categoria" required>
-            <option>Bebidas</option>
-            <option>Alimentos</option>
-            <option>Ortros</option>
+            <option value="Bebidas">Bebidas</option>
+            <option value="Alimentos">Alimentos</option>
+            <option value="Otros">Ortros</option>
           </select>
         </div>
 
@@ -51,7 +53,7 @@
         </div>
       </div>
 
-      <button id="createBtn" class="createBtn">Crear Producto</button>
+      <button type="submit" id="createBtn" class="createBtn">Crear Producto</button>
   </main>
 
 </body>
