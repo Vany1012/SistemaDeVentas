@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 const userData = document.getElementById('user-role');
 const adminExclusive = document.querySelectorAll('.admin-exclusive');
 const userSession = JSON.parse(localStorage.userSession);
-console.log(userSession.role);
 
 userData.innerHTML = `Bienvenido, ${userSession.vendedorName}`;
 if (userSession.role !== 'admin') {
