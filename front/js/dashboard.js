@@ -3,10 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const menu = document.getElementById('hamburgerLinks');
 
     menuBtn.addEventListener('click', () => {
-        // Esto agrega o quita la clase 'active' al menú
         menu.classList.toggle('active');
-        
-        // Opcional: Cambiar el icono de hamburguesa a una X
         if(menu.classList.contains('active')) {
             menuBtn.classList.remove('fa-bars');
             menuBtn.classList.add('fa-times');
@@ -16,3 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+const userData = document.getElementById('user-role');
+const adminExclusive = document.querySelectorAll('.admin-exclusive');
+const userSession = JSON.parse(localStorage.userSession);
+console.log(userSession.role);
+
+userData.innerHTML = `Bienvenido, ${userSession.vendedorName}`;
+if (userSession.role !== 'admin') {
+    adminExclusive.forEach(element => {
+        element.style.display = 'none';
+    });
+};

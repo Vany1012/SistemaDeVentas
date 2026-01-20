@@ -38,7 +38,7 @@ a {
   font-size: 1.5rem;
 }
 
-.user-role {
+#user-role {
   color: white;
   font-weight: bold;
 }
@@ -82,11 +82,10 @@ a {
   padding: 2rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem; /* Espacio entre tarjetas */
+  gap: 2rem;
   width: 100%;
 }
 
-/* Wrapper del link para que no rompa el grid */
 .card-link {
   display: block;
 }

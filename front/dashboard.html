@@ -16,31 +16,31 @@
     <header>
         <div class="top-bar">
             <i class="fa fa-bars" id="menuBtn"></i>
-            <span class="user-role"></span>
+            <span id="user-role"></span>
         </div>
     </header>
     <!-- Menú hamburguesa -->
     <nav id="hamburgerLinks">
-        <a href="crearProducto.html">Crear Producto</a>
-        <a href="editarproducto.html">Editar Producto</a>
+        <a class='admin-exclusive' href="crearProducto.html">Crear Producto</a>
+        <a class='admin-exclusive' href="editarproducto.html">Editar Producto</a>
         <a href="inventario.html">Inventario</a>
         <a href="ventas.html">Registrar Venta</a>
         <a href="devoluciones.html">Registrar Devoluciones</a>
-        <a href="reportes.html">Ver Reportes</a>
-        <a href="registrarUsuario.html">Registrar Usuario</a>
+        <a class='admin-exclusive' href="reportes.html">Ver Reportes</a>
+        <a class='admin-exclusive' href="registrarUsuario.html">Registrar Usuario</a>
     </nav>
 
     <!-- Contenido -->
     <main class="content">
 
         <!-- Cards-->
-        <a href="crearProducto.html">
+        <a class='admin-exclusive' href="crearProducto.html">
             <div class="cards">
                 <img src="img/crearProducto.png" alt="icono para crear un producto">
                 <h5>Crear Producto</h5>
             </div>
         </a>
-        <a href="editarProducto.html">
+        <a class='admin-exclusive' href="editarProducto.html">
             <div class="cards">
                 <img src="img/editarProducto.png" alt="icono de crear un producto">
                 <h5>Editar Producto</h5>
@@ -64,13 +64,13 @@
                 <h5>Registrar Devoluciones</h5>
             </div>
         </a>
-        <a href="reportes.html">
+        <a class='admin-exclusive' href="reportes.html">
             <div class="cards">
                 <img src="img/verReportes.png" alt="Icono para ver reportes">
                 <h5>Ver Reportes</h5>
             </div>
         </a>
-        <a href="registrarUsuario.html">
+        <a class='admin-exclusive' href="registrarUsuario.html">
             <div class="cards">
                 <img src="img/registrarUsuario.png" alt="Icono para registrar usuarios">
                 <h5>Registrar Usuario</h5>
