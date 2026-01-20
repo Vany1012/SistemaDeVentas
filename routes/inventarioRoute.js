@@ -10,7 +10,7 @@ inventarioRouter.route('/eliminarProducto')
         .patch ( protect, inventarioController.eliminarProducto );
 
 inventarioRouter.route('/verInventario')
-        .get ( inventarioController.verInventario );
+        .get ( protect, inventarioController.verInventario );
 
 inventarioRouter.route('/editarProductoPorId')
         .put ( protect, inventarioController.editarProductoPorId );
