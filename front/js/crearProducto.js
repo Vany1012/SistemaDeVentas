@@ -9,16 +9,40 @@ if (!token || role !== 'admin') {
     window.location.href = 'index.html';
 }
 
-const form = document.querySelector('#producto-form');
+const Productform = document.querySelector('#producto-form');
 const nombreInput = document.querySelector('#nombre');
 const idProductoInput = document.querySelector('#idProducto');
 const precioInput = document.querySelector('#precio');
 const stockInput = document.querySelector('#stock');
 const categoriaInput = document.querySelector('#categoria');
-const activoInput = document.querySelector('#activo');
+const activoInput = document.querySelector('#active');
 
-// 3. Función Principal para Crear Producto
+// Función principal para Crear Producto
 const createProduct = async () => {
+    // Validaciones básicas
+    if (!idProductoInput.value.trim()) {
+        alert('Por favor ingresa un folio del producto');
+        return;
+    }
+    
+    if (!nombreInput.value.trim()) {
+        alert('Por favor ingresa un nombre del producto');
+        return;
+    }
+    
+    // Validar que precio y stock sean números válidos
+    const precio = parseFloat(precioInput.value);
+    const stock = parseInt(stockInput.value);
+    
+    if (isNaN(precio) || precio < 0) {
+        alert('Por favor ingresa un precio válido');
+        return;
+    }
+
+     if (isNaN(stock) || stock < 0) {
+        alert('Por favor ingresa un stock válido');
+        return;
+    }
 
     // Preparar el Payload (Datos)
     const payload = {
@@ -44,7 +68,7 @@ const createProduct = async () => {
 
         if (response.ok) {
             alert(`¡Producto "${data.nombre || 'nuevo'}" creado exitosamente!`);
-            form.reset(); // Limpia el formulario
+            Productform.reset(); // Limpia el formulario
         } else {
             // error( ID duplicado)
             alert(`Error: ${data.message || 'No se pudo crear el producto'}`);
@@ -58,8 +82,8 @@ const createProduct = async () => {
 };
 
 
-if (form) {
-    form.addEventListener('submit', async (e) => {
+if (Productform) {
+    Productform.addEventListener('submit', async (e) => {
         e.preventDefault();
         await createProduct();
     });
