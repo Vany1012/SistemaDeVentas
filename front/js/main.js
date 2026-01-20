@@ -27,7 +27,7 @@ loginForm.addEventListener('submit', async (e) => {
     loginBtn.textContent = 'Iniciando sesión...';
     
     try {
-        const response = await fetch(`${API_URL}/auth/login`, {
+        const response = await fetch(`${API_URL}/vendedor/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
