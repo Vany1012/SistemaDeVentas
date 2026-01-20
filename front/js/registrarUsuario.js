@@ -10,7 +10,7 @@ if (!token || role !== 'admin') {
     window.location.href = 'index.html';
 }
 
-const userForm = document.querySelector('#product-form'); // ID del <form>
+const userForm = document.querySelector('#product-form');
 const vendedorName = document.querySelector('#vendedorName');
 const vendedorId = document.querySelector('#vendedorId');
 const userPassword = document.querySelector('#password');
@@ -34,7 +34,7 @@ const createNewUser = async () => {
     email: userEmail.value,
     password: userPassword.value,
     role: userRole.value,
-    active: userActive.value === 'true'
+    active: userActive.value
   };
 
   try {
@@ -56,8 +56,6 @@ const createNewUser = async () => {
     } else {
         alert(`Error: ${data.message || 'No se pudo crear el usuario'}`);
     }
-
-    console.log(`Respuesta del servidor: ${JSON.stringify(data, null, 2)}`);
 
   } catch (error) {
     console.error("Error de conexión:", error);

@@ -19,13 +19,6 @@ const activoInput = document.querySelector('#activo');
 
 // 3. Función Principal para Crear Producto
 const createProduct = async () => {
-    
-    // Validar autenticación
-    if (!token) {
-        alert("No estás autorizado. Inicia sesión como vendedor.");
-        window.location.href = 'login.html'; // Redirección opcional
-        return;
-    }
 
     // Preparar el Payload (Datos)
     const payload = {
@@ -34,7 +27,7 @@ const createProduct = async () => {
         precio: Number(precioInput.value), // Convertir a Numero
         stock: Number(stockInput.value),   // Convertir a Numero
         categoria: categoriaInput.value,
-        activo: activoInput.value === 'true' 
+        activo: activoInput.value 
     };
 
     try {
