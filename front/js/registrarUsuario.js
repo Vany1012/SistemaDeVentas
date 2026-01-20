@@ -1,8 +1,8 @@
 
-
 const API_URL = 'http://localhost:3000/api/vendedor';
 const role = localStorage.getItem("role");
 const token = localStorage.getItem("token");
+
 // BLOQUEO DE SEGURIDAD
 // Si no hay token O el rol no es admin, lo sacamos de la página
 if (!token || role !== 'admin') {
@@ -10,7 +10,7 @@ if (!token || role !== 'admin') {
     window.location.href = 'index.html';
 }
 
-const userForm = document.querySelector('#product-form');
+const userForm = document.querySelector('#registrarUsuario-form');
 const vendedorName = document.querySelector('#vendedorName');
 const vendedorId = document.querySelector('#vendedorId');
 const userPassword = document.querySelector('#password');
@@ -37,6 +37,8 @@ const createNewUser = async () => {
     active: userActive.value
   };
 
+  console.log(payload)
+
   try {
     // Hacemos el llamado al endpoint
     const res = await fetch(`${API_URL}/register`, {
@@ -49,7 +51,7 @@ const createNewUser = async () => {
     });
 
     const data = await res.json();
-
+    console.log(data)
     if (res.ok) {
         alert("Usuario creado exitosamente");
         userForm.reset(); // Limpiar formulario
