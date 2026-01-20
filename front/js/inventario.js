@@ -1,7 +1,8 @@
 
 const API_URL = 'http://localhost:3000/api'; 
 const token = localStorage.getItem("token");
-const tbody = document.querySelector("table-container");
+const role = localStorage.getItem("role");
+const tbody = document.querySelector("tbody");
 
 // BLOQUEO DE SEGURIDAD
 // Si no hay token O el rol no es admin, lo sacamos de la página
@@ -30,6 +31,18 @@ const loadProducts = async () => {
     console.log(products);
 
     tbody.innerHTML = "";//Limpiar la tabla
+
+    // Verificar si hay productos
+    if (!products || products.length === 0) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td colspan="7" style="text-align: center; padding: 20px;">
+                No hay productos en el inventario
+            </td>
+        `;
+        tbody.appendChild(tr);
+        return;
+    }
 
     // 3. Iterar y crear filas
     products.forEach(product => {

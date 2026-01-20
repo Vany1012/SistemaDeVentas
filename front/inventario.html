@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/inventario.css">
+    <script src="js/inventario.js" defer></script>
     <title>Inventario</title>
 </head>
 <body>
@@ -12,7 +13,7 @@
             <div class="header-section">
                 <img id="verInventario" src="./img/verInventario.png" alt="IMagen de un lapiz trazando una caja">
                 <h2>Inventario de Productos</h2>
-                <button class="btn-agregar">+ Agregar Producto</button>
+                <a href="crearProducto.html"><button class="btn-agregar">+ Agregar Producto</button></a>
             </div>
             
             <div class="table-container">
@@ -29,17 +30,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                       
                             <td>
                                 <div id="btn">
-                                <button class="btn-editar">Editar</button>
-                                <button class="btn-eliminar">Eliminar</button>
+                                    <a href="editarProducto.html"><button class="btn-editar">Editar</button></a>
+                                    <button class="btn-eliminar">Eliminar</button>
                                 </div>
                             </td>
                         </tr>
