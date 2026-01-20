@@ -9,14 +9,16 @@
 </head>
 <body>
     <div class="container">
-        <div class="card-login">
-            <img src="img/avatar.png" alt="icono de un perfil">
-            <p>Inicio de sesión</p>
-            <input type="email" class="input-login" placeholder="Correo electrónico">
-            <input type="password" class="input-password" placeholder="Contraseña">
-            <button id="loginBtn" class="button-login">Iniciar sesión</button>
-        </div>
-  </div>
-
+        <form id="login-formulario">
+            <div class="card-login">
+                <img src="img/avatar.png" alt="icono de un perfil">
+                <p>Inicio de sesión</p>
+                <input type="email" id= "email" class="input-login" placeholder="Correo electrónico" name="email" required>
+                <input type="password" id="password" class="input-password" placeholder="Contraseña" name="password" required>
+                <button id="loginBtn" type="submit" class="button-login">Iniciar sesión</button>
+            </div>
+        </form>
+    </div>
+    <div id="message-container"></div>
 </body>
 </html>
