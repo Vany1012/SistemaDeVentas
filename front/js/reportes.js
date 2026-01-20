@@ -8,15 +8,17 @@ function checkAuth() {
     const userData = localStorage.getItem('userData');
     
     if (!token || !userData) {
-        window.location.href = 'index.html';
-        return null;
+        console.log('❌ No autenticado');
+        return { authenticated: false, user: null };
     }
     
     try {
-        return JSON.parse(userData);
-    } catch (e) {
-        window.location.href = 'index.html';
-        return null;
+        const user = JSON.parse(userData);
+        console.log('✅ Usuario:', user.vendedorName, 'Rol:', user.role);
+        return { authenticated: true, user: user };
+    } catch (error) {
+        console.error('❌ Error parseando userData:', error);
+        return { authenticated: false, user: null };
     }
 }
 

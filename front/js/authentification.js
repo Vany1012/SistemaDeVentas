@@ -4,6 +4,10 @@ const API_URL = 'http://localhost:3000/api';
 function checkAuth() {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userData');
+
+    console.log('🔍 Verificando autenticación...');
+    console.log('Token:', token ? 'Presente' : 'Ausente');
+    console.log('UserData:', userData ? 'Presente' : 'Ausente');
     
     if (!token || !userData) {
         // Si no hay sesión, redirigir al login
@@ -12,11 +16,12 @@ function checkAuth() {
     }
     
     try {
-        return JSON.parse(userData);
-    } catch (e) {
-        console.error('Error parsing user data:', e);
-        window.location.href = 'index.html';
-        return null;
+        const user = JSON.parse(userData);
+        console.log('✅ Usuario autenticado:', user.vendedorName, '- Rol:', user.role);
+        return { authenticated: true, user: user };
+    } catch (error) {
+        console.error('❌ Error parseando userData:', error);
+        return { authenticated: false, user: null };
     }
 }
 
@@ -51,7 +56,7 @@ function loadUserProfile() {
         el.textContent = userData.role === 'admin' ? 'Administrador' : 'Vendedor';
     });
     
-    // También podrías mostrar el nombre del usuario si hay elementos para ello
+    // También podrías mostrar el nombre del usuario
     const userNameElements = document.querySelectorAll('.user-name');
     userNameElements.forEach(el => {
         el.textContent = userData.vendedorName || 'Usuario';

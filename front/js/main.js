@@ -1,5 +1,5 @@
 const API_URL = 'http://localhost:3000/api';
-const loginForm = document.getElementById('loginForm');
+const loginForm = document.getElementById('login-formulario');
 
 // Para checar si hay una sesión iniciada
 const checkSession = () => {

@@ -3,7 +3,7 @@ console.log('editarProducto.js cargado');
 const API_URL = 'http://localhost:3000/api';
 
 // Verificar autenticación y permisos
-function checkAuthAndPermissions() {
+function checkAuth() {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userData');
     
