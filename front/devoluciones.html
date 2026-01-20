@@ -1,64 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/devoluciones.css">
+    <script src="js/devoluciones.js" defer></script>
     <title>Registrar Devolución</title>
 </head>
+
 <body>
-    <!--Contenedor principal-->
     <main class="container">
         <h2>Registrar devolución</h2>
-        <!--Formulario-->
-        <form action="" id="devolucion-form">
-            <h3>Datos de la devolucion</h3>
-            <div class="dev-form">
-                <div class="devolucion">
-                    <label>ID de devolucion</label>
-                    <input type="number" required>
-                </div>
-
-                <div class="devolucion">
-                    <label>Fecha de devolucion</label>
-                    <input type="date"  required>
-                </div>
-
-                <div class="devolucion">
-                    <label>Motivo de devolucion</label>
-                    <select required>
-                        <option>Producto dañado</option>
-                        <option>Producto incorrecto</option>
-                        <option>Otro</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label>Tipo de devolución</label>
-                    <select required>
-                        <option>Devolucion parcial</option>
-                        <option>Devolución total</option>
-                    </select>
-                </div>
-            </div>
-
-        <hr>
-
-            <h3>Datos de la venta</h3>
-            <div class="dev-form">
-                <div class="devolucion">
-                    <label>No. de ticket</label>
-                    <input type="number" required>
-                </div>
-
-                <div class="devolucion">
-                    <label>Fecha de venta</label>
-                    <input type="date" required>
-                </div>
-            </div>
-        <hr>
-        <button>Registrar devolucion</button>
+        <!-- Formulario para seleccionar venta -->
+        <form id="venta-formulario">
+            <input type="text" id="venta-input" class="input-venta" placeholder="Escribe el ID de la Venta..."
+                name="id">
+            <button type="submit">Buscar Venta</button>
+        </form>
+        <!-- Formulario para la devolución -->
+        <form id="devolucion-form" style="display: none;">
+            <button type="submit">Registrar Devolución</button>
         </form>
     </main>
 </body>
+
 </html>

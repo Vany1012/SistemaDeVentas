@@ -28,6 +28,12 @@ section {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
+.headers {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
 /* INFO VENTA */
 .fila-producto,
 .venta-info {
