@@ -1,52 +1,54 @@
-// js/registrarUsuario.js
 
-document.getElementById('registrarUsuario-form').addEventListener('submit', async function(e) {
-    e.preventDefault(); // Evita que la página se recargue
+const formulario = document.getElementById('registrarUsuario-form');
 
+formulario.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Evita que se recargue la página
 
-    //Verificar si el admin está logueado
-    // Asumo que cuando haces login, guardas el token en localStorage con el nombre 'token'
+    // 1. Obtener el token del administrador (si usas autenticación)
     const token = localStorage.getItem('token'); 
 
+    // Si tu middleware 'protect' es estricto, necesitas esto:
     if (!token) {
-        alert('No estás autorizado. Debes iniciar sesión como Admin primero.');
-        window.location.href = '/login.html'; // Redirigir al login si no hay token
+        alert('Error: No has iniciado sesión. Necesitas ser admin para registrar usuarios.');
+        // window.location.href = 'login.html'; // Descomenta para redirigir
         return;
     }
-    // 1. Capturar los valores
-    const data = {
+
+    // 2. Armar el objeto con los datos (IDs del HTML)
+    const nuevoUsuario = {
         vendedorName: document.getElementById('vendedorName').value,
-        vendedorId: document.getElementById('vendedorId').value, // La matrícula
+        vendedorId: document.getElementById('vendedorId').value,
         password: document.getElementById('password').value,
         email: document.getElementById('email').value,
         role: document.getElementById('role').value,
-        // Convertimos el string "true"/"false" a booleano real
-        active: document.getElementById('active').value === 'true' 
+        // Convertimos el string "true" a booleano true
+        active: document.getElementById('active').value === 'true'
     };
 
     try {
-        // 2. Enviar al Backend (Asumiendo que tu servidor corre en localhost:3000)
-        const response = await fetch('http://localhost:3000/api/vendedores', { 
-    //Corregir direccion del servidor!!!!!!!!
+        // 3. Petición al Backend
+        const respuesta = await fetch('http://localhost:3000/api/vendedor/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                // Enviamos el token para pasar el middleware "protect"
+                'Authorization': `Bearer ${token}` 
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(nuevoUsuario)
         });
 
-        const result = await response.json();
+        const data = await respuesta.json();
 
-        if (response.ok) {
-            alert('Usuario creado con éxito');
-            // Opcional: limpiar formulario
-            document.getElementById('registrarUsuario-form').reset();
+        if (respuesta.ok) {
+            alert('¡Usuario registrado exitosamente!');
+            formulario.reset(); // Limpia los campos
         } else {
-            alert('Error: ' + (result.message || 'Error desconocido'));
+            // Muestra el error que envía el backend (ej: "Usuario ya existe")
+            alert('Error: ' + (data.message || data.error || 'Algo salió mal'));
         }
 
     } catch (error) {
         console.error('Error de red:', error);
-        alert('Hubo un problema conectando con el servidor');
+        alert('No se pudo conectar con el servidor.');
     }
 });
