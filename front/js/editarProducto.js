@@ -376,7 +376,7 @@ function configurarBotonVolver() {
 // Inicializar la página
 function inicializarPagina() {
     // Verificar autenticación y permisos
-    const usuario = checkAuthAndPermissions();
+    const usuario = checkAuth();
     if (!usuario) return;
     
     console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);

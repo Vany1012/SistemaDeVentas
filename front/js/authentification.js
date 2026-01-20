@@ -5,12 +5,13 @@ function checkAuth() {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userData');
 
-    console.log('🔍 Verificando autenticación...');
+    console.log('Verificando autenticación...');
     console.log('Token:', token ? 'Presente' : 'Ausente');
     console.log('UserData:', userData ? 'Presente' : 'Ausente');
     
     if (!token || !userData) {
         // Si no hay sesión, redirigir al login
+        console.log('❌ No autenticado, redirigiendo a login...');
         window.location.href = 'index.html';
         return null;
     }
@@ -18,10 +19,11 @@ function checkAuth() {
     try {
         const user = JSON.parse(userData);
         console.log('✅ Usuario autenticado:', user.vendedorName, '- Rol:', user.role);
-        return { authenticated: true, user: user };
+        return user;
     } catch (error) {
         console.error('❌ Error parseando userData:', error);
-        return { authenticated: false, user: null };
+        window.location.href = 'index.html';
+        return null;
     }
 }
 
@@ -39,27 +41,34 @@ function getAuthHeaders() {
     };
 }
 
-// Verificar si el usuario es admin
+// Verificar si usuario es admin
 function isAdmin() {
-    const userData = checkAuth();
-    return userData && userData.role === 'admin';
+    const user = checkAuth();  // usuario o null
+    return user && user.role === 'admin';
 }
 
 // Cargar datos del usuario en la interfaz
 function loadUserProfile() {
-    const userData = checkAuth();
-    if (!userData) return;
+    const user = checkAuth();
+    if (!user) return;
     
     // Actualizar elementos del DOM con datos del usuario
     const userRoleElements = document.querySelectorAll('.user-role');
     userRoleElements.forEach(el => {
-        el.textContent = userData.role === 'admin' ? 'Administrador' : 'Vendedor';
+        el.textContent = user.role === 'admin' ? 'Administrador' : 'Vendedor';
+        el.style.cssText = `
+            background-color: ${user.role === 'admin' ? '#4CAF50' : '#2196F3'};
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-left: 10px;
+        `;
     });
     
-    // También podrías mostrar el nombre del usuario
     const userNameElements = document.querySelectorAll('.user-name');
     userNameElements.forEach(el => {
-        el.textContent = userData.vendedorName || 'Usuario';
+        el.textContent = user.vendedorName || 'Usuario';
     });
 }
 
@@ -85,7 +94,6 @@ async function authFetch(url, options = {}) {
     
     const response = await fetch(`${API_URL}${url}`, mergedOptions);
     
-    // Si la respuesta es 401 (no autorizado), redirigir al login
     if (response.status === 401) {
         localStorage.removeItem('token');
         localStorage.removeItem('userData');
@@ -96,14 +104,18 @@ async function authFetch(url, options = {}) {
     return response;
 }
 
-// Exportar funciones si usas módulos
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        checkAuth,
-        getAuthToken,
-        getAuthHeaders,
-        isAdmin,
-        loadUserProfile,
-        authFetch
-    };
+// Logout function
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userData');
+    window.location.href = 'index.html';
 }
+
+// funciones globales
+window.checkAuth = checkAuth;
+window.getAuthToken = getAuthToken;
+window.getAuthHeaders = getAuthHeaders;
+window.isAdmin = isAdmin;
+window.loadUserProfile = loadUserProfile;
+window.authFetch = authFetch;
+window.logout = logout;
