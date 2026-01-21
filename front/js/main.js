@@ -21,7 +21,7 @@ loginForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;
     
     // Deshabilita el btn durante login
-    const loginBtn = document.getElementById('loginBtn');
+    const loginBtn = document.getElementById('button-login');
     const originalText = loginBtn.textContent;
     loginBtn.disabled = true;
     loginBtn.textContent = 'Iniciando sesión...';

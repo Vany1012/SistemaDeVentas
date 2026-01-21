@@ -1,5 +1,5 @@
 const API_URL = "http://localhost:3000/api";
-const userSession = JSON.parse(localStorage.userSession);
+const token = localStorage.getItem('token');
 const formulario = document.getElementById('venta-formulario');
 const ventaInput = document.getElementById('venta-input');
 const devolucionForm = document.getElementById('devolucion-form');
@@ -9,7 +9,7 @@ let ventaSeleccionadaActual = null;
 async function obtenerVentas() {
     try {
         const response = await fetch(`${API_URL}/ventas/ventas`, {
-            headers: { 'Authorization': `Bearer ${userSession.token}` }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!response.ok) throw new Error('Error al obtener ventas');
         const data = await response.json();
@@ -222,7 +222,7 @@ async function enviarDevolucionAlBackend(datosDevolucion) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${userSession.token}`
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(datosDevolucion)
         });

@@ -1,14 +1,15 @@
 const API_URL = 'http://localhost:3000/api';
 const contenedorProductos = document.getElementById("productos-vendidos");
 const btnAgregarProducto = document.getElementById("btn-agregar-producto");
-const userSession = JSON.parse(localStorage.userSession);
+const token = localStorage.getItem('token');
+const userData = localStorage.getItem('userData');
 
 // Función para mostrar la fecha y el vendedor
 document.addEventListener('DOMContentLoaded', () => {
   const hoy = new Date().toISOString().split('T')[0];
   const inputFecha = document.getElementById('fecha-venta');
   inputFecha.value = hoy;
-  const nombreVendedor = userSession.vendedorName
+  const nombreVendedor = userData.vendedorName
   const inputVendedor = document.getElementById('vendedor');
   inputVendedor.value = nombreVendedor;
 });
@@ -38,7 +39,7 @@ function actualizarTotales() {
 async function obtenerInventario() {
   try {
     const response = await fetch(`${API_URL}/inventario/verInventario`, {
-      headers: { 'Authorization': `Bearer ${userSession.token}` }
+      headers: { 'Authorization': `Bearer ${token}` }
     });
     if (!response.ok) throw new Error('Error al obtener inventario');
     return await response.json();
@@ -153,7 +154,7 @@ document.querySelector("#btn-registrar-venta").addEventListener('click', async (
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${userSession.token}`
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(ventaData)
     });
