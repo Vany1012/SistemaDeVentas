@@ -12,6 +12,9 @@
 </head>
 <body>
     <main>
+        <div class="btnRegreso">
+        <a href="dashboard.html"><button id="volverBtn">← Volver al Dashboard</button></a>
+        </div>
         <section class="container">
             <div id="head">
             <img id="editarProducto" src="./img/editarProducto.png" alt="Imagen de un lápiz trazando una caja">
@@ -22,14 +25,12 @@
                     <div class="input-whit-icon">
                         <label for="folio">Folio del producto</label>
                         <div class="input-wrapper">
-                            <i class="input-icon">#</i>
                             <input type="number" id="folio" name="folio" required="required"/>
                         </div>
                     </div>
                     <div class="input-whit-icon">
                         <label for="nombre">Nombre del producto</label>
                         <div class="input-wrapper">
-                            <i class="input-icon">📝</i>
                             <input type="text" id="nombre" name="nombre" required="required"/>
                         </div>
                         
@@ -45,17 +46,13 @@
                     </div>
                     <div class="input-whit-icon">
                         <label for="stock">Stock</label>
-                         <div class="input-wrapper">
-                            <i class="input-icon">📋</i>
                             <input type="number" id="stock" name="stock" min="0" required="required"/>
-                        </div>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="input-whit-icon">
                         <label for="categoria">Categoría</label>
                         <div class="input-wrapper">
-                            <i class="input-icon">📂</i>
                             <select id="categoria" required="required">
                             <option value="seleccion">Selecciona la categoria</option>
                             <option value="bebidas">Bebidas</option>

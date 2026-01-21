@@ -8,6 +8,7 @@
     --color-danger: #ef4444;
     --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
     --radius: 12px;
+    --radius-s: 10px;
 }
 
 * {
@@ -20,7 +21,7 @@
 body {
     background-color: var(--color-fondo);
     min-height: 100vh;
-    padding: 30px 20px;
+    padding: 65px 20px;
 }
 
 .container {
@@ -56,6 +57,31 @@ body {
 h2 {
     color: var(--color-texto-oscuro);
     font-size: 1.8rem;
+}
+
+.btnRegreso{
+    position: fixed; /* Se mantiene fijo respecto a la pantalla */
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+#volverBtn{
+    padding: 10px 15px;
+    font-size: 14px;
+    z-index: 100;
+    background-color: var(--color-primario);
+    color: white;
+    border: none;
+    border-radius: var(--radius-s);
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+}
+
+#volverBtn:hover {
+    background-color: var(--color-primario-hover);
+    transform: translateY(-2px);
 }
 
 .btn-agregar {
@@ -160,5 +186,22 @@ tr:hover {
         flex-direction: column;
         gap: 20px;
         text-align: center;
+    }
+    
+    body {
+        padding: 15px ;
+        align-items: flex-start;
+    }
+
+    .btnRegreso 
+    {
+        position: static; 
+        top: 10px;
+        left: 10px;
+    }
+
+    #volverBtn {
+        padding: 8px 12px;
+        font-size: 12px; /* Reducimos un poco el tamaño en móviles */
     }
 }

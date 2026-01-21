@@ -48,6 +48,31 @@ h2 {
     align-self: center;
 }
 
+.btnRegreso{
+    position: fixed; /* Se mantiene fijo respecto a la pantalla */
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+#volverBtn{
+    padding: 10px 15px;
+    font-size: 14px;
+    z-index: 100;
+    background-color: var(--color-primario);
+    color: white;
+    border: none;
+    border-radius: var(--radius-s);
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+}
+
+#volverBtn:hover {
+    background-color: var(--color-primario-hover);
+    transform: translateY(-2px);
+}
+
 .form {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -112,6 +137,26 @@ button.createBtn:active {
     }
 
     .container {
-        padding: 25px;
+        padding: 30px 50px;
+    }
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    body {
+        display: flex;
+        align-items:flex-start;
+        flex-direction: column;
+    }
+
+    .btnRegreso {
+        position: static; 
+        top: 10px;
+        left: 10px;
+    }
+
+    #volverBtn {
+        padding: 8px 12px;
+        font-size: 12px; /* Reducimos un poco el tamaño en móviles */
     }
 }
