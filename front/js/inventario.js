@@ -2,14 +2,40 @@
 const API_URL = 'http://localhost:3000/api'; 
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
+
 const tbody = document.querySelector("tbody");
 
-// BLOQUEO DE SEGURIDAD
-// Si no hay token O el rol no es admin, lo sacamos de la página
-if (!token || role !== 'admin') {
-    alert("Acceso denegado: Solo los administradores pueden ver esta página.");
-    window.location.href = 'index.html';
-}
+// Función para eliminar producto
+const eliminarProducto = async (id) => {
+    // Confirmación de seguridad
+    const confirmar = confirm(`¿Estás seguro de que deseas eliminar el producto con ID: ${id}?`);
+    if (!confirmar) return;
+
+    try {
+        
+        const res = await fetch(`${API_URL}/inventario/eliminarProducto?idProducto=${id}`, {
+            method: "PATCH", // Desactiva el producto
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || data.massage || "Error al eliminar");
+        }
+
+        alert("Producto eliminado correctamente");
+        loadProducts(); // Recargar tabla actualizada
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert(error.message);
+    }
+};
+
 
 // Función para cargar productos
 const loadProducts = async () => {
@@ -44,13 +70,30 @@ const loadProducts = async () => {
         return;
     }
 
-    // 3. Iterar y crear filas
+    //Iterar y crear filas
     products.forEach(product => {
       const tr = document.createElement("tr");
 
-      //visual para el campo booleano
+      //vista para el campo booleano
       const estadoTexto = product.activo ? 'Activo' : 'Inactivo';
       const estadoColor = product.activo ? 'green' : 'red';
+
+
+      //Ocultar/Mostrar botones
+      let accionesAdmin = '';
+      
+      // Se muestran los botones si el usuario es 'admin'
+      if (role === 'admin') {
+          accionesAdmin = `
+            <div id="btn">
+                <a href="editarProducto.html?id=${product.idProducto}" class="btn-editar" style="margin-right: 5px;">Editar</a>
+                <button class="btn-eliminar" onclick="eliminarProducto('${product.idProducto}')">Eliminar</button>
+            </div>
+          `;
+      } else {
+          // Si no es admin
+          accionesAdmin = `<span style="color: gray;">Sin permisos</span>`;
+      }
 
       tr.innerHTML = `
         <td>${product.idProducto}</td>
@@ -60,10 +103,7 @@ const loadProducts = async () => {
         <td>${product.categoria}</td>
         <td style="color: ${estadoColor}; font-weight: bold;">${estadoTexto}</td>
         <td>
-            <div id="btn">
-                <button class="btn-editar">Editar</button>
-                <button class="btn-eliminar">Eliminar</button>
-            </div>
+          ${accionesAdmin}
         </td>
       `;
       
