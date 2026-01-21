@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es-mx">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear Producto</title>
+  <link rel="stylesheet" href="css/crearProducto.css">
+  <script src="js/crearProducto.js" defer></script>
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+<!--Contenedor principal-->
+  <main class="container">
+    <h2>Crear Producto</h2>
+    <!--Formulario-->
+    <form id="producto-form">
+      <div class="form">
+        <div class="res">
+          <label>Nombre del producto</label>
+          <input type="text"id="nombre"  placeholder="Ingrese el nombre" required>
+        </div>
+
+        <div class="res">
+        <label>Folio del producto</label>
+          <input type="text" id="idProducto" placeholder="Ingrese el folio" required>
+        </div>
+
+        <div class="res">
+          <label>Precio</label>
+          <input type="text" id="precio" placeholder="$0.00" min="0" required>
+        </div>
+
+        <div class="res">
+          <label>Stock</label>
+          <input type="text" id="stock" placeholder="Cantidad" min="0" required>
+        </div>
+
+        <div class="res">
+          <label>Categoría</label>
+          <select id="categoria" name="categoria" required>
+            <option value="Bebidas">Bebidas</option>
+            <option value="Alimentos">Alimentos</option>
+            <option value="Otros">Ortros</option>
+          </select>
+        </div>
+
+        <div class="res">
+          <label>Activo</label>
+          <select id="active" name="activo" required>
+            <option value="true">Si</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" id="createBtn" class="createBtn">Crear Producto</button>
+    </form>
+  </main>
+
+</body>
+</html>

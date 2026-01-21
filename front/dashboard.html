@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es-mx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="js/dashboard.js" defer></script>
+    <!-- Para autentificar el archivo -->
+    <script src="js/authentification.js" defer></script> 
+    <!-- Para el menú hamburguesa -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Menú Principal</title>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <!--Topbar-->
+    <header>
+        <div class="top-bar">
+            <i class="fa fa-bars" id="menuBtn"></i>
+            <span id="user-role"></span>
+        </div>
+    </header>
+    <!-- Menú hamburguesa -->
+    <nav id="hamburgerLinks">
+        <a class='admin-exclusive' href="crearProducto.html">Crear Producto</a>
+        <a class='admin-exclusive' href="editarproducto.html">Editar Producto</a>
+        <a href="inventario.html">Inventario</a>
+        <a href="ventas.html">Registrar Venta</a>
+        <a href="devoluciones.html">Registrar Devoluciones</a>
+        <a class='admin-exclusive' href="reportes.html">Ver Reportes</a>
+        <a class='admin-exclusive' href="registrarUsuario.html">Registrar Usuario</a>
+    </nav>
+
+    <!-- Contenido -->
+    <main class="content">
+
+        <!-- Cards-->
+        <a class='admin-exclusive' href="crearProducto.html">
+            <div class="cards">
+                <img src="img/crearProducto.png" alt="icono para crear un producto">
+                <h5>Crear Producto</h5>
+            </div>
+        </a>
+        <a class='admin-exclusive' href="editarProducto.html">
+            <div class="cards">
+                <img src="img/editarProducto.png" alt="icono de crear un producto">
+                <h5>Editar Producto</h5>
+            </div>
+        </a>
+        <a href="inventario.html">
+            <div class="cards">
+                <img src="img/verInventario.png" alt="Icono para ver inventario">
+                <h5>Ver Inventario</h5>
+            </div>
+        </a>
+        <a href="ventas.html">
+            <div class="cards">
+                <img src="img/registrarVenta.png" alt="Icono de registro de ventas">
+                <h5>Registrar Venta</h5>
+            </div>
+        </a>
+        <a href="devoluciones.html">
+            <div class="cards">
+                <img src="img/registrarDevoluciones.png" alt="Icono de registro de devoluciones">
+                <h5>Registrar Devoluciones</h5>
+            </div>
+        </a>
+        <a class='admin-exclusive' href="reportes.html">
+            <div class="cards">
+                <img src="img/verReportes.png" alt="Icono para ver reportes">
+                <h5>Ver Reportes</h5>
+            </div>
+        </a>
+        <a class='admin-exclusive' href="registrarUsuario.html">
+            <div class="cards">
+                <img src="img/registrarUsuario.png" alt="Icono para registrar usuarios">
+                <h5>Registrar Usuario</h5>
+            </div>
+        </a>
+    </main>
+
+</body>
+
+</html>

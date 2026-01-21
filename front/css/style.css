@@ -1,0 +1,118 @@
+:root {
+
+  --color-fondo: #213244;
+  --color-card: #f8f8f8;
+  --color-primario: #415a77;
+  --color-primario-hover: #778da9;
+  --color-input: #acada8;
+  --color-input-hover: #b9bab6;
+  --color-texto: #0d1b2a;
+  --color-blanco: #ffffff;
+  --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
+  --sombra-hover: 0px 15px 35px rgba(0, 0, 0, 0.58);
+  --radius-m: 10px;
+  --radius-s: 6px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-fondo);
+  font-family: 'Segoe UI', Arial, sans-serif; /* Fuente un poco más moderna */
+  color: var(--color-texto);
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+}
+
+.card-login {
+  background-color: var(--color-card);
+  border-radius: var(--radius-m);
+  box-shadow: var(--sombra);
+  display: flex;
+  flex-direction: column;
+  min-width: 300px; /* Un poco más ancho para mejor legibilidad */
+  padding: 30px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-login:hover {
+  box-shadow: var(--sombra-hover);
+  transform: translateY(-5px) scale(1.02);
+}
+
+.card-login img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  align-self: center;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  transition: border 0.3s ease;
+}
+
+.card-login img:hover {
+  border-color: var(--color-primario);
+}
+
+.card-login p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#login-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-login,
+.input-password {
+  padding: 12px;
+  border-radius: var(--radius-s);
+  border: 2px solid transparent;
+  outline: none;
+  background-color: var(--color-input);
+  color: var(--color-texto);
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.input-login:focus,
+.input-password:focus {
+  background-color: var(--color-input-hover);
+  border-color: var(--color-primario);
+}
+
+#button-login {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: var(--radius-s);
+  border: none;
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s active;
+}
+
+#button-login:hover {
+  background-color: var(--color-primario-hover);
+}
+
+#button-login:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

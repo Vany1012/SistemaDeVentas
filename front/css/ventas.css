@@ -1,0 +1,187 @@
+:root {
+  --color-fondo: #213244;
+  --color-card: #f8f8f8;
+  --color-primario: #415a77;
+  --color-secundario: #1b263b;
+  --color-texto-oscuro: #0d1b2a;
+  --color-input-bg: #eceff1;
+  --color-accent: #3b82f6;
+  --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: var(--color-fondo);
+  padding: 40px 20px;
+  color: var(--color-texto-oscuro);
+}
+
+h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 30px;
+  font-size: 2rem;
+}
+
+section {
+  background-color: var(--color-card);
+  padding: 25px;
+  border-radius: var(--radius);
+  margin-bottom: 25px;
+  box-shadow: var(--sombra);
+}
+
+.venta-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.venta-info label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: var(--color-primario);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.venta-info input {
+  margin-top: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: var(--color-input-bg);
+}
+
+.headers {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 15px;
+  padding: 10px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 15px;
+}
+
+.headers h3 {
+  font-size: 0.9rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.fila-producto {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 15px;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #edf2f7;
+}
+
+.fila-producto select,
+.fila-producto input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.precio-unitario {
+  font-weight: bold;
+  text-align: right;
+  color: var(--color-accent);
+}
+
+.totales-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-primario);
+  color: white;
+}
+
+.total-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.total-label {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.total-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+button {
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+#btn-agregar-producto {
+  background-color: transparent;
+  border: 2px dashed var(--color-primario);
+  color: var(--color-primario);
+  width: 100%;
+  padding: 15px;
+}
+
+#btn-agregar-producto:hover {
+  background-color: #f1f5f9;
+}
+
+#btn-registrar-venta {
+  background-color: #10b981;
+  color: white;
+  width: 100%;
+  padding: 18px;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+}
+
+#btn-registrar-venta:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+}
+
+.ticket-imprimible {
+    width: 80mm;
+    padding: 5mm;
+    background: white;
+    color: black;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.ticket-imprimible hr {
+    border: none;
+    border-top: 1px dashed #000;
+    margin: 5px 0;
+}
+
+.ticket-imprimible table {
+    font-size: 12px;
+}
+
+.oculto-impresion {
+    position: fixed;
+    top: -10000px;
+    left: -10000px;
+    z-index: -100;
+    visibility: visible;
+}

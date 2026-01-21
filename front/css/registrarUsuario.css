@@ -1,0 +1,117 @@
+:root {
+    --color-fondo: #213244;
+    --color-card: #f8f8f8;
+    --color-primario: #415a77;
+    --color-primario-hover: #778da9;
+    --color-texto-oscuro: #0d1b2a;
+    --color-label: #546e7a;
+    --color-input-bg: #eceff1;
+    --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: var(--color-fondo);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background-color: var(--color-card);
+    border-radius: var(--radius);
+    box-shadow: var(--sombra);
+    padding: 40px;
+    width: 100%;
+    max-width: 700px;
+}
+
+h2 {
+    color: var(--color-texto-oscuro);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+}
+
+.form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.res {
+    display: flex;
+    flex-direction: column;
+}
+
+.createBtn {
+    grid-column: span 2;
+    margin-top: 20px;
+}
+
+label {
+    color: var(--color-label);
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+input,
+select {
+    padding: 12px 15px;
+    background-color: var(--color-input-bg);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    color: var(--color-texto-oscuro);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--color-primario);
+    background-color: white;
+    outline: none;
+    box-shadow: 0 0 8px rgba(65, 90, 119, 0.2);
+}
+
+.createBtn {
+    background-color: var(--color-primario);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: block;
+    width: 100%;
+}
+
+.createBtn:hover {
+    background-color: var(--color-primario-hover);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+    .form {
+        grid-template-columns: 1fr;
+    }
+
+    .createBtn {
+        grid-column: span 1;
+    }
+}

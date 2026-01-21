@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es-mx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/devoluciones.css">
+    <script src="js/devoluciones.js" defer></script>
+    <title>Registrar Devolución</title>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <main class="container">
+        <h2>Registrar devolución</h2>
+        <!-- Formulario para seleccionar venta -->
+        <form id="venta-formulario">
+            <input type="text" id="venta-input" class="input-venta" placeholder="Escribe el ID de la Venta..."
+                name="id">
+            <button type="submit">Buscar Venta</button>
+        </form>
+        <!-- Formulario para la devolución -->
+        <form id="devolucion-form" style="display: none;">
+            <button type="submit">Registrar Devolución</button>
+        </form>
+    </main>
+</body>
+
+</html>

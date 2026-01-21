@@ -1,0 +1,126 @@
+:root {
+  --color-fondo: #213244;
+  --color-topbar: #19232f;
+  --color-menu: #141b24;
+  --color-card: #f8f8f8;
+  --color-primario: #415a77;
+  --color-primario-hover: #778da9;
+  --color-texto-oscuro: #0d1b2a;
+  --color-texto-claro: #e0e1dd;
+  --sombra: 0 5px 15px rgba(0, 0, 0, 0.3);
+  --transition: 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-fondo);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-topbar);
+  height: 60px;
+  padding: 0 25px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  color: var(--color-texto-claro);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+#hamburgerLinks {
+  background-color: var(--color-menu);
+  position: fixed;
+  top: 60px;
+  left: -260px;
+  width: 260px;
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  transition: left var(--transition);
+  z-index: 999;
+}
+
+#hamburgerLinks.active {
+  left: 0;
+}
+
+#hamburgerLinks a {
+  color: #a0a0a0;
+  padding: 15px 25px;
+  text-decoration: none;
+  border-left: 4px solid transparent;
+  transition: all var(--transition);
+}
+
+#hamburgerLinks a:hover {
+  background-color: var(--color-primario);
+  color: white;
+  border-left: 4px solid var(--color-primario-hover);
+}
+
+.content {
+  margin-top: 80px;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cards {
+  background-color: var(--color-card);
+  border-radius: 12px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--sombra);
+  transition: transform var(--transition), box-shadow var(--transition);
+  padding: 20px;
+  text-decoration: none;
+}
+
+.cards:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+}
+
+.cards img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+  object-fit: contain;
+}
+
+.cards h5 {
+  font-size: 1.1rem;
+  color: var(--color-texto-oscuro);
+  text-align: center;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  #hamburgerLinks {
+    width: 100%;
+    left: -100%;
+  }
+
+  #hamburgerLinks.active {
+    left: 0;
+  }
+}

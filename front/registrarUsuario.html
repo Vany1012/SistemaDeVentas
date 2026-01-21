@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es-mx">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Producto</title>
+  <link rel="stylesheet" href="css/crearProducto.css"> 
+  <script src="./js/registrarUsuario.js" defer></script>
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+<!--Contenedor principal-->
+  <main class="container">
+    <h2>Registrar Usuario</h2>
+    <!--Formulario-->
+    <form action="" id="registrarUsuario-form">
+      <div class="form">
+        <div class="res">
+          <label>Nombre del usuario</label>
+          <input type="text"  id="vendedorName" placeholder="" required>
+        </div>
+
+        <div class="res">
+        <label>Vendedor ID</label>
+          <input type="text" id="vendedorId" placeholder="" required>
+        </div>
+
+        <div class="res">
+          <label>Contraseña</label>
+          <input type="password" id="password" placeholder="" required>
+        </div>
+
+        <div class="res">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="" required>
+        </div>
+
+        <div class="res">
+          <label>Role</label>
+          <select id="role" name="role">
+              <option value="vendedor">vendedor</option>   
+              <option value="admin">admin</option>
+          </select>
+        </div>
+
+        <div class="res">
+          <label>Activo</label>
+          <select id="active" name="activo" required>
+            <option value="true">Si</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" id="createBtn" class="createBtn">Crear Usuario</button>
+    </form>
+  </main>
+
+</body>
+</html>

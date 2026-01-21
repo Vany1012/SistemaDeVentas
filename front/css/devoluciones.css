@@ -1,0 +1,152 @@
+:root {
+    --color-fondo: #213244;
+    --color-card: #f8f8f8;
+    --color-primario: #415a77;
+    --color-primario-hover: #778da9;
+    --color-texto-oscuro: #0d1b2a;
+    --color-input-bg: #eceff1;
+    --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --radius-m: 12px;
+    --radius-s: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background-color: var(--color-fondo);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.container {
+    background-color: var(--color-card);
+    border-radius: var(--radius-m);
+    box-shadow: var(--sombra);
+    max-width: 1000px;
+    padding: 30px;
+    width: 100%;
+}
+
+h2,
+h3,
+h4 {
+    color: var(--color-texto-oscuro);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#venta-formulario {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+input {
+    background-color: var(--color-input-bg);
+    border: 2px solid transparent;
+    border-radius: var(--radius-s);
+    padding: 12px;
+    flex-grow: 1;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: var(--color-primario);
+    background-color: white;
+}
+
+button {
+    background-color: var(--color-primario);
+    color: white;
+    border: none;
+    border-radius: var(--radius-s);
+    padding: 12px 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--color-primario-hover);
+}
+
+.detalles-venta-container {
+    margin-top: 20px;
+    border-top: 2px solid var(--color-input-bg);
+    padding-top: 20px;
+}
+
+.venta-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    background: white;
+    padding: 20px;
+    border-radius: var(--radius-s);
+    margin-bottom: 25px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.info-item strong {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.info-item span {
+    font-weight: 600;
+    color: var(--color-texto-oscuro);
+}
+
+.productos-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: var(--radius-s);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.productos-table th {
+    background-color: var(--color-primario);
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.productos-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+}
+
+.cantidad-devolver-input {
+    width: 70px !important;
+    padding: 5px !important;
+    text-align: center;
+}
+
+.resumen-devolucion {
+    background: var(--color-primario);
+    color: white;
+    padding: 20px;
+    border-radius: var(--radius-s);
+    text-align: right;
+}
+
+.total-devolucion span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 10px;
+}

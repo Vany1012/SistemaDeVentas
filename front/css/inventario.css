@@ -1,0 +1,164 @@
+:root {
+    --color-fondo: #213244;
+    --color-card: #f8f8f8;
+    --color-primario: #415a77;
+    --color-primario-hover: #778da9;
+    --color-texto-oscuro: #0d1b2a;
+    --color-success: #10b981;
+    --color-danger: #ef4444;
+    --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: var(--color-fondo);
+    min-height: 100vh;
+    padding: 30px 20px;
+}
+
+.container {
+    background-color: var(--color-card);
+    border-radius: var(--radius);
+    box-shadow: var(--sombra);
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 30px;
+    width: 100%;
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #eee;
+}
+
+.header-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#verInventario {
+    height: 40px;
+    filter: brightness(0.2);
+}
+
+h2 {
+    color: var(--color-texto-oscuro);
+    font-size: 1.8rem;
+}
+
+.btn-agregar {
+    background-color: var(--color-success);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-agregar:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
+}
+
+.table-container {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: var(--color-primario);
+    color: white;
+    padding: 15px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    color: var(--color-texto-oscuro);
+    font-size: 0.95rem;
+}
+
+tr:hover {
+    background-color: #f1f5f9;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.badge-active {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-inactive {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-editar,
+.btn-eliminar {
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-editar {
+    background-color: var(--color-primario);
+    color: white;
+}
+
+.btn-eliminar {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.btn-editar:hover,
+.btn-eliminar:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .header-section {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+}
