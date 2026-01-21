@@ -44,6 +44,10 @@ const createProduct = async () => {
         return;
     }
 
+    // Obliga a que la primera letra de categoria sea Mayuscula
+    const categoriaRaw = categoriaInput.value.trim();
+    const categoriaFormateada = categoriaRaw.charAt(0).toUpperCase() + categoriaRaw.slice(1).toLowerCase();
+
     // Preparar el Payload (Datos)
     const payload = {
         idProducto: idProductoInput.value.trim(),
