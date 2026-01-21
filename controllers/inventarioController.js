@@ -67,7 +67,7 @@ exports.verInventario = async (req, res) => {
 	try {
 		if (req.vendedor.role === req.role) {
 			const productos = await Producto.find();
-			res.json(productos);
+			return res.json(productos);
 		}
 		return res.status(401).json({ message: 'No tienes permisos para ver el inventario' });
 	} catch (error) {
