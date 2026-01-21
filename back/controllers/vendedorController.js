@@ -1,8 +1,10 @@
 const Vendedor = require('../models/vendedorModels');
 const jwt = require ('jsonwebtoken');
+const { validarEmail, esContraseñaSegura } = require('../middleware/validacionVendedor');
 
 const generateToken = (role, id) => {
-    return jwt.sign({role, id}, process.env.JWT_SECRET, {expiresIn: '1h'});
+    return jwt.sign({role, id}, process.env.JWT_SECRET, {expiresIn: '24h'});
+    //return jwt.sign({role, id}, process.env.JWT_SECRET); Esto es un riesgo manejenlo bien en el front y ya lo activan
 };
 
 exports.registerVendedor = async (req, res) => {
