@@ -4,53 +4,54 @@
   <meta charset="UTF-8">
   <title>Crear Producto</title>
   <link rel="stylesheet" href="css/crearProducto.css"> 
+  <script src="./js/registrarUsuario.js" defer></script>
 </head>
 
 <body>
 <!--Contenedor principal-->
   <main class="container">
-    <h2>Crear Usuario</h2>
+    <h2>Registrar Usuario</h2>
     <!--Formulario-->
-    <form action="" id="product-form">
+    <form action="" id="registrarUsuario-form">
       <div class="form">
         <div class="res">
           <label>Nombre del usuario</label>
-          <input type="text" placeholder="" required>
+          <input type="text"  id="vendedorName" placeholder="" required>
         </div>
 
         <div class="res">
-        <label>Matricula</label>
-          <input type="number" placeholder="" required>
+        <label>Vendedor ID</label>
+          <input type="text" id="vendedorId" placeholder="" required>
         </div>
 
         <div class="res">
           <label>Contraseña</label>
-          <input type="text" placeholder="" required>
+          <input type="password" id="password" placeholder="" required>
         </div>
 
         <div class="res">
           <label>Email</label>
-          <input type="text" placeholder="" required>
+          <input type="email" id="email" placeholder="" required>
         </div>
 
         <div class="res">
           <label>Role</label>
-          <select id="categoria" name="role">
-              <option>vendedor</option>   
-              <option>admin</option>
+          <select id="role" name="role">
+              <option value="vendedor">vendedor</option>   
+              <option value="admin">admin</option>
           </select>
         </div>
 
         <div class="res">
           <label>Activo</label>
-          <select id="activo" name="activo" required>
-            <option value="yes">Si</option>
-            <option value="no">No</option>
+          <select id="active" name="activo" required>
+            <option value="true">Si</option>
+            <option value="false">No</option>
           </select>
         </div>
       </div>
 
-      <button id="createBtn" class="createBtn">Crear Usuario</button>
+      <button type="submit" id="createBtn" class="createBtn">Crear Usuario</button>
     </form>
   </main>
 
