@@ -11,6 +11,8 @@ const ventaSchema = new mongoose.Schema(
            precioUnitario: {type: Number, required: true, min:0}
        }],
        totalProductos: {type: Number, required: true, min:0},
-       total: {type: Number, required:true, min:0}
+       total: {type: Number, required:true, min:0},
+       metodoPago: {type: String, required: true, enum: ['efectivo', 'tarjeta', 'transferencia'], trim: true},
+       cambio: {type: Number, default: 0, min: 0}
 })
 module.exports = mongoose.model('Venta', ventaSchema);

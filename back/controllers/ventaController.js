@@ -7,10 +7,14 @@ exports.registrarVentas = async (req, res) => {
             return res.status(401).json({message: 'No autorizado - Vendedor no encontrado'});
         }
         if(req.vendedor.role === req.role){
-                const { vendedor, productosVendidos } = req.body;
+                const { vendedor, productosVendidos, metodoPago, monto } = req.body;
 
             if (!vendedor || !productosVendidos || productosVendidos.length === 0) {
                 return res.status(400).json({ message: 'Faltan datos: vendedor y productosVendidos son requeridos' });
+            }
+
+            if (!metodoPago) {
+                return res.status(400).json({ message: 'El método de pago es requerido' });
             }
             let total = 0;
             let totalProductos = 0;
@@ -39,11 +43,23 @@ exports.registrarVentas = async (req, res) => {
                 total += producto.precio * cantidad;
                 totalProductos += cantidad;
             }
+
+            // Calculamos si hay cambio para darle al cliente
+            let cambio = 0;
+            if (metodoPago === 'efectivo') {
+                if (!monto || monto < total) {
+                    return res.status(400).json({ message: 'Monto de efectivo insuficiente' });
+                }
+                cambio = monto - total;
+            }
+
             const nuevaVenta = new Venta({
                 vendedor,
                 productosVendidos: productosParaVenta,
                 totalProductos,
-                total
+                total,
+                metodoPago,
+                cambio
             });
 
             const ventaGuardada = await nuevaVenta.save();
@@ -66,7 +82,9 @@ exports.registrarVentas = async (req, res) => {
                 vendedor: ventaGuardada.vendedor, 
                 productosVendidos: productosSinId, 
                 totalProductos: ventaGuardada.totalProductos, 
-                total: '$' + ventaGuardada.total} });
+                total: '$' + ventaGuardada.total,
+                metodoPago: ventaGuardada.metodoPago,
+                cambio: ventaGuardada.cambio ? '$' + ventaGuardada.cambio : 'N/A'} });
         }else{
              return res.status(403).json({ message: 'Acceso denegado: El rol no coincide o falta token' });
         }
