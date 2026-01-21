@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en-mx">
+<html lang="es-mx">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="css/ventas.css">
     <title>Registar Venta</title>
 </head>
+
 <body>
     <h2>Registrar Venta</h2>
     <!--Datos de la venta (fecha y vendedor)-->
@@ -22,38 +24,72 @@
         </label>
 
     </section>
-    
+
     <section class="productos-section">
         <div class="headers">
             <h3>Productos vendidos</h3>
             <h3>Cantidad</h3>
             <h3>Precio Unitario</h3>
         </div>
-         <div class="productos-vendidos" id="productos-vendidos">
+        <div class="productos-vendidos" id="productos-vendidos">
 
-         </div>
+        </div>
 
-         <button id="btn-agregar-producto">
+        <button id="btn-agregar-producto">
             Agregar producto
         </button>
 
     </section>
-    
+
     <!-- Sección para mostrar los totales -->
     <section class="totales-section">
-        <div>
-            <span>Total de productos:</span>
-            <span id="total-productos">0</span>
+        <div class="total-item">
+            <span class="total-label">Productos:</span>
+            <span id="total-productos" class="total-value">0</span>
         </div>
-        <div>
-            <span>Total venta:</span>
-            <span id="total-venta">$0.00</span>
+        <div class="total-item">
+            <span class="total-label">Total Venta:</span>
+            <span id="total-venta" class="total-value">$0.00</span>
         </div>
     </section>
-    
-     <button id="btn-registrar-venta">
+
+    <button id="btn-registrar-venta">
         Registrar venta
     </button>
 
+    <div id="ticket-container" class="oculto-impresion">
+        <div class="ticket-imprimible">
+            <div class="header">
+                <h2 style="text-align: center;">MI TIENDA</h2>
+                <p style="text-align: center;">Nota de Venta</p>
+            </div>
+            <hr>
+            <div class="info">
+                <p><strong>Ticket #:</strong> <span id="t-id"></span></p>
+                <p><strong>Fecha:</strong> <span id="t-fecha"></span></p>
+                <p><strong>Vendedor:</strong> <span id="t-vendedor"></span></p>
+            </div>
+            <hr>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">Cant.</th>
+                        <th style="text-align: left;">Prod.</th>
+                        <th style="text-align: right;">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="t-items">
+                </tbody>
+            </table>
+            <hr>
+            <div class="total" style="text-align: right; font-size: 1.2rem;">
+                <strong>Total: <span id="t-total"></span></strong>
+            </div>
+            <div class="footer" style="text-align: center; margin-top: 20px; font-size: 0.8rem;">
+                <p>¡Gracias por su compra!</p>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

@@ -1,153 +1,187 @@
+:root {
+  --color-fondo: #213244;
+  --color-card: #f8f8f8;
+  --color-primario: #415a77;
+  --color-secundario: #1b263b;
+  --color-texto-oscuro: #0d1b2a;
+  --color-input-bg: #eceff1;
+  --color-accent: #3b82f6;
+  --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
+  --radius: 12px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Segoe UI', sans-serif;
 }
-
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #0d1b2a;
-  color: #e0e1dd;
-  padding: 40px;
+  background-color: var(--color-fondo);
+  padding: 40px 20px;
+  color: var(--color-texto-oscuro);
 }
 
-/* TITULO */
 h2 {
   text-align: center;
+  color: #fff;
   margin-bottom: 30px;
-  color: #e0e1dd;
+  font-size: 2rem;
 }
 
-/* SECCIONES GENERALES */
 section {
-  background-color: #1b263b;
-  padding: 20px;
-  border-radius: 10px;
+  background-color: var(--color-card);
+  padding: 25px;
+  border-radius: var(--radius);
   margin-bottom: 25px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--sombra);
 }
 
-.headers {
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-}
-
-/* INFO VENTA */
-.fila-producto,
 .venta-info {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
-  justify-content: space-between;
 }
 
 .venta-info label {
   display: flex;
   flex-direction: column;
-  font-size: 14px;
+  font-weight: bold;
+  color: var(--color-primario);
+  font-size: 0.85rem;
+  text-transform: uppercase;
 }
 
-.fila-producto input,
-.fila-producto select {
+.venta-info input {
   margin-top: 8px;
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
-  outline: none;
-  background-color: #e0e1dd;
-  color: #0d1b2a;
-}
-
-.fila-producto span {
-  align-content: center;
-}
-
-/* PRODUCTOS */
-.productos-section h3 {
-  margin-bottom: 15px;
-  color: #e0e1dd;
-}
-
-.productos-vendidos {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 15px;
-}
-
-/*Cuando se crea el producto este es el estilo que agarrará*/
-.producto-card {
-  display: flex;
-  flex-direction: column;
-  background-color: #415a77;
   padding: 12px;
   border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: var(--color-input-bg);
 }
 
-.producto-card input {
-  padding: 8px;
+.headers {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 15px;
+  padding: 10px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 15px;
+}
+
+.headers h3 {
+  font-size: 0.9rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.fila-producto {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 15px;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #edf2f7;
+}
+
+.fila-producto select,
+.fila-producto input {
+  padding: 10px;
   border-radius: 6px;
-  margin: 5px;
-  border: none;
-  outline: none;
-  background-color: #e0e1dd;
-  color: #0d1b2a;
-  font-size: 13px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.95rem;
 }
 
-/* BOTONES */
-button {
-  padding: 10px 15px;
-  border-radius: 6px;
-  border: none;
-  background-color: #415a77;
-  color: #e0e1dd;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+.precio-unitario {
+  font-weight: bold;
+  text-align: right;
+  color: var(--color-accent);
 }
 
-button:hover {
-  background-color: #778da9;
-  transform: translateY(-2px);
-}
-
-/* TOTALES */
 .totales-section {
   display: flex;
   justify-content: space-between;
-  background-color: #415a77;
-  font-size: 16px;
+  align-items: center;
+  background-color: var(--color-primario);
+  color: white;
 }
 
-.totales-section div {
+.total-item {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.total-label {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.total-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+button {
+  border-radius: 8px;
+  border: none;
   font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-/* BOTÓN FINAL */
-#btn-registrar-venta,
 #btn-agregar-producto {
+  background-color: transparent;
+  border: 2px dashed var(--color-primario);
+  color: var(--color-primario);
   width: 100%;
-  margin-top: 10px;
-  font-size: 16px;
-  padding: 12px;
+  padding: 15px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .venta-info {
-    flex-direction: column;
-  }
+#btn-agregar-producto:hover {
+  background-color: #f1f5f9;
+}
 
-  .producto-card {
-    grid-template-columns: 1fr;
-  }
+#btn-registrar-venta {
+  background-color: #10b981;
+  color: white;
+  width: 100%;
+  padding: 18px;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+}
 
-  .totales-section {
-    flex-direction: column;
-    gap: 10px;
-  }
+#btn-registrar-venta:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+}
+
+.ticket-imprimible {
+    width: 80mm;
+    padding: 5mm;
+    background: white;
+    color: black;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.ticket-imprimible hr {
+    border: none;
+    border-top: 1px dashed #000;
+    margin: 5px 0;
+}
+
+.ticket-imprimible table {
+    font-size: 12px;
+}
+
+.oculto-impresion {
+    position: fixed;
+    top: -10000px;
+    left: -10000px;
+    z-index: -100;
+    visibility: visible;
 }

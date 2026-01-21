@@ -1,153 +1,164 @@
-/* Reset básico */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-/* Body */
-body { 
-    background: linear-gradient(135deg, #2c3e50, #34495e, #3498db); 
-    min-height: 100vh; 
-    font-family: sans-serif; 
-    padding: 20px 0; 
+:root {
+    --color-fondo: #213244;
+    --color-card: #f8f8f8;
+    --color-primario: #415a77;
+    --color-primario-hover: #778da9;
+    --color-texto-oscuro: #0d1b2a;
+    --color-success: #10b981;
+    --color-danger: #ef4444;
+    --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --radius: 12px;
 }
 
-/* Container */
-.container { 
-    background-color: #1e293b; 
-    border-radius: 20px; 
-    padding: 30px; 
-    margin: 0 auto; 
-    width: 98%; 
-    max-width: 1400px; 
-    box-shadow: 0 15px 35px rgba(44, 62, 80, 0.4); 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-/* Header con botón */
-.header-section { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 30px; 
-    flex-wrap: wrap; 
-    gap: 15px; 
+body {
+    background-color: var(--color-fondo);
+    min-height: 100vh;
+    padding: 30px 20px;
 }
 
-#verInventario{
-    height: 50px;
-    filter: invert(100%);
+.container {
+    background-color: var(--color-card);
+    border-radius: var(--radius);
+    box-shadow: var(--sombra);
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 30px;
+    width: 100%;
 }
 
-h2 { 
-    color: #f1f5f9; 
-    font-size: 2rem; 
-    font-weight: bold; 
-}
-
-.btn-agregar { 
-    background: linear-gradient(135deg, #10b981, #059669); 
-    color: white; 
-    border: none; 
-    padding: 12px 25px; 
-    border-radius: 12px; 
-    font-size: 1rem; 
-    font-weight: 600; 
-    cursor: pointer; 
-    transition: all 0.3s; 
-}
-
-.btn-agregar:hover { 
-    transform: translateY(-2px); 
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4); 
-}
-
-/* Tabla */
-.table-container { 
-    background-color: #1e293b; 
-    border-radius: 15px; 
-    overflow: hidden; 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
-}
-
-table { 
-    width: 100%; 
-    border-collapse: collapse; 
-}
-
-th, td { 
-    padding: 16px 12px; 
-    text-align: left; 
-    color: #f1f5f9; 
-}
-
-th { 
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
-    font-weight: 600; 
-    font-size: 0.9rem; 
-    text-transform: uppercase; 
-    letter-spacing: 0.5px; 
-    text-align: center;
-}
-
-td { 
-    border-bottom: 1px solid #475569; 
-}
-
-tr:hover { 
-    background: rgba(71, 85, 105, 0.3); 
-}
-
-#btn{
+.header-section {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #eee;
 }
 
-/* Botones de acción */
-.btn-editar, .btn-eliminar { 
-    padding: 8px 16px; 
-    border: none; 
-    border-radius: 8px; 
-    font-size: 0.85rem; 
-    font-weight: 500; 
-    cursor: pointer; 
-    margin-right: 8px; 
-    transition: all 0.3s; 
+.header-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-.btn-editar { 
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
-    color: white; 
+#verInventario {
+    height: 40px;
+    filter: brightness(0.2);
 }
 
-.btn-editar:hover { 
-    transform: translateY(-1px); 
-    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); 
+h2 {
+    color: var(--color-texto-oscuro);
+    font-size: 1.8rem;
 }
 
-.btn-eliminar { 
-    background: linear-gradient(135deg, #ef4444, #dc2626); 
-    color: white; 
+.btn-agregar {
+    background-color: var(--color-success);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
-.btn-eliminar:hover { 
-    transform: translateY(-1px); 
-    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4); 
+.btn-agregar:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
 }
 
-/* Responsive */
-@media (max-width: 768px) { 
-    .header-section { 
-        flex-direction: column; 
-        text-align: center; 
-    }
-    
-    .container { 
-        margin: 20px; 
-        padding: 25px 20px; 
-    }
-    
-    table { 
-        font-size: 0.9rem; 
-    }
-    
-    th, td { 
-        padding: 12px 8px; 
+.table-container {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: var(--color-primario);
+    color: white;
+    padding: 15px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    color: var(--color-texto-oscuro);
+    font-size: 0.95rem;
+}
+
+tr:hover {
+    background-color: #f1f5f9;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.badge-active {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.badge-inactive {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-editar,
+.btn-eliminar {
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-editar {
+    background-color: var(--color-primario);
+    color: white;
+}
+
+.btn-eliminar {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.btn-editar:hover,
+.btn-eliminar:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .header-section {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
     }
 }

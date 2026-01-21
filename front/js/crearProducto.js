@@ -1,10 +1,10 @@
 
 const API_URL = 'http://localhost:3000/api/inventario';
-const role = localStorage.getItem("role");
+const userData = JSON.parse(localStorage.getItem('userData'));
 const token = localStorage.getItem("token");
 // BLOQUEO DE SEGURIDAD
 // Si no hay token O el rol no es admin, lo sacamos de la página
-if (!token || role !== 'admin') {
+if (!token || userData.role !== 'admin') {
     alert("Acceso denegado: Solo los administradores pueden ver esta página.");
     window.location.href = 'index.html';
 }

@@ -114,7 +114,7 @@ function mostrarDetallesVenta(venta) {
             <div class="venta-info">
                 <div class="info-item">
                     <strong>ID Venta:</strong>
-                    <span><small>${venta._id}</small></span>
+                    <span>${venta._id}</span>
                 </div>
                 <div class="info-item">
                     <strong>Vendedor:</strong>

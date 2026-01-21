@@ -263,155 +263,89 @@ function actualizarTarjetasReportes(estadisticasInventario, ventasMes) {
 function crearTablaInventario(estadisticas) {
     const container = document.querySelector('.container');
     
-    // Crear sección de inventario detallado
-    const seccionInventario = document.createElement('div');
-    seccionInventario.className = 'inventario-detallado';
-    seccionInventario.style.cssText = `
-        margin-top: 40px;
-        padding: 20px;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    `;
+    // Limpiar si ya existe para evitar duplicados al actualizar
+    const anterior = document.querySelector('.inventario-detallado');
+    if (anterior) anterior.remove();
+
+    const seccion = document.createElement('div');
+    seccion.className = 'inventario-detallado';
     
-    seccionInventario.innerHTML = `
-        <h3 style="margin-bottom: 20px; color: #333;">📊 Resumen del Inventario</h3>
+    seccion.innerHTML = `
+        <h3>📊 Resumen del Inventario</h3>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-            <div class="stat-card" style="padding: 15px; background-color: #e3f2fd; border-radius: 8px;">
-                <h4 style="margin: 0 0 10px 0; color: #1976d2;">Productos Totales</h4>
-                <p style="font-size: 24px; font-weight: bold; margin: 0;">${estadisticas.totalProductos}</p>
+        <div class="stats-grid">
+            <div class="stat-item bg-blue">
+                <h4>Productos Totales</h4>
+                <p>${estadisticas.totalProductos}</p>
             </div>
-            
-            <div class="stat-card" style="padding: 15px; background-color: #e8f5e9; border-radius: 8px;">
-                <h4 style="margin: 0 0 10px 0; color: #388e3c;">Productos Activos</h4>
-                <p style="font-size: 24px; font-weight: bold; margin: 0;">${estadisticas.productosActivos}</p>
+            <div class="stat-item bg-green">
+                <h4>Productos Activos</h4>
+                <p>${estadisticas.productosActivos}</p>
             </div>
-            
-            <div class="stat-card" style="padding: 15px; background-color: #fff3e0; border-radius: 8px;">
-                <h4 style="margin: 0 0 10px 0; color: #f57c00;">Stock Total</h4>
-                <p style="font-size: 24px; font-weight: bold; margin: 0;">${estadisticas.stockTotal}</p>
+            <div class="stat-item bg-orange">
+                <h4>Stock Total</h4>
+                <p>${estadisticas.stockTotal}</p>
             </div>
-            
-            <div class="stat-card" style="padding: 15px; background-color: #fce4ec; border-radius: 8px;">
-                <h4 style="margin: 0 0 10px 0; color: #c2185b;">Valor Inventario</h4>
-                <p style="font-size: 24px; font-weight: bold; margin: 0;">$${estadisticas.valorInventario}</p>
+            <div class="stat-item bg-pink">
+                <h4>Valor Inventario</h4>
+                <p>$${estadisticas.valorInventario}</p>
             </div>
         </div>
         
-        <h4 style="margin-bottom: 15px; color: #555;">📈 Productos por Categoría</h4>
+        <h4>📈 Productos por Categoría</h4>
+        <table class="tabla-reporte">
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Productos</th>
+                    <th>Stock Total</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody id="categorias-body"></tbody>
+        </table>
     `;
     
-    // Crear tabla de categorías
-    const tablaCategorias = document.createElement('table');
-    tablaCategorias.style.cssText = `
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    `;
-    
-    tablaCategorias.innerHTML = `
-        <thead>
-            <tr style="background-color: #f5f5f5;">
-                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Categoría</th>
-                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Productos</th>
-                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Stock Total</th>
-                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Valor Total</th>
-            </tr>
-        </thead>
-        <tbody id="categorias-body"></tbody>
-    `;
-    
-    seccionInventario.appendChild(tablaCategorias);
-    
-    // Llenar tabla de categorías
-    const categoriasBody = document.getElementById('categorias-body');
-    if (categoriasBody && estadisticas.categorias) {
-        Object.entries(estadisticas.categorias).forEach(([categoria, datos]) => {
-            const row = document.createElement('tr');
-            row.style.borderBottom = '1px solid #eee';
-            row.innerHTML = `
-                <td style="padding: 10px;">${categoria}</td>
-                <td style="padding: 10px;">${datos.count}</td>
-                <td style="padding: 10px;">${datos.stock}</td>
-                <td style="padding: 10px;">$${datos.valor.toFixed(2)}</td>
-            `;
-            categoriasBody.appendChild(row);
-        });
-    }
-    
-    // Agregar advertencia de bajo stock si existe
+    container.appendChild(seccion);
+
+    // Llenar las filas (esto sigue siendo dinámico)
+    const tbody = document.getElementById('categorias-body');
+    Object.entries(estadisticas.categorias).forEach(([cat, datos]) => {
+        const row = `<tr>
+            <td>${cat}</td>
+            <td>${datos.count}</td>
+            <td>${datos.stock}</td>
+            <td>$${datos.valor.toFixed(2)}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+    });
+
+    // Alerta de Stock Bajo
     if (estadisticas.bajoStock > 0) {
         const alerta = document.createElement('div');
-        alerta.style.cssText = `
-            padding: 15px;
-            background-color: #ffebee;
-            border-left: 4px solid #f44336;
-            margin-top: 20px;
-            border-radius: 4px;
-        `;
+        alerta.className = 'alerta-stock';
         alerta.innerHTML = `
-            <p style="margin: 0; color: #d32f2f; font-weight: bold;">
-                ⚠️ Alerta: ${estadisticas.bajoStock} producto(s) con stock bajo (< 10 unidades)
-            </p>
-            <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">
-                Se recomienda reponer stock para evitar desabastecimiento.
-            </p>
+            <strong>⚠️ Alerta: ${estadisticas.bajoStock} productos con stock bajo</strong>
+            <p>Se recomienda reponer stock lo antes posible.</p>
         `;
-        seccionInventario.appendChild(alerta);
+        seccion.appendChild(alerta);
     }
-    
-    container.appendChild(seccionInventario);
 }
 
-// Configurar botón de volver
-function configurarBotonVolver() {
-    const botonVolver = document.createElement('button');
-    botonVolver.id = 'volverBtn';
-    botonVolver.textContent = '← Volver al Dashboard';
-    botonVolver.style.cssText = `
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        padding: 10px 15px;
-        background-color: #607d8b;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        z-index: 100;
-    `;
-    
-    botonVolver.addEventListener('click', function() {
-        window.location.href = 'dashboard.html';
-    });
-    
-    document.body.appendChild(botonVolver);
-}
+function configurarBotones() {
+    // Botón Volver
+    const btnVolver = document.createElement('button');
+    btnVolver.className = 'btn-flotante btn-volver';
+    btnVolver.textContent = '← Dashboard';
+    btnVolver.onclick = () => window.location.href = 'dashboard.html';
 
-// Configurar botón de actualizar
-function configurarBotonActualizar() {
-    const botonActualizar = document.createElement('button');
-    botonActualizar.id = 'actualizarBtn';
-    botonActualizar.textContent = '🔄 Actualizar Reportes';
-    botonActualizar.style.cssText = `
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        padding: 10px 15px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        z-index: 100;
-    `;
-    
-    botonActualizar.addEventListener('click', cargarReportes);
-    
-    document.body.appendChild(botonActualizar);
+    // Botón Actualizar
+    const btnActualizar = document.createElement('button');
+    btnActualizar.className = 'btn-flotante btn-actualizar';
+    btnActualizar.textContent = '🔄 Actualizar';
+    btnActualizar.onclick = cargarReportes;
+
+    document.body.append(btnVolver, btnActualizar);
 }
 
 // Mostrar loading
@@ -496,13 +430,6 @@ async function cargarReportes() {
             
             // Mostrar mensaje de error
             const errorContainer = document.createElement('div');
-            errorContainer.style.cssText = `
-                padding: 20px;
-                background-color: #ffebee;
-                border-radius: 8px;
-                margin-top: 20px;
-                color: #d32f2f;
-            `;
             errorContainer.innerHTML = `
                 <h4>⚠️ Error al cargar reportes</h4>
                 <p>${resultadoInventario.error || resultadoVentas.error}</p>
@@ -533,15 +460,12 @@ function inicializarPagina() {
     const titulo = document.querySelector('h2');
     if (titulo) {
         titulo.insertAdjacentHTML('afterend', `
-            <p style="text-align: center; color: #666; margin-top: -10px; margin-bottom: 20px;">
-                Usuario: ${usuario.vendedorName} (${usuario.role})
-            </p>
+            <p>Usuario: ${usuario.vendedorName} (${usuario.role})</p>
         `);
     }
     
     // Configurar botones
-    configurarBotonVolver();
-    configurarBotonActualizar();
+    configurarBotones();
     
     // Cargar reportes
     cargarReportes();

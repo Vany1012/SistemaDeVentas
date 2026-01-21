@@ -2,14 +2,14 @@ const API_URL = 'http://localhost:3000/api';
 const contenedorProductos = document.getElementById("productos-vendidos");
 const btnAgregarProducto = document.getElementById("btn-agregar-producto");
 const token = localStorage.getItem('token');
-const userData = localStorage.getItem('userData');
+const userData = JSON.parse(localStorage.getItem('userData'));
 
 // Función para mostrar la fecha y el vendedor
 document.addEventListener('DOMContentLoaded', () => {
   const hoy = new Date().toISOString().split('T')[0];
   const inputFecha = document.getElementById('fecha-venta');
   inputFecha.value = hoy;
-  const nombreVendedor = userData.vendedorName
+  const nombreVendedor = userData.vendedorName;
   const inputVendedor = document.getElementById('vendedor');
   inputVendedor.value = nombreVendedor;
 });
@@ -158,14 +158,8 @@ document.querySelector("#btn-registrar-venta").addEventListener('click', async (
       },
       body: JSON.stringify(ventaData)
     });
-
     if (response.ok) {
-      const resultado = await response.json();
       alert("Venta registrada con éxito.");
-      location.reload();
-    } else {
-      const errorData = await response.json();
-      alert("Error del servidor: " + (errorData.message || "No se pudo registrar"));
     }
   } catch (error) {
     console.error("Error en la petición:", error);

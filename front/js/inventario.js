@@ -1,7 +1,7 @@
 
 const API_URL = 'http://localhost:3000/api'; 
 const token = localStorage.getItem("token");
-const role = localStorage.getItem("role");
+const userData = JSON.parse(localStorage.getItem('userData'));
 
 const tbody = document.querySelector("tbody");
 
@@ -83,7 +83,7 @@ const loadProducts = async () => {
       let accionesAdmin = '';
       
       // Se muestran los botones si el usuario es 'admin'
-      if (role === 'admin') {
+      if (userData.role === 'admin') {
           accionesAdmin = `
             <div id="btn">
                 <a href="editarProducto.html?id=${product.idProducto}" class="btn-editar" style="margin-right: 5px;">Editar</a>

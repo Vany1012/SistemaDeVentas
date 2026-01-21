@@ -1,128 +1,236 @@
-/* Reset básico */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-/* Body */
-body { 
-    background: linear-gradient(135deg, #2c3e50, #34495e, #3498db); 
-    min-height: 100vh; 
-    font-family: sans-serif; 
-    padding: 20px 0; 
+:root {
+    --color-fondo: #213244;
+    --color-card: #f8f8f8;
+    --color-card-oscuro: #cacaca;
+    --color-primario: #415a77;
+    --color-texto-oscuro: #0d1b2a;
+    --color-success: #10b981;
+    --color-danger: #ef4444;
+    --color-warning: #f59e0b;
+    --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --radius: 12px;
 }
 
-/* Container */
-.container { 
-    background-color: #1e293b; 
-    border-radius: 20px; 
-    padding: 40px; 
-    margin: 0 auto; 
-    width: 95%; 
-    max-width: 1200px; 
-    box-shadow: 0 15px 35px rgba(44, 62, 80, 0.4); 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-#head{
+body {
+    background-color: var(--color-fondo);
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.container {
+    background-color: var(--color-card-oscuro);
+    border-radius: var(--radius);
+    box-shadow: var(--sombra);
+    margin: 0 auto;
+    max-width: 1100px;
+    padding: 40px;
+    position: relative;
+}
+
+#head {
     display: flex;
-    flex-direction: row;
+    align-items: center;
     justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+}
+
+#verReportes {
+    height: 45px;
+    filter: brightness(0.2);
+}
+
+h2 {
+    color: var(--color-texto-oscuro);
+    font-size: 2rem;
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 25px;
+    margin-bottom: 40px;
 }
 
-#verReportes{
-    height: 50px;
-    filter: invert(100%);
+.report-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 25px;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-h2 { 
-    color: #f7f7f7e1; 
-    text-align: center; 
-    margin-bottom: 40px; 
-    font-size: 2.2rem; 
-    font-weight: bold; 
+.report-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* Grid de tarjetas */
-.cards-container { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-    gap: 25px; 
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
-/* Tarjetas de reporte */
-.report-card { 
-    background: linear-gradient(135deg, #1e40af, #1e293b); 
-    border-radius: 20px; 
-    padding: 30px; 
-    text-align: center; 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
-    transition: all 0.3s; 
+.card-icon {
+    font-size: 1.8rem;
 }
 
-.report-card:hover { 
-    transform: translateY(-5px); 
-    box-shadow: 0 20px 40px rgba(30, 64, 175, 0.4); 
+.report-card h3 {
+    color: #64748b;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.card-header { 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 15px; 
-    margin-bottom: 15px; 
+.card-number {
+    color: var(--color-texto-oscuro);
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 10px 0;
 }
 
-.card-icon { 
-    font-size: 2.5rem; 
+.card-trend {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
 }
 
-.report-card h3 { 
-    color: #f1f5f9; 
-    font-size: 1.3rem; 
-    font-weight: 600; 
-    margin: 0; 
+.card-trend.up {
+    background-color: #065f46;
+    color: #065f46;
 }
 
-.card-number { 
-    color: #3b82f6; 
-    font-size: 3rem; 
-    font-weight: bold; 
-    margin-bottom: 10px; 
+.card-trend.down {
+    background-color: #991b1b;
+    color: #991b1b;
 }
 
-.card-trend { 
-    padding: 10px 20px; 
-    border-radius: 25px; 
-    font-weight: 600; 
-    font-size: 0.95rem; 
+.card-trend.alert {
+    background-color: #92400e;
+    color: #92400e;
 }
 
-.card-trend.up { 
-    background: rgba(16, 185, 129, 0.2); 
-    color: #10b981; 
+.inventario-detallado {
+    margin-top: 40px;
+    padding: 25px;
+    background-color: white;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.card-trend.down { 
-    background: rgba(239, 68, 68, 0.2); 
-    color: #ef4444; 
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
 }
 
-.card-trend.alert { 
-    background: rgba(251, 191, 36, 0.2); 
-    color: #f59e0b; 
+.stat-item {
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
 }
 
-/* Responsive */
-@media (max-width: 768px) { 
-    .container { 
-        margin: 20px; 
-        padding: 30px 20px; 
+.stat-item h4 {
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+.stat-item p {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.bg-blue {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.bg-green {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+.bg-orange {
+    background-color: #fff3e0;
+    color: #f57c00;
+}
+
+.bg-pink {
+    background-color: #fce4ec;
+    color: #c2185b;
+}
+
+.tabla-reporte {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.tabla-reporte th {
+    background-color: #f8fafc;
+    color: #64748b;
+    text-align: left;
+    padding: 12px;
+    border-bottom: 2px solid #edf2f7;
+}
+
+.tabla-reporte td {
+    padding: 12px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.alerta-stock {
+    padding: 15px;
+    background-color: #fff1f2;
+    border-left: 4px solid var(--color-danger);
+    margin-top: 25px;
+    border-radius: 4px;
+}
+
+.btn-flotante {
+    position: fixed;
+    top: 20px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-volver {
+    left: 20px;
+    background-color: var(--color-primario);
+    color: white;
+}
+
+.btn-actualizar {
+    right: 20px;
+    background-color: var(--color-success);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
     }
-    
-    .cards-container { 
-        grid-template-columns: 1fr; 
-        gap: 20px; 
-    }
-    
-    .card-number { 
-        font-size: 2.2rem; 
+
+    .card-number {
+        font-size: 1.8rem;
     }
 }
