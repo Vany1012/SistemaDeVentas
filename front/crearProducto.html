@@ -38,11 +38,13 @@
 
         <div class="res">
           <label>Categoría</label>
-          <select id="categoria" name="categoria" required>
-            <option value="Bebidas">Bebidas</option>
-            <option value="Alimentos">Alimentos</option>
-            <option value="Otros">Ortros</option>
-          </select>
+          <input type="text" id="categoria" list="lista-categorias" placeholder="Escribe o selecciona" required>
+  
+          <datalist id="lista-categorias">
+            <option value="Bebidas"></option>
+            <option value="Alimentos"></option>
+            <option value="Otros"></option>
+          </datalist>
         </div>
 
         <div class="res">
