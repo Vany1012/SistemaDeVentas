@@ -1,16 +1,8 @@
 {
-  "name": "sistemadeventas",
+  "name": "back",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "main": "server.js",
   "dependencies": {
-    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -18,13 +10,12 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.5"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Vany1012/SistemaDeVentas.git"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "bugs": {
-    "url": "https://github.com/Vany1012/SistemaDeVentas/issues"
-  },
-  "homepage": "https://github.com/Vany1012/SistemaDeVentas#readme",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "description": ""
 }

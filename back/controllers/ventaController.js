@@ -3,6 +3,9 @@ const Producto = require('../models/inventariosModels');
 
 exports.registrarVentas = async (req, res) => {
     try {
+        if(!req.vendedor){
+            return res.status(401).json({message: 'No autorizado - Vendedor no encontrado'});
+        }
         if(req.vendedor.role === req.role){
                 const { vendedor, productosVendidos } = req.body;
 
@@ -69,12 +72,15 @@ exports.registrarVentas = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: 'Error al registrar venta', error: error.message });
     }
 };
 
 exports.obtenerVentas = async (req, res) => { 
     try {
+        if(!req.vendedor){
+            return res.status(401).json({message: 'No autorizado - Vendedor no encontrado'});
+        }
         if (req.vendedor.role === req.role) { 
             const { page = 1, limit = 10, mes, anio } = req.query; 
             const skip = (page - 1) * limit;
@@ -93,7 +99,7 @@ exports.obtenerVentas = async (req, res) => {
 
             const totalVentas = await Venta.countDocuments({ vendedor: req.vendedor.nombreVendedor });
 
-            res.json({
+            res.status(200).json({
                 ventas,
                 pagination: {
                     page: parseInt(page),
@@ -106,12 +112,15 @@ exports.obtenerVentas = async (req, res) => {
             return res.status(403).json({ message: 'Acceso denegado: El rol no coincide o falta token' }); 
         }
     } catch (error) {
-        res.status(500).json({ error: error.message }); 
+        res.status(500).json({ message: 'Error al obtener ventas', error: error.message }); 
     }
 };
 
 exports.obtenerTodasLasVentas = async (req, res) => {
     try {
+        if(!req.vendedor){
+            return res.status(401).json({message: 'No autorizado - Vendedor no encontrado'});
+        }
         if (req.vendedor.role === req.role && req.role === "admin") {
             const { page = 1, limit = 10 } = req.query;
             const skip = (page - 1) * limit;
@@ -123,7 +132,7 @@ exports.obtenerTodasLasVentas = async (req, res) => {
 
             const totalVentas = await Venta.countDocuments({}); 
 
-            res.json({ 
+            res.status(200).json({ 
                 ventas, 
                 pagination: { 
                     page: parseInt(page), 
@@ -136,6 +145,6 @@ exports.obtenerTodasLasVentas = async (req, res) => {
             return res.status(403).json({ message: 'Acceso denegado: Solo admins pueden ver todas las ventas' });
         }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: 'Error al obtener todas las ventas', error: error.message });
     }
 };

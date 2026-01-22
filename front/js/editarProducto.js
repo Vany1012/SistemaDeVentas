@@ -344,32 +344,7 @@ function configurarFormulario() {
     });
 }
 
-// Configurar botón de volver al dashboard
-function configurarBotonVolver() {
-    // Crear botón de volver si no existe
-    const botonVolver = document.createElement('button');
-    botonVolver.id = 'volverBtn';
-    botonVolver.textContent = '← Volver al Dashboard';
-    botonVolver.style.cssText = `
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        padding: 10px 15px;
-        background-color: #607d8b;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        z-index: 100;
-    `;
-    
-    botonVolver.addEventListener('click', function() {
-        window.location.href = 'dashboard.html';
-    });
-    
-    document.body.appendChild(botonVolver);
-}
+
 
 // Inicializar la página
 function inicializarPagina() {
