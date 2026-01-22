@@ -78,7 +78,7 @@ exports.registrarVentas = async (req, res) => {
 
             res.status(201).json({ message: 'Venta registrada exitosamente', TicketDeVenta: {
                 fecha: ventaGuardada.fecha,
-                idVenta: ventaGuardada._id, 
+                ventaId: ventaGuardada.ventaId, 
                 vendedor: ventaGuardada.vendedor, 
                 productosVendidos: productosSinId, 
                 totalProductos: ventaGuardada.totalProductos, 

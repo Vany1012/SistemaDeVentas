@@ -57,10 +57,10 @@ const obtenerMensajeContraseña = (password) => {
 
 // Middleware de validación para registro
 exports.validarRegistroVendedor = (req, res, next) => {
-    const { vendedorName, vendedorId, email, password } = req.body;
+    const { vendedorName, email, password } = req.body;
 
     // Validar campos requeridos
-    if (!vendedorName || !vendedorId || !email || !password) {
+    if (!vendedorName || !email || !password) {
         return res.status(400).json({ 
             message: 'Todos los campos son requeridos' 
         });
