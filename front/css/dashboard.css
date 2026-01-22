@@ -37,7 +37,9 @@ body {
   color: var(--color-texto-claro);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
-
+.top-bar i{
+  cursor: pointer;
+}
 #hamburgerLinks {
   background-color: var(--color-menu);
   position: fixed;
