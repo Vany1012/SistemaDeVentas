@@ -331,23 +331,6 @@ function crearTablaInventario(estadisticas) {
         seccion.appendChild(alerta);
     }
 }
-
-function configurarBotones() {
-    // Botón Volver
-    const btnVolver = document.createElement('button');
-    btnVolver.className = 'btn-flotante btn-volver';
-    btnVolver.textContent = '← Dashboard';
-    btnVolver.onclick = () => window.location.href = 'dashboard.html';
-
-    // Botón Actualizar
-    const btnActualizar = document.createElement('button');
-    btnActualizar.className = 'btn-flotante btn-actualizar';
-    btnActualizar.textContent = '🔄 Actualizar';
-    btnActualizar.onclick = cargarReportes;
-
-    document.body.append(btnVolver, btnActualizar);
-}
-
 // Mostrar loading
 function mostrarLoading() {
     // Eliminar loading anterior si existe
@@ -465,7 +448,7 @@ function inicializarPagina() {
     }
     
     // Configurar botones
-    configurarBotones();
+    
     
     // Cargar reportes
     cargarReportes();
