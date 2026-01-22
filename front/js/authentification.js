@@ -1,5 +1,3 @@
-const API_URL = 'http://localhost:3000/api';
-
 // Verificar autenticación en páginas protegidas
 function checkAuth() {
     const token = localStorage.getItem('token');

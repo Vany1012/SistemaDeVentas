@@ -7,14 +7,32 @@
     <script src="js/editarProducto.js" defer></script>
     <!-- Autentificar el archivo -->
     <script src="js/authentification.js" defer></script>
+    <script src="js/dashboard.js" defer></script> <!--Conecta el funcionamiento del menu hamburguesa-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Editar Producto</title>
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <main>
-        <div class="btnRegreso">
-        <a href="dashboard.html"><button id="volverBtn">← Volver al Dashboard</button></a>
+    <!--Topbar-->
+    <header>
+        <div class="top-bar">
+          <i class="fa fa-bars" id="menuBtn"></i>
+          <span id="user-role"></span>
         </div>
+    </header>
+    <!-- Menú hamburguesa -->
+    <nav id="hamburgerLinks">
+        <a href="dashboard.html">Inicio</a>
+        <a class='admin-exclusive' href="crearProducto.html">Crear Producto</a>
+        <a class='admin-exclusive' href="editarproducto.html">Editar Producto</a>
+        <a href="inventario.html">Inventario</a>
+        <a href="ventas.html">Registrar Venta</a>
+        <a href="devoluciones.html">Registrar Devoluciones</a>
+        <a class='admin-exclusive' href="reportes.html">Ver Reportes</a>
+        <a class='admin-exclusive' href="registrarUsuario.html">Registrar Usuario</a>
+        <a>Cerrar sesión</a>
+    </nav> 
+    <main>
         <section class="container">
             <div id="head">
             <img id="editarProducto" src="./img/editarProducto.png" alt="Imagen de un lápiz trazando una caja">
