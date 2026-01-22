@@ -19,21 +19,24 @@
         <div class="res">
           <label>Nombre del producto</label>
           <input type="text"id="nombre"  placeholder="Ingrese el nombre" required>
+          <span id="nombre-alert" class="error-msg"></span>
         </div>
-
+        <!--
         <div class="res">
         <label>Folio del producto</label>
           <input type="text" id="idProducto" placeholder="Ingrese el folio" required>
-        </div>
+        </div> -->
 
         <div class="res">
           <label>Precio</label>
           <input type="text" id="precio" placeholder="$0.00" min="0" required>
+          <span id="precio-alert" class="error-msg"></span>
         </div>
 
         <div class="res">
           <label>Stock</label>
           <input type="text" id="stock" placeholder="Cantidad" min="0" required>
+          <span id="stock-alert" class="error-msg"></span>
         </div>
 
         <div class="res">
@@ -56,7 +59,12 @@
         </div>
       </div>
 
+      <div id="mensaje-Alert"></div>
+
+      <div id="general-alert" class="status-msg"></div>
+
       <button type="submit" id="createBtn" class="createBtn">Crear Producto</button>
+      
     </form>
   </main>
 

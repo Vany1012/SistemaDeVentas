@@ -1,8 +1,9 @@
 
 const API_URL = 'http://localhost:3000/api'; 
-const token = localStorage.getItem("token");
-const userData = JSON.parse(localStorage.getItem('userData'));
-
+//const token = localStorage.getItem("token");
+//const userData = JSON.parse(localStorage.getItem('userData'));
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpZCI6IjY5NzI0YTQzY2I4OTVhOTE2Y2FiNDU4ZCIsImlhdCI6MTc2OTExNDYwOSwiZXhwIjoxNzY5MjAxMDA5fQ.uK6fOudg9IPWshsV2Ok_SleVaPsE5A0mo1l91YHJcAM"
+const userData ="admin"
 const tbody = document.querySelector("tbody");
 
 // Función para eliminar producto
