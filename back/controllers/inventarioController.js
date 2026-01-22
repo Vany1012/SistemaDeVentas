@@ -7,16 +7,18 @@ exports.crearProducto = async(req, res, next) =>{
             return res.status(401).json({message: 'No autorizado - Vendedor no encontrado'});
         }
         if(req.vendedor.role === req.role && req.role === "admin"){
-            const {idProducto, nombre, precio, stock, categoria} = req.body;
-            const idExist = await Producto.findOne({idProducto});
-            if (idExist){
-                return res.status(400).json({message: 'El id del producto ya existe en el sistema'})
+            const {nombre, precio, stock, categoria} = req.body;
+            
+            if (!nombre || !precio || stock === undefined || !categoria) {
+                return res.status(400).json({message: 'Nombre, precio, stock y categoría son requeridos'});
             }
+            
             const nameExist = await Producto.findOne({nombre});
             if (nameExist){
                 return res.status(400).json({message: 'El nombre del producto ya existe en el sistema'})
             }
-            const producto = await Producto.create({idProducto, nombre, precio, stock, categoria});
+            
+            const producto = await Producto.create({nombre, precio, stock, categoria});
             res.status(201).json(producto);
         }else{
             res.status(403).json({message: 'El vendedor no es admin'});
