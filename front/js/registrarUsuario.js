@@ -1,9 +1,7 @@
 
 const API_URL = 'http://localhost:3000/api/vendedor';
-//const userData = JSON.parse(localStorage.getItem('userData'));
-//const token = localStorage.getItem("token");
-const userData ="admin"
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpZCI6IjY5NzI0YTQzY2I4OTVhOTE2Y2FiNDU4ZCIsImlhdCI6MTc2OTA5ODI1MiwiZXhwIjoxNzY5MTg0NjUyfQ.RRJCF-IfZz7EdV-de9Nd6IdkAzEZdM94whTBJr1aCwA"
+const userData = JSON.parse(localStorage.getItem('userData'));
+const token = localStorage.getItem("token");
 /*
 // BLOQUEO DE SEGURIDAD
 // Si no hay token O el rol no es admin, lo sacamos de la página
