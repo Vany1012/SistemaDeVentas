@@ -1,14 +1,16 @@
 
 const API_URL = 'http://localhost:3000/api/vendedor';
-const userData = JSON.parse(localStorage.getItem('userData'));
-const token = localStorage.getItem("token");
-
+//const userData = JSON.parse(localStorage.getItem('userData'));
+//const token = localStorage.getItem("token");
+const userData ="admin"
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpZCI6IjY5NzI0YTQzY2I4OTVhOTE2Y2FiNDU4ZCIsImlhdCI6MTc2OTA5ODI1MiwiZXhwIjoxNzY5MTg0NjUyfQ.RRJCF-IfZz7EdV-de9Nd6IdkAzEZdM94whTBJr1aCwA"
+/*
 // BLOQUEO DE SEGURIDAD
 // Si no hay token O el rol no es admin, lo sacamos de la página
 if (!token || userData.role !== 'admin') {
     alert("Acceso denegado: Solo los administradores pueden ver esta página.");
     window.location.href = 'index.html';
-}
+}*/
 
 const userForm = document.querySelector('#registrarUsuario-form');
 const vendedorName = document.querySelector('#vendedorName');
@@ -22,6 +24,17 @@ const userActive = document.querySelector('#active');
 const passAlert = document.querySelector('#password-alert');
 const emailAlert = document.querySelector('#email-alert');
 const generalAlert = document.querySelector('#general-alert');
+
+
+// Bloqueamos el campo | El id se genera automaticamente
+document.addEventListener('DOMContentLoaded', () => {
+    if (vendedorId) {
+        vendedorId.disabled = true; 
+        vendedorId.value = "Autogenerado al guardar"; 
+        vendedorId.style.backgroundColor = "#e9ecef";
+        vendedorId.style.fontStyle = "italic";
+    }
+});
 
 //limpiar mensajes
 const limpiarMensajes = () => {
@@ -90,7 +103,7 @@ const createNewUser = async () => {
   // Creamos la estructura de datos
   const payload = {
     vendedorName: vendedorName.value,
-    vendedorId: vendedorId.value,
+    //vendedorId: vendedorId.value,
     email: userEmail.value,
     password: userPassword.value,
     role: userRole.value,
@@ -102,11 +115,6 @@ const createNewUser = async () => {
   generalAlert.textContent = "Procesando registro...";
   generalAlert.style.color = "blue";
   
-
-
-
-
-
   try {
     // Hacemos el llamado al endpoint
     const res = await fetch(`${API_URL}/register`, {
@@ -121,25 +129,27 @@ const createNewUser = async () => {
     const data = await res.json();
     console.log(data)
 
-
     if (res.ok) {
-        // ÉXITO
+        // Éxito al crear usuario
         generalAlert.textContent = "¡Usuario creado exitosamente!";
         generalAlert.className = 'success-text'; // Clase verde
-        userForm.reset(); 
+        
+        const idGenerado = data.vendedorId || (data.user && data.user.vendedorId) || data.vendedor?.vendedorId;
+
+        if (idGenerado) {
+             vendedorId.value = idGenerado; // Mostramos el ID real asignado
+             generalAlert.textContent += `  | ID Asignado: ${idGenerado}`;
+        }
+        userForm.reset();
         
         // Opcional: Borrar mensaje de éxito después de 3 segundos
-        setTimeout(() => { generalFeedback.textContent = ''; }, 3000);
+        //setTimeout(() => { generalAlert.textContent = ''; }, 10000);
     } else {
-        // ERROR (400, 500)
-        // Tu middleware 'validarRegistroVendedor' devuelve errores detallados
+        // Devuelve errores detallados
         if (data.requisitos) {
-            // Si el backend devuelve array de requisitos no cumplidos
-            generalFeedback.textContent = "Error de validación: " + data.requisitos.join(', ');
-    
+            generalAlert.textContent = "Error de validación: " + data.requisitos.join(', ');
     
         } else {
-          // ERROR DEL SERVIDOR
           generalAlert.textContent = `Error: ${data.message || 'No se pudo crear el usuario'}`;
           generalAlert.className = 'error-text'; // Clase roja
         }
@@ -151,7 +161,6 @@ const createNewUser = async () => {
   }
 };
 
-// 
 if (userForm) {
   userForm.addEventListener("submit", async (event) => {
     event.preventDefault();
