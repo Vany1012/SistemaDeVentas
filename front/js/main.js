@@ -11,7 +11,7 @@ const checkSession = () => {
 
     // SOLO en index.html, si ya hay sesión, redirige al dashboard
     if (token && userData) {
-        window.location.href = 'dashboard.html';
+        window.location.href = 'views/dashboard.html';
     }
 };
 checkSession();
@@ -48,7 +48,7 @@ loginForm.addEventListener('submit', async (e) => {
                 email: data.email,
                 role: data.role
             }));
-            window.location.href = 'dashboard.html';
+            window.location.href = 'views/dashboard.html';
         } else {
             showMessage(data.message || 'Credenciales incorrectas');
             loginBtn.disabled = false;
