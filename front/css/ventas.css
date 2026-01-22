@@ -30,6 +30,18 @@ h2 {
   font-size: 2rem;
 }
 
+#head{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+#ventas {
+  height: 50px;
+  filter: brightness(0.2) invert(100%);
+  
+}
+
 section {
   background-color: var(--color-card);
   padding: 25px;

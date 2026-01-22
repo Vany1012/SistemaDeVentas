@@ -38,6 +38,18 @@ body {
     flex-direction: column;
 }
 
+#head{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+#crearProducto {
+    height: 50px;
+    filter: brightness(0.2);
+}
+
 h2 {
     color: var(--color-texto-oscuro);
     margin-bottom: 30px;
