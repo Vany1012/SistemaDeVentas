@@ -19,8 +19,12 @@
 
 body {
   background-color: var(--color-fondo);
-  padding: 40px 20px;
-  color: var(--color-texto-oscuro);
+}
+
+main {
+  margin: 100px auto 40px auto;
+  max-width: 900px;
+  width: 95%;
 }
 
 h2 {
@@ -78,14 +82,19 @@ section {
 
 .fila-producto {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 40px;
   gap: 15px;
   align-items: center;
   background: white;
-  padding: 10px;
+  padding: 15px;
   border-radius: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #edf2f7;
+  margin-bottom: 12px;
+  transition: all 0.2s;
+}
+
+.fila-producto:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .fila-producto select,
@@ -106,8 +115,9 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--color-primario);
+  background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
   color: white;
+  padding: 20px 30px;
 }
 
 .total-item {
@@ -161,27 +171,37 @@ button {
 }
 
 .ticket-imprimible {
-    width: 80mm;
-    padding: 5mm;
-    background: white;
-    color: black;
-    font-family: 'Courier New', Courier, monospace;
+  width: 80mm;
+  padding: 5mm;
+  background: white;
+  color: black;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .ticket-imprimible hr {
-    border: none;
-    border-top: 1px dashed #000;
-    margin: 5px 0;
+  border: none;
+  border-top: 1px dashed #000;
+  margin: 5px 0;
 }
 
 .ticket-imprimible table {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .oculto-impresion {
-    position: fixed;
-    top: -10000px;
-    left: -10000px;
-    z-index: -100;
-    visibility: visible;
+  position: fixed;
+  top: -10000px;
+  left: -10000px;
+  z-index: -100;
+  visibility: visible;
+}
+
+@media (max-width: 600px) {
+    .fila-producto {
+        grid-template-columns: 1fr; /* Una sola columna en móvil */
+        gap: 10px;
+    }
+    .venta-info {
+        grid-template-columns: 1fr;
+    }
 }

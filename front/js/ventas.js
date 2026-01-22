@@ -61,6 +61,16 @@ btnAgregarProducto.addEventListener('click', async () => {
   select.className = 'select-producto';
   select.innerHTML = '<option value="">Seleccione un producto...</option>';
 
+  const btnEliminar = document.createElement('button');
+  btnEliminar.innerHTML = '×';
+  btnEliminar.style.cssText = 'color: red; font-size: 1.5rem; background: none; border: none; cursor: pointer;';
+  btnEliminar.title = "Eliminar producto";
+
+  btnEliminar.onclick = () => {
+    divFila.remove();
+    actualizarTotales();
+  };
+
   inventario.forEach(prod => {
     const option = document.createElement('option');
     option.value = prod.idProducto;
@@ -106,6 +116,7 @@ btnAgregarProducto.addEventListener('click', async () => {
   divFila.appendChild(select);
   divFila.appendChild(inputCantidad);
   divFila.appendChild(displayPrecio);
+  divFila.appendChild(btnEliminar);
   contenedorProductos.appendChild(divFila);
 });
 

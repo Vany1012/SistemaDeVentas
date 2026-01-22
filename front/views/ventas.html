@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es-mx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/ventas.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <script src="../js/ventas.js" defer></script>
+    <script src="../js/header.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Registar Venta</title>
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <header id="header-container"></header>
+    <main>
+        <h2>Registrar Venta</h2>
+        <!--Datos de la venta (fecha y vendedor)-->
+        <section class="venta-info">
+            <label>
+                Fecha
+                <input type="date" id="fecha-venta" readonly>
+            </label>
+            <label>
+                Vendedor
+                <input type="text" id="vendedor" readonly>
+            </label>
+
+        </section>
+
+        <section class="productos-section">
+            <div class="headers">
+                <h3>Productos vendidos</h3>
+                <h3>Cantidad</h3>
+                <h3>Precio Unitario</h3>
+            </div>
+            <div class="productos-vendidos" id="productos-vendidos">
+
+            </div>
+
+            <button id="btn-agregar-producto">
+                Agregar producto
+            </button>
+
+        </section>
+
+        <!-- Sección para mostrar los totales -->
+        <section class="totales-section">
+            <div class="total-item">
+                <span class="total-label">Productos:</span>
+                <span id="total-productos" class="total-value">0</span>
+            </div>
+            <div class="total-item">
+                <span class="total-label">Total Venta:</span>
+                <span id="total-venta" class="total-value">$0.00</span>
+            </div>
+        </section>
+
+        <button id="btn-registrar-venta">
+            Registrar
+        </button>
+    </main>
+</body>
+
+</html>

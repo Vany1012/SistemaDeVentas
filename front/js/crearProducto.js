@@ -2,13 +2,6 @@
 const API_URL = 'http://localhost:3000/api/inventario';
 const userData = JSON.parse(localStorage.getItem('userData'));
 const token = localStorage.getItem("token");
-// BLOQUEO DE SEGURIDAD
-// Si no hay token O el rol no es admin, lo sacamos de la página
-if (!token || userData.role !== 'admin') {
-    alert("Acceso denegado: Solo los administradores pueden ver esta página.");
-    window.location.href = 'index.html';
-}
-
 const Productform = document.querySelector('#producto-form');
 const nombreInput = document.querySelector('#nombre');
 const idProductoInput = document.querySelector('#idProducto');
@@ -16,6 +9,13 @@ const precioInput = document.querySelector('#precio');
 const stockInput = document.querySelector('#stock');
 const categoriaInput = document.querySelector('#categoria');
 const activoInput = document.querySelector('#active');
+
+// BLOQUEO DE SEGURIDAD
+// Si no hay token O el rol no es admin, lo sacamos de la página
+if (!token || userData.role !== 'admin') {
+    alert("Acceso denegado: Solo los administradores pueden ver esta página.");
+    window.location.href = 'index.html';
+}
 
 // Función principal para Crear Producto
 const createProduct = async () => {
