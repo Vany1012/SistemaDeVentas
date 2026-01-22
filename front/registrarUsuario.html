@@ -28,11 +28,13 @@
         <div class="res">
           <label>Contraseña</label>
           <input type="password" id="password" placeholder="" required>
+          <div id="password-alert" class="alert-msg"></div>
         </div>
 
         <div class="res">
           <label>Email</label>
           <input type="email" id="email" placeholder="" required>
+          <div id="email-alert" class="alert-msg"></div>
         </div>
 
         <div class="res">
@@ -51,6 +53,8 @@
           </select>
         </div>
       </div>
+
+      <div id="general-alert" class="status-msg"></div>
 
       <button type="submit" id="createBtn" class="createBtn">Crear Usuario</button>
     </form>
