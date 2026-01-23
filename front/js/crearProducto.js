@@ -3,6 +3,7 @@ const API_URL = 'http://localhost:3000/api/inventario';
 const userData = JSON.parse(localStorage.getItem('userData'));
 const token = localStorage.getItem("token");
 
+
 const Productform = document.querySelector('#producto-form');
 const nombreInput = document.querySelector('#nombre');
 //const idProductoInput = document.querySelector('#idProducto');
@@ -135,6 +136,7 @@ const createProduct = async () => {
 
 
             Productform.reset()
+            setTimeout(() => { generalAlert.textContent = '';generalAlert.removeAttribute('style'); }, 5000);//Muestra el producto guardado y lo limpia despues de 5 seg
         } else {
             // Error del servidor
             if(generalAlert) {

@@ -71,7 +71,7 @@ const createNewUser = async () => {
   const erroresPassword = obtenerErroresContraseña(passwordValue);
   if (erroresPassword.length > 0) {
       // Creamos una lista HTML
-      const listaHTML = `<ul class="password-errors-list">
+      const listaHTML = `<ul class="password-errors-list" style="color: red;">
                             ${erroresPassword.map(e => `<li>${e}</li>`).join('')}
                          </ul>`;
       passAlert.innerHTML = listaHTML;
@@ -117,12 +117,30 @@ const createNewUser = async () => {
         const idGenerado = data.vendedorId || (data.user && data.user.vendedorId) || data.vendedor?.vendedorId;
 
         if (idGenerado) {
-             generalAlert.textContent += `  | ID Asignado: ${idGenerado}`;
+          
+             //generalAlert.textContent += `  | ID Asignado: ${idGenerado}`;
+             generalAlert.innerHTML = `
+                <div style="text-align: left;" >
+                    <h3 style="margin: 0 0 10px 0;">¡Usuario registrado exitosamente!</h3>
+                    <strong>ID Vendedor:</strong> ${idGenerado}<br>
+                    <strong>Nombre:</strong> ${payload.vendedorName}<br>
+                    <strong>Email:</strong> ${payload.email}<br>
+                    <strong>Rol:</strong> ${payload.role}<br>
+                    <strong>Estado:</strong> ${payload.active === 'true' || payload.active === true ? 'Activo' : 'Inactivo'}
+                </div>`;
+                generalAlert.style.color = "#155724";            
+                generalAlert.style.backgroundColor = "#d4edda";  
+                generalAlert.style.borderColor = "#c3e6cb";      
+                generalAlert.style.borderWidth = "1px";
+                generalAlert.style.borderStyle = "solid";
+                generalAlert.style.padding = "15px";
+                generalAlert.style.borderRadius = "5px";
+                generalAlert.style.marginTop = "15px";
         }
         userForm.reset();
         
-        // Opcional: Borrar mensaje de éxito después de 3 segundos
-        //setTimeout(() => { generalAlert.textContent = ''; }, 10000);
+        // Opcional: Borrar mensaje de éxito después de 5 segundos
+        setTimeout(() => { generalAlert.textContent = '';generalAlert.removeAttribute('style'); }, 5000);
     } else {
         // Error
         if (data.requisitos) {

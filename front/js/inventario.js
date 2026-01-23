@@ -1,9 +1,7 @@
 
 const API_URL = 'http://localhost:3000/api'; 
-//const token = localStorage.getItem("token");
-//const userData = JSON.parse(localStorage.getItem('userData'));
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpZCI6IjY5NzI0YTQzY2I4OTVhOTE2Y2FiNDU4ZCIsImlhdCI6MTc2OTExNDYwOSwiZXhwIjoxNzY5MjAxMDA5fQ.uK6fOudg9IPWshsV2Ok_SleVaPsE5A0mo1l91YHJcAM"
-const userData ="admin"
+const token = localStorage.getItem("token");
+const userData = JSON.parse(localStorage.getItem('userData'));
 const tbody = document.querySelector("tbody");
 
 // Función para eliminar producto
@@ -85,10 +83,13 @@ const loadProducts = async () => {
       
       // Se muestran los botones si el usuario es 'admin'
       if (userData.role === 'admin') {
+        const botonEliminarHTML = product.activo 
+            ? `<button class="btn-eliminar" onclick="eliminarProducto('${product.idProducto}')">Eliminar</button>` 
+            : '';
           accionesAdmin = `
             <div id="btn">
                 <a href="editarProducto.html?id=${product.idProducto}" class="btn-editar" style="margin-right: 5px;">Editar</a>
-                <button class="btn-eliminar" onclick="eliminarProducto('${product.idProducto}')">Eliminar</button>
+                ${botonEliminarHTML}
             </div>
           `;
       } else {
