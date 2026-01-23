@@ -3,39 +3,162 @@ const contenedorProductos = document.getElementById("productos-vendidos");
 const btnAgregarProducto = document.getElementById("btn-agregar-producto");
 const token = localStorage.getItem('token');
 const userData = JSON.parse(localStorage.getItem('userData'));
+let inventarioGlobal = [];
 
-// Función para mostrar la fecha y el vendedor
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const hoy = new Date().toISOString().split('T')[0];
   const inputFecha = document.getElementById('fecha-venta');
   inputFecha.value = hoy;
+
   const nombreVendedor = userData.vendedorName;
   const inputVendedor = document.getElementById('vendedor');
   inputVendedor.value = nombreVendedor;
+
+  inventarioGlobal = await obtenerInventario();
+  inventarioGlobal.sort((a, b) => a.nombre.localeCompare(b.nombre));
+  llenarDatalist(inventarioGlobal);
+
+  configurarMetodoPago();
 });
 
-// Función para actualizar totales
+function formatearMoneda(valor) {
+    if (valor === "N/A" || valor === undefined || valor === null) return "N/A";
+    const numero = typeof valor === 'string' 
+        ? parseFloat(valor.replace(/[^0-9.-]+/g, "")) 
+        : valor;
+    
+    return `$${numero.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+function mostrarMensaje(message, type = 'success') {
+  const container = document.getElementById('notification-container');
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.textContent = message;
+
+  container.appendChild(notification);
+
+  setTimeout(() => {
+    notification.style.opacity = '0';
+    setTimeout(() => notification.remove(), 500);
+  }, 4000);
+}
+
+function generarPDF(datosTicket) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: [80, 160] }); 
+
+    doc.setFontSize(14);
+    doc.text("REGISTRO DE VENTA", 40, 10, { align: "center" });
+    doc.setFontSize(8);
+    doc.text(`Ticket: ${datosTicket.ventaId}`, 10, 18);
+    doc.text(`Fecha: ${new Date(datosTicket.fecha).toLocaleString()}`, 10, 23);
+    doc.text(`Vendedor: ${datosTicket.vendedor}`, 10, 28);
+    doc.text("-".repeat(45), 10, 32);
+
+    const filas = datosTicket.productosVendidos.map(p => [
+        p.nombre,
+        p.cantidad,
+        formatearMoneda(p.cantidad * p.precioUnitario)
+    ]);
+
+    doc.autoTable({
+        startY: 35,
+        head: [['Producto', 'Cant.', 'Subt.']],
+        body: filas,
+        theme: 'plain',
+        styles: { fontSize: 7, cellPadding: 1 },
+        columnStyles: { 2: { halign: 'right' } },
+        margin: { left: 5, right: 5 }
+    });
+
+    const finalY = doc.lastAutoTable.finalY + 8;
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'bold');
+    doc.text(`TOTAL: ${formatearMoneda(datosTicket.total)}`, 10, finalY);
+    
+    doc.setFontSize(8);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Método de Pago: ${datosTicket.metodoPago.toUpperCase()}`, 10, finalY + 6);
+    doc.text(`Cambio: ${formatearMoneda(datosTicket.cambio)}`, 10, finalY + 10);
+    
+    doc.text("¡Gracias por su preferencia!", 40, finalY + 20, { align: "center" });
+
+    doc.save(`Ticket_${datosTicket.ventaId}.pdf`);
+}
+
+function configurarMetodoPago() {
+  const selectMetodo = document.getElementById('metodo-pago');
+  const containerEfectivo = document.getElementById('container-efectivo');
+  const inputRecibido = document.getElementById('monto-recibido');
+
+  selectMetodo.addEventListener('change', () => {
+    if (selectMetodo.value === 'efectivo') {
+      containerEfectivo.style.display = 'flex';
+    } else {
+      containerEfectivo.style.display = 'none';
+      inputRecibido.value = '';
+      actualizarCambio();
+    }
+  });
+
+  inputRecibido.addEventListener('input', actualizarCambio);
+}
+
+function actualizarCambio() {
+  const totalVenta = parseFloat(document.getElementById('total-venta').textContent.replace('$', '').replace(',', '')) || 0;
+  const montoRecibido = parseFloat(document.getElementById('monto-recibido').value) || 0;
+  const metodoPago = document.getElementById('metodo-pago').value;
+
+  if (metodoPago === 'efectivo') {
+    const cambio = montoRecibido - totalVenta;
+    const spanCambio = document.getElementById('valor-cambio');
+
+    if (cambio >= 0) {
+      spanCambio.textContent = `$${cambio.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+      spanCambio.style.color = '#1b263b';
+    } else {
+      spanCambio.textContent = "Falta dinero";
+      spanCambio.style.color = 'red';
+    }
+  }
+}
+
+function llenarDatalist(inventario) {
+  const datalist = document.getElementById('lista-inventario');
+  datalist.innerHTML = '';
+  inventario.forEach(prod => {
+    const option = document.createElement('option');
+    option.value = prod.nombre;
+    datalist.appendChild(option);
+  });
+}
+
 function actualizarTotales() {
   const filas = document.querySelectorAll('.fila-producto');
   let cuentaProductos = 0;
   let sumaDinero = 0;
-  filas.forEach(fila => {
-    const select = fila.querySelector('.select-producto');
-    const input = fila.querySelector('.input-cantidad');
-    const cantidad = parseInt(input.value) || 0;
-    const opcionSeleccionada = select.options[select.selectedIndex];
-    const precio = parseFloat(opcionSeleccionada.dataset.price) || 0;
 
-    if (select.value !== "") {
+  filas.forEach(fila => {
+    const inputNombre = fila.querySelector('.input-producto-search');
+    const inputCant = fila.querySelector('.input-cantidad');
+    const cantidad = parseInt(inputCant.value) || 0;
+
+    const productoEncontrado = inventarioGlobal.find(p => p.nombre === inputNombre.value);
+
+    if (productoEncontrado) {
+      const precio = parseFloat(productoEncontrado.precio) || 0;
       cuentaProductos += cantidad;
       sumaDinero += (cantidad * precio);
     }
   });
+
   document.getElementById('total-productos').textContent = cuentaProductos;
   document.getElementById('total-venta').textContent = `$${sumaDinero.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+
+  actualizarCambio();
 }
 
-// Función para obtener inventario de la base de datos
 async function obtenerInventario() {
   try {
     const response = await fetch(`${API_URL}/inventario/verInventario`, {
@@ -50,25 +173,14 @@ async function obtenerInventario() {
   }
 }
 
-// Función para agregar productos
-btnAgregarProducto.addEventListener('click', async () => {
-  const inventario = await obtenerInventario();
-
+btnAgregarProducto.addEventListener('click', () => {
   const divFila = document.createElement('div');
   divFila.className = 'fila-producto';
 
-  const select = document.createElement('select');
-  select.className = 'select-producto';
-  select.innerHTML = '<option value="">Seleccione un producto...</option>';
-
-  inventario.forEach(prod => {
-    const option = document.createElement('option');
-    option.value = prod.idProducto;
-    option.dataset.stock = prod.stock;
-    option.dataset.price = prod.precio;
-    option.textContent = `${prod.idProducto} - ${prod.nombre}`;
-    select.appendChild(option);
-  });
+  const inputSearch = document.createElement('input');
+  inputSearch.setAttribute('list', 'lista-inventario');
+  inputSearch.className = 'input-producto-search';
+  inputSearch.placeholder = 'Escribe para buscar...';
 
   const inputCantidad = document.createElement('input');
   inputCantidad.type = 'number';
@@ -81,73 +193,99 @@ btnAgregarProducto.addEventListener('click', async () => {
   displayPrecio.className = 'precio-unitario';
   displayPrecio.textContent = '$0.00';
 
-  select.addEventListener('change', (e) => {
-    const selectedOption = e.target.options[e.target.selectedIndex];
-    const stock = selectedOption.dataset.stock;
-    const price = selectedOption.dataset.price;
-    displayPrecio.textContent = `$${parseFloat(price).toFixed(2)}`;
+  const btnEliminar = document.createElement('button');
+  btnEliminar.innerHTML = '×';
+  btnEliminar.style.cssText = 'color: red; font-size: 1.5rem; background: none; border: none; cursor: pointer;';
+  btnEliminar.onclick = () => {
+    divFila.remove();
+    actualizarTotales();
+  };
 
-    if (stock) {
+  inputSearch.addEventListener('input', (e) => {
+    const val = e.target.value;
+    const producto = inventarioGlobal.find(p => p.nombre === val);
+
+    if (producto) {
+      displayPrecio.textContent = `$${parseFloat(producto.precio).toFixed(2)}`;
       inputCantidad.disabled = false;
-      inputCantidad.max = stock;
-      inputCantidad.value = 1;
-      inputCantidad.addEventListener('input', () => {
-        if (inputCantidad.value < 0) inputCantidad.value = 0;
-        actualizarTotales();
-      });
+      inputCantidad.max = producto.stock;
+
+      if (inputCantidad.value === "" || inputCantidad.value == 0) {
+        inputCantidad.value = 1;
+      }
+
+      if (parseInt(inputCantidad.value) > producto.stock) {
+        inputCantidad.value = producto.stock;
+      }
     } else {
-      inputCantidad.disabled = true;
-      inputCantidad.value = "";
       displayPrecio.textContent = '$0.00';
+      inputCantidad.disabled = true;
+      inputCantidad.value = '';
     }
     actualizarTotales();
   });
 
-  divFila.appendChild(select);
+  inputCantidad.addEventListener('input', () => {
+    const maxStock = parseInt(inputCantidad.max);
+    let val = parseInt(inputCantidad.value);
+
+    if (val > maxStock) {
+      alert(`Solo hay ${maxStock} unidades disponibles.`);
+      inputCantidad.value = maxStock;
+    }
+    if (val < 1) {
+      // Permitir vacio mientras escribe, pero logica requiere min 1
+    }
+    actualizarTotales();
+  });
+
+  divFila.appendChild(inputSearch);
   divFila.appendChild(inputCantidad);
   divFila.appendChild(displayPrecio);
+  divFila.appendChild(btnEliminar);
   contenedorProductos.appendChild(divFila);
 });
 
-// Función para enviar la venta al backend
 document.querySelector("#btn-registrar-venta").addEventListener('click', async () => {
   const filas = document.querySelectorAll('.fila-producto');
   const productosVendidos = [];
-  let acumuladorTotalProductos = 0;
-  let acumuladorTotalDinero = 0;
 
   filas.forEach(fila => {
-    const select = fila.querySelector('.select-producto');
+    const inputNombre = fila.querySelector('.input-producto-search');
     const inputCant = fila.querySelector('.input-cantidad');
-    const id = select.value;
-    const cantidad = parseInt(inputCant.value);
-    const optionSel = select.options[select.selectedIndex];
-    const nombre = optionSel.text.split(' - ')[1]?.split(' (')[0];
-    const precioUnitario = parseFloat(optionSel.dataset.price);
-    if (id && cantidad > 0) {
+    const cantidad = parseInt(inputCant.value) || 0;
+    const productoObj = inventarioGlobal.find(p => p.nombre === inputNombre.value);
+
+    if (productoObj && cantidad > 0) {
       productosVendidos.push({
-        idProducto: id,
-        nombre: nombre,
+        idProducto: productoObj.idProducto,
+        nombre: productoObj.nombre,
         cantidad: cantidad,
-        precioUnitario: precioUnitario
+        precioUnitario: parseFloat(productoObj.precio)
       });
-      acumuladorTotalProductos += cantidad;
-      acumuladorTotalDinero += (cantidad * precioUnitario);
     }
   });
 
   if (productosVendidos.length === 0) {
-    return alert("Debes agregar al menos un producto válido.");
+    return mostrarMensaje("Debes agregar al menos un producto válido.", "error");
   }
+
+  const metodoPago = document.getElementById('metodo-pago').value;
+  const totalVenta = parseFloat(document.getElementById('total-venta').textContent.replace('$', '').replace(',', ''));
+
   const ventaData = {
-    fecha: document.getElementById('fecha-venta').value,
     vendedor: document.getElementById('vendedor').value,
     productosVendidos: productosVendidos,
-    totalProductos: acumuladorTotalProductos,
-    total: acumuladorTotalDinero
+    metodoPago: metodoPago
   };
 
-  console.log("Enviando al backend:", ventaData);
+  if (metodoPago === 'efectivo') {
+    const monto = parseFloat(document.getElementById('monto-recibido').value) || 0;
+    if (monto < totalVenta) {
+      return mostrarMensaje("El monto recibido es menor al total.", "error");
+    }
+    ventaData.monto = monto;
+  }
 
   try {
     const response = await fetch(`${API_URL}/ventas/registerVenta`, {
@@ -158,10 +296,18 @@ document.querySelector("#btn-registrar-venta").addEventListener('click', async (
       },
       body: JSON.stringify(ventaData)
     });
+    const result = await response.json();
+
     if (response.ok) {
-      alert("Venta registrada con éxito.");
+      mostrarMensaje("Venta registrada con éxito. Generando ticket...");
+      generarPDF(result.TicketDeVenta);
+      console.log(result.TicketDeVenta)
+      setTimeout(() => window.location.reload(), 3000);
+    } else {
+      const errorData = await response.json();
+      mostrarMensaje(errorData.message || "Error al registrar", "error");
     }
   } catch (error) {
-    console.error("Error en la petición:", error);
+    mostrarMensaje("Error de conexión con el servidor", "error");
   }
 });

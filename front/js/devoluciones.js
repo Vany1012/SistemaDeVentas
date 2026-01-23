@@ -22,7 +22,7 @@ async function obtenerVentas() {
 }
 
 function buscarVentaPorId(ventaId) {
-    return ventasGlobal.find(venta => venta._id === ventaId);
+    return ventasGlobal.find(venta => venta.ventaId === ventaId);
 }
 
 function validarContador(input, cantidadMaxima) {
@@ -114,7 +114,7 @@ function mostrarDetallesVenta(venta) {
             <div class="venta-info">
                 <div class="info-item">
                     <strong>ID Venta:</strong>
-                    <span>${venta._id}</span>
+                    <span>${venta.ventaId}</span>
                 </div>
                 <div class="info-item">
                     <strong>Vendedor:</strong>
@@ -207,7 +207,7 @@ function obtenerDatosDevolucion() {
         return null;
     }
     const datosDevolucion = {
-        idVenta: ventaSeleccionadaActual._id,
+        idVenta: ventaSeleccionadaActual.ventaId,
         vendedor: ventaSeleccionadaActual.vendedor,
         productosDevueltos,
         totalProductosDevueltos,
@@ -283,14 +283,26 @@ ${datosDevolucion.productosDevueltos.map(p =>
 
 document.addEventListener('DOMContentLoaded', () => {
     obtenerVentas().then(ventas => {
-        ventasGlobal = ventas;
+        ventasGlobal = ventas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
         
+        const datalist = document.getElementById('ventas-list');
+        datalist.innerHTML = '';
+        
+        ventasGlobal.forEach(venta => {
+            const option = document.createElement('option');
+            option.value = venta.ventaId;
+            const fechaFormateada = new Date(venta.fecha).toLocaleDateString();
+            option.textContent = `Fecha: ${fechaFormateada} - Vendedor: ${venta.vendedor}`;
+            datalist.appendChild(option);
+        });
+
         if (ventas.length === 0) {
             console.log('No hay ventas disponibles');
         } else {
-            console.log(`${ventas.length} ventas cargadas`);
+            console.log(`${ventas.length} ventas cargadas y ordenadas`);
         }
     });
+    
     formulario.addEventListener('submit', function(event) {
         event.preventDefault();
         const ventaId = ventaInput.value.trim();

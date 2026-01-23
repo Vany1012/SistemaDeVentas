@@ -396,55 +396,11 @@ function configurarFormulario() {
     });
 }
 
-// Configurar botón de volver al dashboard
-function configurarBotonVolver() {
-    // Crear botón de volver si no existe
-    const botonVolver = document.createElement('button');
-    botonVolver.id = 'volverBtn';
-    botonVolver.textContent = '← Volver al Dashboard';
-    botonVolver.style.cssText = `
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        padding: 10px 15px;
-        background-color: #607d8b;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        z-index: 100;
-    `;
-    
-    botonVolver.addEventListener('click', function() {
-        window.location.href = 'dashboard.html';
-    });
-    
-    document.body.appendChild(botonVolver);
-}
-
 // Inicializar la página
 function inicializarPagina() {
-    // Verificar autenticación y permisos
-    const usuario = checkAuth();
-    if (!usuario) return;
-    
-    console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);
-    
     // Configurar elementos de la página
     configurarBusquedaAutomatica();
     configurarFormulario();
-    configurarBotonVolver();
-    
-    // Mostrar nombre de usuario en la página
-    const titulo = document.querySelector('h2');
-    if (titulo) {
-        titulo.insertAdjacentHTML('afterend', `
-            <p style="text-align: center; color: #666; margin-top: -10px; margin-bottom: 20px;">
-                Usuario: ${usuario.vendedorName} (${usuario.role})
-            </p>
-        `);
-    }
 }
 
 // DOM listo

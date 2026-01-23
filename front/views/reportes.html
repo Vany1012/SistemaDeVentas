@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="es-mx">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/reportes.css">
-    <script src="js/authentification.js" defer></script>
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/reportes.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <script src="../js/reportes.js" defer></script>
+    <script src="../js/header.js" defer></script>
+    <script src="../js/authentification.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Reportes</title>
+    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
+    <header id="header-container"></header>
     <main>
         <section class="container">
             <div id="head">
-            <img id="verReportes" src="./img/verReportes.png" alt="Hoja">
-            <script src="js/reportes.js" defer></script>
-            <h2>Reportes del Sistema</h2>
+                <h2>Reportes del Sistema</h2>
             </div>
             <div class="cards-container">
                 <div class="report-card">
@@ -25,7 +30,7 @@
                     <div class="card-number"></div>
                     <div class="card-trend up"></div>
                 </div>
-                
+
                 <div class="report-card">
                     <div class="card-header">
                         <span class="card-icon">📦</span>
@@ -34,7 +39,7 @@
                     <div class="card-number"></div>
                     <div class="card-trend down"></div>
                 </div>
-                
+
                 <div class="report-card">
                     <div class="card-header">
                         <span class="card-icon">📋</span>
@@ -47,4 +52,5 @@
         </section>
     </main>
 </body>
+
 </html>

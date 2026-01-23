@@ -1,48 +1,46 @@
 const API_URL = 'http://localhost:3000/api';
 const loginForm = document.getElementById('login-formulario');
+const messageContainer = document.getElementById('message-container');
+const loginBtn = document.getElementById('button-login');
+const originalText = loginBtn.textContent;
 
 // Para checar si hay una sesión iniciada
 const checkSession = () => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userData');
-    
-    // SOLO en index.html, si ya hay sesión, ya redirige al dashboard
+
+    // SOLO en index.html, si ya hay sesión, redirige al dashboard
     if (token && userData) {
-        console.log('Sesión existente detectada. Redirigiendo a dashboard');
-        window.location.href = 'dashboard.html';
+        window.location.href = 'views/dashboard.html';
     }
 };
 checkSession();
+
+// Para mostrar mensajes
+const showMessage = (text, isError = true) => {
+    messageContainer.textContent = text;
+    messageContainer.className = isError ? 'error-message' : 'success-message';
+};
 
 // Para iniciar sesión
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    
-    // Deshabilita el btn durante login
-    const loginBtn = document.getElementById('button-login');
-    const originalText = loginBtn.textContent;
     loginBtn.disabled = true;
     loginBtn.textContent = 'Iniciando sesión...';
-    
+    messageContainer.textContent = '';
+
     try {
         const response = await fetch(`${API_URL}/vendedor/login`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
         });
-        
+
         const data = await response.json();
-        
+
         if (response.ok) {
-            console.log('✅ Login exitoso:', data);
-            
             localStorage.setItem('token', data.token);
             localStorage.setItem('userData', JSON.stringify({
                 vendedorId: data.vendedorId,
@@ -50,19 +48,14 @@ loginForm.addEventListener('submit', async (e) => {
                 email: data.email,
                 role: data.role
             }));
-            
-            alert('¡Inicio de sesión exitoso!');
-            
-            window.location.href = 'dashboard.html';
-            
+            window.location.href = 'views/dashboard.html';
         } else {
-            alert(data.message || 'Error al iniciar sesión. Verifica tus credenciales.');
+            showMessage(data.message || 'Credenciales incorrectas');
             loginBtn.disabled = false;
             loginBtn.textContent = originalText;
         }
     } catch (error) {
-        console.error('Error de conexión:', error);
-        alert('⚠️ No se pudo conectar con el servidor. Verifica que el backend esté corriendo en http://localhost:3000');
+        showMessage('Error de conexión con el servidor');
         loginBtn.disabled = false;
         loginBtn.textContent = originalText;
     }
