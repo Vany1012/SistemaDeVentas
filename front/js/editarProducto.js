@@ -1,44 +1,34 @@
 const API_URL = 'http://localhost:3000/api';
 
-// Verificar autenticación y permisos
-function checkAuth() {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('userData');
+// Usar autenticación centralizada - solo admin puede acceder
+function inicializarPagina() {
+    // Verificar que sea administrador usando la función centralizada
+    const usuario = checkAdminAuth();
+    if (!usuario) return;
     
-    if (!token || !userData) {
-        window.location.href = 'index.html';
-        return null;
+    console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);
+    
+    // Mostrar nombre de usuario
+    const titulo = document.querySelector('h2');
+    if (titulo) {
+        titulo.insertAdjacentHTML('afterend', `
+            <p style="text-align: center; color: #666; margin-top: -10px; margin-bottom: 20px;">
+                Usuario: ${usuario.vendedorName} (${usuario.role})
+            </p>
+        `);
     }
     
-    try {
-        const user = JSON.parse(userData);
-        
-        // Verificar si es admin (solo admin puede editar productos)
-        if (user.role !== 'admin') {
-            alert('No tienes permisos para editar productos. Solo administradores pueden realizar esta acción.');
-            window.location.href = 'dashboard.html';
-            return null;
-        }
-        
-        return user;
-    } catch (e) {
-        window.location.href = 'index.html';
-        return null;
-    }
+    // Configurar elementos de la página
+    configurarBusquedaAutomatica();
+    configurarFormulario();
+    configurarBotonVolver();
 }
 
-// Buscar producto por folio
+// Buscar producto por folio usando authFetch
 async function buscarProductoPorFolio(folio) {
     try {
-        const token = localStorage.getItem('token');
-        
-        // Primero obtenemos el inventario completo y filtramos localmente
-        const response = await fetch(`${API_URL}/inventario/verInventario`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
+        const response = await authFetch('/inventario/verInventario', {
+            method: 'GET'
         });
         
         if (response.ok) {
@@ -68,7 +58,69 @@ async function buscarProductoPorFolio(folio) {
         console.error('Error al buscar producto:', error);
         return {
             success: false,
-            error: 'Error de conexión'
+            error: error.message === 'No autenticado' ? 'Sesión expirada' : 'Error de conexión'
+        };
+    }
+}
+
+// Actualizar producto usando authFetch
+async function actualizarProducto(productoId, datosActualizados) {
+    try {
+        // Filtrar solo los campos que tienen valor
+        const camposParaActualizar = {};
+        
+        if (datosActualizados.nombre && datosActualizados.nombre.trim() !== '') {
+            camposParaActualizar.nombre = datosActualizados.nombre;
+        }
+        
+        if (datosActualizados.precio !== undefined && datosActualizados.precio !== '') {
+            camposParaActualizar.precio = parseFloat(datosActualizados.precio);
+        }
+        
+        if (datosActualizados.stock !== undefined && datosActualizados.stock !== '') {
+            camposParaActualizar.stock = parseInt(datosActualizados.stock);
+        }
+        
+        if (datosActualizados.categoria && datosActualizados.categoria !== 'seleccion') {
+            camposParaActualizar.categoria = datosActualizados.categoria;
+        }
+        
+        if (datosActualizados.activo !== undefined) {
+            camposParaActualizar.activo = datosActualizados.activo === 'si';
+        }
+        
+        // Verificar que haya al menos un campo para actualizar
+        if (Object.keys(camposParaActualizar).length === 0) {
+            return {
+                success: false,
+                error: 'No hay campos para actualizar'
+            };
+        }
+        
+        const response = await authFetch(`/inventario/editarProductoPorId?idProducto=${productoId}`, {
+            method: 'PUT',
+            body: JSON.stringify(camposParaActualizar)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            return {
+                success: true,
+                message: data.massage || 'Producto actualizado correctamente',
+                producto: data.producto
+            };
+        } else {
+            return {
+                success: false,
+                error: data.message || 'Error al actualizar el producto'
+            };
+        }
+    } catch (error) {
+        console.error('Error al actualizar producto:', error);
+        return {
+            success: false,
+            error: error.message === 'No autenticado' ? 'Sesión expirada' : 'Error de conexión con el servidor'
         };
     }
 }
@@ -344,56 +396,12 @@ function configurarFormulario() {
     });
 }
 
-// Configurar botón de volver al dashboard
-function configurarBotonVolver() {
-    // Crear botón de volver si no existe
-    const botonVolver = document.createElement('button');
-    botonVolver.id = 'volverBtn';
-    botonVolver.textContent = '← Volver al Dashboard';
-    botonVolver.style.cssText = `
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        padding: 10px 15px;
-        background-color: #607d8b;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        z-index: 100;
-    `;
-    
-    botonVolver.addEventListener('click', function() {
-        window.location.href = 'dashboard.html';
-    });
-    
-    document.body.appendChild(botonVolver);
-}
-
 // Inicializar la página
 function inicializarPagina() {
-    // Verificar autenticación y permisos
-    const usuario = checkAuth();
-    if (!usuario) return;
-    
-    console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);
-    
     // Configurar elementos de la página
     configurarBusquedaAutomatica();
     configurarFormulario();
-    configurarBotonVolver();
-    
-    // Mostrar nombre de usuario en la página
-    const titulo = document.querySelector('h2');
-    if (titulo) {
-        titulo.insertAdjacentHTML('afterend', `
-            <p style="text-align: center; color: #666; margin-top: -10px; margin-bottom: 20px;">
-                Usuario: ${usuario.vendedorName} (${usuario.role})
-            </p>
-        `);
-    }
 }
 
-// Cuando el DOM esté listo
+// DOM listo
 document.addEventListener('DOMContentLoaded', inicializarPagina);

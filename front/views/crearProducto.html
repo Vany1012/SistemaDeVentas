@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html lang="es-mx">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/crearProducto.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <script src="../js/crearProducto.js" defer></script>
+  <script src="../js/header.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <title>Crear Producto</title>
+  <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/crearProducto.css">
+  <script src="js/authentification.js" defer></script> 
+  <script src="js/dashboard.js" defer></script> <!--Conecta el funcionamiento del menu hamburguesa-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="js/crearProducto.js" defer></script>
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
-<!--Contenedor principal-->
+  <header id="header-container"></header>
+  <!--Contenedor principal-->
   <main class="container">
     <h2>Crear Producto</h2>
     <!--Formulario-->
@@ -19,30 +30,35 @@
         <div class="res">
           <label>Nombre del producto</label>
           <input type="text"id="nombre"  placeholder="Ingrese el nombre" required>
+          <span id="nombre-alert" class="error-msg"></span>
         </div>
-
+        <!--
         <div class="res">
         <label>Folio del producto</label>
           <input type="text" id="idProducto" placeholder="Ingrese el folio" required>
-        </div>
+        </div> -->
 
         <div class="res">
           <label>Precio</label>
           <input type="text" id="precio" placeholder="$0.00" min="0" required>
+          <span id="precio-alert" class="error-msg"></span>
         </div>
 
         <div class="res">
           <label>Stock</label>
           <input type="text" id="stock" placeholder="Cantidad" min="0" required>
+          <span id="stock-alert" class="error-msg"></span>
         </div>
 
         <div class="res">
           <label>Categoría</label>
-          <select id="categoria" name="categoria" required>
-            <option value="Bebidas">Bebidas</option>
-            <option value="Alimentos">Alimentos</option>
-            <option value="Otros">Ortros</option>
-          </select>
+          <input type="text" id="categoria" list="lista-categorias" placeholder="Escribe o selecciona" required>
+  
+          <datalist id="lista-categorias">
+            <option value="Bebidas"></option>
+            <option value="Alimentos"></option>
+            <option value="Otros"></option>
+          </datalist>
         </div>
 
         <div class="res">
@@ -54,9 +70,15 @@
         </div>
       </div>
 
+      <div id="mensaje-Alert"></div>
+
+      <div id="general-alert" class="status-msg"></div>
+
       <button type="submit" id="createBtn" class="createBtn">Crear Producto</button>
+      
     </form>
   </main>
 
 </body>
+
 </html>

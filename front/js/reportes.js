@@ -450,7 +450,6 @@ async function cargarReportes() {
 
 // Inicializar la página
 function inicializarPagina() {
-    // Verificar autenticación
     const usuario = checkAuth();
     if (!usuario) return;
     
@@ -471,5 +470,5 @@ function inicializarPagina() {
     cargarReportes();
 }
 
-// Cuando el DOM esté listo
+// DOM listo
 document.addEventListener('DOMContentLoaded', inicializarPagina);

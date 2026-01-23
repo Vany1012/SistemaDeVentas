@@ -9,6 +9,10 @@
     --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
     --radius-m: 16px;
     --radius-s: 10px;
+    --color-topbar: #19232f; /* Agregado */
+    --color-menu: #141b24;   /* Agregado */
+    --color-texto-claro: #e0e1dd; /* Agregado */
+    --transition: 0.3s ease; /* Agregado */
 }
 
 * {
@@ -20,9 +24,7 @@
 
 body {
     background-color: var(--color-fondo);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block; 
     min-height: 100vh;
     padding: 20px;
 }
@@ -32,8 +34,9 @@ body {
     border-radius: var(--radius-m);
     box-shadow: var(--sombra);
     padding: 40px;
-    width: 100%;
+    width: 95%;
     max-width: 750px;
+    margin: 100px auto 40px auto; 
 }
 
 #head {
@@ -60,7 +63,6 @@ h2 {
     gap: 20px;
     margin-bottom: 20px;
 }
-
 .input-whit-icon {
     display: flex;
     flex-direction: column;
@@ -136,5 +138,20 @@ button[type="submit"]:hover {
 @media (max-width: 600px) {
     .form-row {
         grid-template-columns: 1fr;
+    }
+
+    body {
+        align-items: flex-start;
+    }
+
+    .btnRegreso {
+        position: static; 
+        top: 10px;
+        left: 10px;
+    }
+
+    #volverBtn {
+        padding: 8px 12px;
+        font-size: 12px; /* Reducimos un poco el tamaño en móviles */
     }
 }
