@@ -19,8 +19,9 @@
         <h2>Registrar devolución</h2>
         <!-- Formulario para seleccionar venta -->
         <form id="venta-formulario">
-            <input type="text" id="venta-input" class="input-venta" placeholder="Escribe el ID de la Venta..."
-                name="id">
+            <input list="ventas-list" id="venta-input" class="input-venta"
+                placeholder="Escribe o selecciona el ID de la Venta..." name="id" autocomplete="off">
+            <datalist id="ventas-list"></datalist>
             <button type="submit">Buscar Venta</button>
         </form>
         <!-- Formulario para la devolución -->
