@@ -17,40 +17,44 @@ function initHeaderLogic() {
     const adminElements = document.querySelectorAll('.admin-exclusive');
     const menuBtn = document.getElementById('menuBtn');
     const menu = document.getElementById('hamburgerLinks');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const headerLogoutBtn = document.getElementById('headerLogoutBtn'); // Nuevo botón
 
-    // Mostrar nombre de usuario
+    // Detectar si estamos en dashboard.html
+    const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
+    if (currentPage === "dashboard.html") {
+        document.body.classList.add('on-dashboard');
+    }
+
     if (userData && userNameElement) {
         userNameElement.textContent = `Bienvenido, ${userData.vendedorName}`;
     }
 
-    // Control de permisos Admin
     if (userData && userData.role !== 'admin') {
         adminElements.forEach(el => el.remove());
     }
 
-    // Ocultar link de la página actual
-    const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
-    const links = document.querySelectorAll('#hamburgerLinks a');
-    links.forEach(link => {
-        if (link.getAttribute('data-page') === currentPage) {
-            link.classList.add('current-page');
-        }
-    });
-
-    // Toggle Menú Hamburguesa
-    menuBtn.addEventListener('click', () => {
-        menu.classList.toggle('active');
-        menuBtn.classList.toggle('fa-bars');
-        menuBtn.classList.toggle('fa-times');
-    });
-
-    // Cerrar sesión
-    logoutBtn.addEventListener('click', (e) => {
+    // Lógica de cierre de sesión unificada
+    const handleLogout = (e) => {
         e.preventDefault();
-        localStorage.clear();
+        localStorage.removeItem('userData');
+        localStorage.removeItem('token');
         window.location.href = '../index.html';
-    });
+    };
+
+    if (headerLogoutBtn) headerLogoutBtn.addEventListener('click', handleLogout);
+    
+    // El botón viejo dentro del menú (si existe)
+    const oldLogoutBtn = document.getElementById('logoutBtn');
+    if (oldLogoutBtn) oldLogoutBtn.addEventListener('click', handleLogout);
+
+    // Toggle Menú (solo si existe el botón)
+    if (menuBtn) {
+        menuBtn.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            menuBtn.classList.toggle('fa-bars');
+            menuBtn.classList.toggle('fa-times');
+        });
+    }
 }
 
 document.addEventListener('DOMContentLoaded', loadHeader);

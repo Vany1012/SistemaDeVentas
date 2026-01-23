@@ -69,6 +69,32 @@
   font-weight: bold;
 }
 
+.logout-pill {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 15px;
+    transition: background 0.3s;
+}
+
+.logout-pill:hover {
+    background-color: #cc0000;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+body.on-dashboard #menuBtn,
+body.on-dashboard #hamburgerLinks {
+    display: none !important;
+}
+
 /* Regla para ocultar el link de la página actual */
 #hamburgerLinks a.current-page {
     display: none;
