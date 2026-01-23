@@ -6,6 +6,7 @@
   --color-texto-oscuro: #0d1b2a;
   --color-input-bg: #eceff1;
   --color-accent: #3b82f6;
+  --color-exito: #10b981;
   --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
   --radius: 12px;
 }
@@ -48,21 +49,57 @@ section {
   gap: 20px;
 }
 
-.venta-info label {
-  display: flex;
-  flex-direction: column;
+/* Estilos para la nueva sección de pago */
+.pago-section label {
   font-weight: bold;
   color: var(--color-primario);
   font-size: 0.85rem;
   text-transform: uppercase;
+  display: block;
+  margin-bottom: 5px;
 }
 
-.venta-info input {
+.pago-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.efectivo-group {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  flex-grow: 1;
+}
+
+.cambio-display {
+  padding: 10px 20px;
+  background-color: #e0f2fe;
+  border-radius: 8px;
+  border: 1px solid #bae6fd;
+  color: var(--color-secundario);
+  font-weight: bold;
+  font-size: 1.1rem;
+  min-width: 150px;
+  text-align: center;
+}
+
+.venta-info label,
+.pago-section label {
+  display: flex;
+  flex-direction: column;
+}
+
+.venta-info input,
+.pago-section select,
+.pago-section input {
   margin-top: 8px;
   padding: 12px;
   border-radius: 8px;
   border: 1px solid #ddd;
   background-color: var(--color-input-bg);
+  width: 100%;
 }
 
 .headers {
@@ -103,6 +140,8 @@ section {
   border-radius: 6px;
   border: 1px solid #cbd5e1;
   font-size: 0.95rem;
+  width: 100%;
+  /* Asegura que ocupen el ancho de la celda */
 }
 
 .precio-unitario {
@@ -157,7 +196,7 @@ button {
 }
 
 #btn-registrar-venta {
-  background-color: #10b981;
+  background-color: var(--color-exito);
   color: white;
   width: 100%;
   padding: 18px;
@@ -196,12 +235,46 @@ button {
   visibility: visible;
 }
 
+#notification-container {
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.notification {
+    padding: 15px 25px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    box-shadow: var(--sombra);
+    animation: slideIn 0.5s ease-out;
+}
+.notification.error { background-color: #ef4444; }
+.notification.success { background-color: var(--color-exito); }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
 @media (max-width: 600px) {
-    .fila-producto {
-        grid-template-columns: 1fr; /* Una sola columna en móvil */
-        gap: 10px;
-    }
-    .venta-info {
-        grid-template-columns: 1fr;
-    }
+  .fila-producto {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .venta-info {
+    grid-template-columns: 1fr;
+  }
+
+  .pago-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .efectivo-group {
+    flex-direction: column;
+  }
 }

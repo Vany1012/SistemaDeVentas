@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="../css/header.css">
     <script src="../js/ventas.js" defer></script>
     <script src="../js/header.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js" defer></script>
     <title>Registar Venta</title>
     <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
 </head>
@@ -17,8 +18,9 @@
 <body>
     <header id="header-container"></header>
     <main>
+
         <h2>Registrar Venta</h2>
-        <!--Datos de la venta (fecha y vendedor)-->
+
         <section class="venta-info">
             <label>
                 Fecha
@@ -28,26 +30,46 @@
                 Vendedor
                 <input type="text" id="vendedor" readonly>
             </label>
-
         </section>
 
         <section class="productos-section">
             <div class="headers">
-                <h3>Productos vendidos</h3>
+                <h3>Producto</h3>
                 <h3>Cantidad</h3>
                 <h3>Precio Unitario</h3>
             </div>
             <div class="productos-vendidos" id="productos-vendidos">
-
             </div>
-
+            <datalist id="lista-inventario"></datalist>
             <button id="btn-agregar-producto">
                 Agregar producto
             </button>
-
         </section>
 
-        <!-- Sección para mostrar los totales -->
+        <section class="pago-section">
+            <div class="pago-row">
+                <label>
+                    Método de Pago
+                    <select id="metodo-pago">
+                        <option value="efectivo">Efectivo</option>
+                        <option value="tarjeta">Tarjeta</option>
+                        <option value="transferencia">Transferencia</option>
+                    </select>
+                </label>
+
+                <div id="container-efectivo" class="efectivo-group">
+                    <label>
+                        Monto Recibido
+                        <input type="number" id="monto-recibido" placeholder="0.00" min="0">
+                    </label>
+                    <div class="cambio-display">
+                        <span>Cambio:</span>
+                        <span id="valor-cambio">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="totales-section">
             <div class="total-item">
                 <span class="total-label">Productos:</span>
@@ -62,6 +84,8 @@
         <button id="btn-registrar-venta">
             Registrar
         </button>
+
+        <div id="notification-container"></div>
     </main>
 </body>
 
