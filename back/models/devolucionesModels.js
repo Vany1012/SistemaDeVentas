@@ -16,10 +16,10 @@ const devolucionSchema = new mongoose.Schema({
     fechaDevolucion: { type: Date, default: Date.now } 
 });
 
-devolucionSchema.pre('save', async function(next) {
+devolucionSchema.pre('save', async function() {
     const doc = this;
     if (!doc.isNew) {
-        return next(); 
+        return; 
     }
     try {
         const contador = await Contador.findByIdAndUpdate(
@@ -28,10 +28,8 @@ devolucionSchema.pre('save', async function(next) {
             { new: true, upsert: true }
         );
         doc.devolucionId = `04${contador.seq}`;
-        
-        next();
     } catch (error) {
-        next(error);
+        throw error;
     }
 });
 
