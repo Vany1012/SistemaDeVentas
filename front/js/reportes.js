@@ -332,21 +332,21 @@ function crearTablaInventario(estadisticas) {
     }
 }
 
-function configurarBotones() {
-    // Botón Volver
-    const btnVolver = document.createElement('button');
-    btnVolver.className = 'btn-flotante btn-volver';
-    btnVolver.textContent = '← Dashboard';
-    btnVolver.onclick = () => window.location.href = 'dashboard.html';
+// function configurarBotones() {
+//     // Botón Volver
+//     const btnVolver = document.createElement('button');
+//     btnVolver.className = 'btn-flotante btn-volver';
+//     btnVolver.textContent = '← Dashboard';
+//     btnVolver.onclick = () => window.location.href = 'dashboard.html';
 
-    // Botón Actualizar
-    const btnActualizar = document.createElement('button');
-    btnActualizar.className = 'btn-flotante btn-actualizar';
-    btnActualizar.textContent = '🔄 Actualizar';
-    btnActualizar.onclick = cargarReportes;
+//     // Botón Actualizar
+//     const btnActualizar = document.createElement('button');
+//     btnActualizar.className = 'btn-flotante btn-actualizar';
+//     btnActualizar.textContent = '🔄 Actualizar';
+//     btnActualizar.onclick = cargarReportes;
 
-    document.body.append(btnVolver, btnActualizar);
-}
+//     document.body.append(btnVolver, btnActualizar);
+// }
 
 // Mostrar loading
 function mostrarLoading() {
@@ -465,11 +465,11 @@ function inicializarPagina() {
     }
     
     // Configurar botones
-    configurarBotones();
+    // configurarBotones();
     
     // Cargar reportes
     cargarReportes();
 }
 
-// Cuando el DOM esté listo
+// DOM listo
 document.addEventListener('DOMContentLoaded', inicializarPagina);

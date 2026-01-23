@@ -51,12 +51,12 @@ loginForm.addEventListener('submit', async (e) => {
                 role: data.role
             }));
             
-            alert('✅ ¡Inicio de sesión exitoso!');
+            alert('¡Inicio de sesión exitoso!');
             
             window.location.href = 'dashboard.html';
             
         } else {
-            alert(data.message || '❌ Error al iniciar sesión. Verifica tus credenciales.');
+            alert(data.message || 'Error al iniciar sesión. Verifica tus credenciales.');
             loginBtn.disabled = false;
             loginBtn.textContent = originalText;
         }

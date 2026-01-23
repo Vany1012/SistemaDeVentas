@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Verificación de sesión
-    const user = checkAuth(); // Asumiendo que esta función está en authentification.js
+    // Verificación de sesión
+    const user = checkAuth();
     if (!user) return;
 
-    // 2. Mostrar nombre y rol
+    // Nombre y rol
     const userNameElement = document.getElementById('user-role');
     const userData = JSON.parse(localStorage.getItem('userData'));
 
@@ -11,13 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
         userNameElement.textContent = `Bienvenido, ${userData.vendedorName} (${userData.role})`;
     }
 
-    // 3. Control de permisos
+    // Control de permisos
     const adminElements = document.querySelectorAll('.admin-exclusive');
     if (userData && userData.role !== 'admin') {
         adminElements.forEach(el => el.remove()); // .remove() es más seguro que display:none
     }
 
-    // 4. Menú Hamburguesa
+    // Menú Hamburguesa
     const menuBtn = document.getElementById('menuBtn');
     const menu = document.getElementById('hamburgerLinks');
 
