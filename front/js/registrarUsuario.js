@@ -1,130 +1,102 @@
 
 const API_URL = 'http://localhost:3000/api/vendedor';
-
-// BLOQUEO DE SEGURIDAD
-// Si no hay token OR el rol no es admin, lo sacamos de la página
-const usuario = checkAdminAuth();
-if (!usuario) {
-    // alert("Acceso denegado: Solo los administradores pueden ver esta página.");
-    // window.location.href = 'index.html';
-    // quitamos lo de arriba para no duplicar alertas de checkAdminAuth del authentification.js
-}
-
-console.log('Admin autentificado', usuario.vendedorName)
+const userData = JSON.parse(localStorage.getItem('userData'));
+const token = localStorage.getItem("token");
 
 const userForm = document.querySelector('#registrarUsuario-form');
 const vendedorName = document.querySelector('#vendedorName');
-// const vendedorId = document.querySelector('#vendedorId');
+//const vendedorId = document.querySelector('#vendedorId');
 const userPassword = document.querySelector('#password');
 const userEmail = document.querySelector('#email');
 const userRole = document.querySelector('#role');
 const userActive = document.querySelector('#active');
 
-async function estimarProximoVendedorId() {
-    try {
-        // Obtener la lista de vendedores para ver el último ID
-        const response = await authFetch('/vendedors', {
-            method: 'GET'
-        });
+//Constantes para mensajes de Error
+const passAlert = document.querySelector('#password-alert');
+const emailAlert = document.querySelector('#email-alert');
+const generalAlert = document.querySelector('#general-alert');
 
-        if (response.ok) {
-            const vendedores = await response.json();
-            
-            // Encontrar el ID más alto
-            let maxId = 0;
-            vendedores.forEach(v => {
-                if (v.vendedorId && v.vendedorId.startsWith('01')) {
-                    const num = parseInt(v.vendedorId.substring(2));
-                    if (num > maxId) maxId = num;
-                }
-            });
-            
-            // Calcular próximo ID
-            const proximoId = `01${maxId + 1}`;
-            return proximoId;
-        }
-    } catch (error) {
-        console.error('Error al estimar próximo ID:', error);
-    }
-    
-    // Si hay error, usar un placeholder
-    return '01XXX';
+//limpiar mensajes
+const limpiarMensajes = () => {
+    passAlert.innerHTML = '';
+    emailAlert.innerHTML = '';
+    generalAlert.innerHTML = '';
+    generalAlert.className = 'status-msg'; // Resetear clases
 };
 
-// Llenamos el campo Id con placeholders
-async function configurarCampoVendedorId() {
-    if (!vendedorIdInput) return;
-    
-    // Configurar como campo informativo
-    vendedorIdInput.placeholder = "Calculando próximo ID...";
-    vendedorIdInput.readOnly = true;
-    vendedorIdInput.style.backgroundColor = '#f9f9f9';
-    
-    // Obtener y mostrar el próximo ID estimado
-    const proximoId = await estimarProximoVendedorId();
-    vendedorIdInput.value = proximoId;
-    
-    // Agregar información visual
-    const infoText = document.createElement('small');
-    infoText.textContent = `Este será el ID asignado automáticamente`;
-    infoText.style.cssText = `
-        display: block;
-        color: #666;
-        margin-top: 5px;
-        font-size: 12px;
-    `;
-    
-    // Insertar el campo
-    if (vendedorIdInput.parentNode) {
-        const existingInfo = vendedorIdInput.parentNode.querySelector('small');
-        if (existingInfo) existingInfo.remove();
-        vendedorIdInput.parentNode.appendChild(infoText);
-    }
-}
+// Validaciones
+const validarEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
+const getPasswordRequirements = (password) => ({
+    minLength: password.length >= 8,
+    hasUpperCase: /[A-Z]/.test(password),
+    hasLowerCase: /[a-z]/.test(password),
+    hasNumber: /\d/.test(password),
+    hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+});
+
+const obtenerErroresContraseña = (password) => {
+    const req = getPasswordRequirements(password);
+    const err = [];
+    if (!req.minLength) err.push('Mínimo 8 caracteres');
+    if (!req.hasUpperCase) err.push('Al menos una mayúscula');
+    if (!req.hasLowerCase) err.push('Al menos una minúscula');
+    if (!req.hasNumber) err.push('Al menos un número');
+    if (!req.hasSpecialChar) err.push('Al menos un carácter especial');
+    return err;
+};
+
+// Implementamos el llamado al endpoint POST => Funcón principal
 const createNewUser = async () => {
-  // Estructura de datos
+  
+  // Verificación de seguridad antes de enviar
+  if (!token) {
+    generalAlert.textContent = "No hay sesión activa.";
+    generalAlert.classList.add('error-text');
+    return;
+  }
+
+    //Validar Email
+  const emailValue = userEmail.value;
+  const passwordValue = userPassword.value;
+  let hayErrores = false;
+
+  if (!validarEmail(emailValue)) {
+      emailAlert.textContent = "Formato de email inválido (ejemplo@dominio.com)";
+      emailAlert.classList.add('error-text');
+      hayErrores = true;
+  }
+
+  //Validar Contraseña
+  const erroresPassword = obtenerErroresContraseña(passwordValue);
+  if (erroresPassword.length > 0) {
+      // Creamos una lista HTML
+      const listaHTML = `<ul class="password-errors-list" style="color: red;">
+                            ${erroresPassword.map(e => `<li>${e}</li>`).join('')}
+                         </ul>`;
+      passAlert.innerHTML = listaHTML;
+      hayErrores = true;
+  }
+
+  if (hayErrores) return; // Si hubo errores locales, no enviamos nada al servidor
+
+  // Creamos la estructura de datos
   const payload = {
     vendedorName: vendedorName.value,
-    // vendedorId: vendedorId.value,
+    //vendedorId: vendedorId.value,
     email: userEmail.value,
     password: userPassword.value,
     role: userRole.value,
     active: userActive.value
   };
 
-  console.log('Enviando...',payload)
+  console.log(payload)
 
-  // Validaciones de alta de usuario
-  if (!vendedorName.value.trim()) {
-        alert('El nombre del vendedor es requerido');
-        return;
-    }
-    
-    if (!userEmail.value.trim()) {
-        alert('El email es requerido');
-        return;
-    }
-    
-    if (!userPassword.value.trim()) {
-        alert('La contraseña es requerida');
-        return;
-    }
-    
-
-    // Confirmación del nuevo usuario
-    const confirmar = confirm(
-        `¿Crear nuevo usuario?\n\n` +
-        `Nombre: ${vendedorName.value}\n` +
-        `Email: ${userEmail.value}\n` +
-        `Rol: ${userRole.value}\n` +
-        `ID estimado: ${vendedorIdInput.value}\n\n` +
-        `El ID será asignado automáticamente por el sistema.`
-    );
-    
-    if (!confirmar) return;
-
+  generalAlert.textContent = "Procesando registro...";
+  generalAlert.style.color = "blue";
+  
   try {
+    // Hacemos el llamado al endpoint
     const res = await fetch(`${API_URL}/register`, {
       method: "POST",
       headers: { 
@@ -136,11 +108,51 @@ const createNewUser = async () => {
 
     const data = await res.json();
     console.log(data)
+
     if (res.ok) {
-        alert("Usuario creado exitosamente");
-        userForm.reset(); // Limpiar formulario
+        // Éxito al crear usuario
+        generalAlert.textContent = "¡Usuario creado exitosamente!";
+        generalAlert.className = 'success-text'; // Clase verde
+      
+        const idGenerado = data.vendedorId || (data.user && data.user.vendedorId) || data.vendedor?.vendedorId;
+
+        if (idGenerado) {
+          
+             //generalAlert.textContent += `  | ID Asignado: ${idGenerado}`;
+             generalAlert.innerHTML = `
+                <div style="text-align: left;" >
+                    <h3 style="margin: 0 0 10px 0;">¡Usuario registrado exitosamente!</h3>
+                    <strong>ID Vendedor:</strong> ${idGenerado}<br>
+                    <strong>Nombre:</strong> ${payload.vendedorName}<br>
+                    <strong>Email:</strong> ${payload.email}<br>
+                    <strong>Rol:</strong> ${payload.role}<br>
+                    <strong>Estado:</strong> ${payload.active === 'true' || payload.active === true ? 'Activo' : 'Inactivo'}
+                </div>`;
+                generalAlert.style.color = "#155724";            
+                generalAlert.style.backgroundColor = "#d4edda";  
+                generalAlert.style.borderColor = "#c3e6cb";      
+                generalAlert.style.borderWidth = "1px";
+                generalAlert.style.borderStyle = "solid";
+                generalAlert.style.padding = "15px";
+                generalAlert.style.borderRadius = "5px";
+                generalAlert.style.marginTop = "15px";
+        }
+        userForm.reset();
+        
+        // Opcional: Borrar mensaje de éxito después de 5 segundos
+        setTimeout(() => { generalAlert.textContent = '';generalAlert.removeAttribute('style'); }, 5000);
     } else {
-        alert(`Error: ${data.message || 'No se pudo crear el usuario'}`);
+        // Error
+        if (data.requisitos) {
+            
+            generalAlert.textContent = "Error de validación: " + data.requisitos.join(', ');
+    
+    
+        } else {
+          // ERROR DEL SERVIDOR
+          generalAlert.textContent = `Error: ${data.message || 'No se pudo crear el usuario'}`;
+          generalAlert.className = 'error-text'; // Clase roja
+        }
     }
 
   } catch (error) {
@@ -148,14 +160,14 @@ const createNewUser = async () => {
     alert("Error al conectar con el servidor");
   }
 };
+ 
+if (userForm) {
+  userForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    await createNewUser();
+  });
 
-//
-document.addEventListener('DOMContentLoaded', () => {
-    configurarCampoVendedorId();
-    if (userForm) {
-      userForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        await createNewUser();
-      })
-    }
-});
+  userPassword.addEventListener('input', () => { passAlert.innerHTML = ''; });
+  userEmail.addEventListener('input', () => { emailAlert.innerHTML = ''; });
+
+}

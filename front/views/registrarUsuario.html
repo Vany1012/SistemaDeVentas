@@ -3,14 +3,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="../css/crearProducto.css">
-  <link rel="stylesheet" href="../css/header.css">
-  <script src="../js/registrarUsuario.js" defer></script>
-  <script src="../js/authentification.js" defer></script>
-  <script src="../js/header.js" defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <title>Registrar Usuario</title>
-  <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+  <title>Registar Usuario</title>
+  <link rel="stylesheet" href="css/crearProducto.css"> 
+  <script src="./js/registrarUsuario.js" defer></script>
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -25,15 +21,23 @@
           <label>Nombre del usuario</label>
           <input type="text" id="vendedorName" placeholder="" required>
         </div>
-
+        <!--
         <div class="res">
           <label>Vendedor ID</label>
           <input type="text" id="vendedorId" placeholder="" required>
+        </div>
+        -->
+
+        <div class="res">
+          <label>Contraseña</label>
+          <input type="password" id="password" placeholder="" required>
+          <div id="password-alert" class="alert-msg"></div>
         </div>
 
         <div class="res">
           <label>Email</label>
           <input type="email" id="email" placeholder="" required>
+          <div id="email-alert" class="alert-msg"></div>
         </div>
         
         <div class="res">
@@ -57,6 +61,8 @@
           </select>
         </div>
       </div>
+
+      <div id="general-alert" class="status-msg"></div>
 
       <button type="submit" id="createBtn" class="createBtn">Crear Usuario</button>
     </form>
