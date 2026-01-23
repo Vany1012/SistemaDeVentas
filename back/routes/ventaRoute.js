@@ -1,5 +1,5 @@
 const express = require('express');
-const { registrarVentas, obtenerVentas, obtenerTodasLasVentas } = require('../controllers/ventaController');
+const { registrarVentas, obtenerVentas, obtenerTodasLasVentas, obtenerReporteVentasPorDia, obtenerVentasDelDia } = require('../controllers/ventaController');
 const { protect } = require('../middleware/vendedorMiddleware');
 const ventaRouter = express.Router();
 
@@ -15,6 +15,12 @@ ventaRouter.route('/ventas')
 
 ventaRouter.route('/reporteVentas') // Ruta para reporte de todas las ventas (solo admin)
     .get(protect, obtenerTodasLasVentas);
+
+ventaRouter.route('/reporteVentasPorDia') // Ruta para obtener ventas agrupadas por día con detalles de productos
+    .get(protect, obtenerReporteVentasPorDia);
+
+ventaRouter.route('/ventasDelDia') // Ruta para obtener SOLO las ventas del día actual
+    .get(protect, obtenerVentasDelDia);
 
 ventaRouter.route('/')
 module.exports = ventaRouter;
