@@ -13,9 +13,9 @@ exports.protect = async (req, res, next) => {
 
             next();
         }catch(e){
-            res.status(401).json({message: 'Token Invalido o expirado' + e.message});
+            return res.status(401).json({message: 'Token Invalido o expirado: ' + e.message});
         }
     }else{
-        res.status(401).json({message: 'No se ingreso el token'});
+        return res.status(401).json({message: 'No se ingreso el token'});
     }
 };

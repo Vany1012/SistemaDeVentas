@@ -25,6 +25,23 @@ function checkAuth() {
     }
 }
 
+// Verificación de permiso ONLY Admin -> devuelve el user sólo cuando user.role es admin
+function checkAdminAuth() {
+    const user = checkAuth();
+
+    if (!user){
+        return null;
+    };
+
+    if(user.role !== 'admin') {
+        alert('Acceso restringido a SOLO Admin.');
+        window.location.href = 'dashboard.html';
+        return null;
+    };
+
+    return user;
+};
+
 // Obtener el token para las peticiones
 function getAuthToken() {
     return localStorage.getItem('token');
@@ -74,6 +91,13 @@ function loadUserProfile() {
 async function authFetch(url, options = {}) {
     const token = getAuthToken();
     
+    // Sin globito (token) no hay fiesta
+    if (!token) {
+        console.error('No hay Token de Autentificación') // por cualquier razón que se remueva el token
+        window.location.href = 'index.html'; // que vuelva a iniciar sesión
+        throw new Error('No autentificado.');
+    };
+
     const defaultOptions = {
         headers: {
             'Content-Type': 'application/json',

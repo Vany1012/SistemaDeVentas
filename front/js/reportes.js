@@ -331,6 +331,23 @@ function crearTablaInventario(estadisticas) {
         seccion.appendChild(alerta);
     }
 }
+
+function configurarBotones() {
+    // Botón Volver
+    const btnVolver = document.createElement('button');
+    btnVolver.className = 'btn-flotante btn-volver';
+    btnVolver.textContent = '← Dashboard';
+    btnVolver.onclick = () => window.location.href = 'dashboard.html';
+
+    // Botón Actualizar
+    const btnActualizar = document.createElement('button');
+    btnActualizar.className = 'btn-flotante btn-actualizar';
+    btnActualizar.textContent = '🔄 Actualizar';
+    btnActualizar.onclick = cargarReportes;
+
+    document.body.append(btnVolver, btnActualizar);
+}
+
 // Mostrar loading
 function mostrarLoading() {
     // Eliminar loading anterior si existe
@@ -433,7 +450,6 @@ async function cargarReportes() {
 
 // Inicializar la página
 function inicializarPagina() {
-    // Verificar autenticación
     const usuario = checkAuth();
     if (!usuario) return;
     
@@ -448,11 +464,11 @@ function inicializarPagina() {
     }
     
     // Configurar botones
-    
+    configurarBotones();
     
     // Cargar reportes
     cargarReportes();
 }
 
-// Cuando el DOM esté listo
+// DOM listo
 document.addEventListener('DOMContentLoaded', inicializarPagina);

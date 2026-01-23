@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+const Contador = require('./contadorModel'); 
 
 const devolucionSchema = new mongoose.Schema({
-    idVenta: { type: mongoose.Schema.Types.ObjectId, ref: 'Venta', required: true }, 
+    devolucionId: { type: String, unique: true },
+    ventaId: { type: String, required: true }, 
     vendedor: { type: String, required: true }, 
     productosDevueltos: [{ 
         idProducto: { type: String, required: true },
@@ -12,6 +14,23 @@ const devolucionSchema = new mongoose.Schema({
     totalProductosDevueltos: { type: Number, required: true, min: 0 }, 
     totalReembolsado: { type: Number, required: true, min: 0 },
     fechaDevolucion: { type: Date, default: Date.now } 
+});
+
+devolucionSchema.pre('save', async function() {
+    const doc = this;
+    if (!doc.isNew) {
+        return; 
+    }
+    try {
+        const contador = await Contador.findByIdAndUpdate(
+            { _id: 'devolucionId' },  // Nombre del contador
+            { $inc: { seq: 1 } },
+            { new: true, upsert: true }
+        );
+        doc.devolucionId = `04${contador.seq}`;
+    } catch (error) {
+        throw error;
+    }
 });
 
 module.exports = mongoose.model('Devolucion', devolucionSchema); 

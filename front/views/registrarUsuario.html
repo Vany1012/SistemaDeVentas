@@ -2,35 +2,17 @@
 <html lang="es-mx">
 <head>
   <meta charset="UTF-8">
-  <title>Crear Producto</title>
-  <link rel="stylesheet" href="css/crearProducto.css"><!--Este conecta registar y crear productos en este css-->
-  <script src="js/authentification.js" defer></script> 
-  <script src="js/dashboard.js" defer></script> <!--Conecta el funcionamiento del menu hamburguesa-->
+  <title>Registar Usuario</title>
+  <link rel="stylesheet" href="../css/crearProducto.css"> 
+  <link rel="stylesheet" href="../css/header.css"> 
+  <script src="../js/registrarUsuario.js" defer></script>
+  <script src="../js/header.js" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="./js/registrarUsuario.js" defer></script>
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
-    <!--Topbar-->
-  <header>
-    <div class="top-bar">
-      <i class="fa fa-bars" id="menuBtn"></i>
-      <span id="user-role"></span>
-    </div>
-  </header>
-    <!-- Menú hamburguesa -->
-  <nav id="hamburgerLinks">
-      <a href="dashboard.html">Inicio</a>
-      <a class='admin-exclusive' href="crearProducto.html">Crear Producto</a>
-      <a class='admin-exclusive' href="editarproducto.html">Editar Producto</a>
-      <a href="inventario.html">Inventario</a>
-      <a href="ventas.html">Registrar Venta</a>
-      <a href="devoluciones.html">Registrar Devoluciones</a>
-      <a class='admin-exclusive' href="reportes.html">Ver Reportes</a>
-      <a class='admin-exclusive' href="registrarUsuario.html">Registrar Usuario</a>
-      <a>Cerrar sesión</a>
-  </nav>
+  <header id="header-container"></header>
 <!--Contenedor principal-->
   <main class="container">
     <h2>Registrar Usuario</h2>
@@ -41,20 +23,23 @@
           <label>Nombre del usuario</label>
           <input type="text"  id="vendedorName" placeholder="" required>
         </div>
-
+        <!--
         <div class="res">
         <label>Vendedor ID</label>
           <input type="text" id="vendedorId" placeholder="" required>
         </div>
+        -->
 
         <div class="res">
           <label>Contraseña</label>
           <input type="password" id="password" placeholder="" required>
+          <div id="password-alert" class="alert-msg"></div>
         </div>
 
         <div class="res">
           <label>Email</label>
           <input type="email" id="email" placeholder="" required>
+          <div id="email-alert" class="alert-msg"></div>
         </div>
 
         <div class="res">
@@ -73,6 +58,8 @@
           </select>
         </div>
       </div>
+
+      <div id="general-alert" class="status-msg"></div>
 
       <button type="submit" id="createBtn" class="createBtn">Crear Usuario</button>
     </form>
