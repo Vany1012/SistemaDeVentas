@@ -1,5 +1,4 @@
 :root {
-
   --color-fondo: #213244;
   --color-card: #f8f8f8;
   --color-primario: #415a77;
@@ -60,10 +59,6 @@ body {
   transition: border 0.3s ease;
 }
 
-.card-login img:hover {
-  border-color: var(--color-primario);
-}
-
 .card-login p {
   font-size: 1.2rem;
   font-weight: bold;
@@ -115,4 +110,31 @@ body {
 #button-login:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+/* Estilos para el contenedor de mensajes */
+#message-container:empty {
+  display: none;
+}
+
+#message-container {
+  margin-top: 20px;
+  text-align: center;
+  min-height: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.error-message {
+  color: #ff4d4d;
+  background-color: rgba(255, 77, 77, 0.1);
+  padding: 10px;
+  border-radius: var(--radius-s);
+}
+
+.success-message {
+  color: #2ecc71;
+  background-color: rgba(46, 204, 113, 0.1);
+  padding: 10px;
+  border-radius: var(--radius-s);
 }

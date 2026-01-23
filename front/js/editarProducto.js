@@ -344,30 +344,11 @@ function configurarFormulario() {
     });
 }
 
-
-
 // Inicializar la página
 function inicializarPagina() {
-    // Verificar autenticación y permisos
-    const usuario = checkAuth();
-    if (!usuario) return;
-    
-    console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);
-    
     // Configurar elementos de la página
     configurarBusquedaAutomatica();
     configurarFormulario();
-    configurarBotonVolver();
-    
-    // Mostrar nombre de usuario en la página
-    const titulo = document.querySelector('h2');
-    if (titulo) {
-        titulo.insertAdjacentHTML('afterend', `
-            <p style="text-align: center; color: #666; margin-top: -10px; margin-bottom: 20px;">
-                Usuario: ${usuario.vendedorName} (${usuario.role})
-            </p>
-        `);
-    }
 }
 
 // Cuando el DOM esté listo

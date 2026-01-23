@@ -331,6 +331,16 @@ function crearTablaInventario(estadisticas) {
         seccion.appendChild(alerta);
     }
 }
+
+function configurarBotones() {
+    // Botón Actualizar
+    const btnActualizar = document.createElement('button');
+    btnActualizar.className = 'btn-flotante btn-actualizar';
+    btnActualizar.textContent = 'Actualizar';
+    btnActualizar.onclick = cargarReportes;
+    document.body.append(btnActualizar);
+}
+
 // Mostrar loading
 function mostrarLoading() {
     // Eliminar loading anterior si existe
@@ -433,7 +443,6 @@ async function cargarReportes() {
 
 // Inicializar la página
 function inicializarPagina() {
-    // Verificar autenticación
     const usuario = checkAuth();
     if (!usuario) return;
     

@@ -5,13 +5,13 @@ const Producto = require('../models/inventariosModels');
 exports.registrarDevolucion = async (req, res) => {
     try {
         if (req.vendedor.role === req.role) { 
-            const { idVenta, productosDevueltos } = req.body;
+            const { ventaId, productosDevueltos } = req.body;
 
-            if (!idVenta || !productosDevueltos || productosDevueltos.length === 0) {
-                return res.status(400).json({ message: 'Faltan datos: idVenta y productosDevueltos son requeridos' });
+            if (!ventaId || !productosDevueltos || productosDevueltos.length === 0) {
+                return res.status(400).json({ message: 'Faltan datos: ventaId y productosDevueltos son requeridos' });
             }
 
-            const venta = await Venta.findById(idVenta);
+            const venta = await Venta.findOne({ ventaId });
             if (!venta) {
                 return res.status(404).json({ message: 'Venta no encontrada' });
             }
@@ -49,7 +49,7 @@ exports.registrarDevolucion = async (req, res) => {
 
             // Crear la devolución
             const nuevaDevolucion = new Devolucion({
-                idVenta,
+                ventaId,
                 vendedor: venta.vendedor,
                 productosDevueltos: productosParaDevolucion,
                 totalProductosDevueltos,
@@ -83,7 +83,6 @@ exports.obtenerTodasLasDevoluciones = async (req, res) => {
             const skip = (page - 1) * limit; 
 
             const devoluciones = await Devolucion.find({}) 
-                .populate('idVenta') 
                 .sort({ fechaDevolucion: -1 }) 
                 .skip(skip)
                 .limit(parseInt(limit)); 
