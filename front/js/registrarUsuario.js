@@ -101,7 +101,7 @@ const createNewUser = async () => {
       method: "POST",
       headers: { 
         "Content-type": "application/json",
-        "Authorization": `Bearer ${token}`
+        "Authorization": `Bearer ${token}` // Enviamos el token
       },
       body: JSON.stringify(payload)
     });
