@@ -3,8 +3,6 @@ async function loadHeader() {
         const response = await fetch('../components/header.html');
         const html = await response.text();
         document.getElementById('header-container').innerHTML = html;
-
-        // Una vez cargado, ejecutamos la lógica
         initHeaderLogic();
     } catch (error) {
         console.error("Error cargando el header:", error);
@@ -17,9 +15,8 @@ function initHeaderLogic() {
     const adminElements = document.querySelectorAll('.admin-exclusive');
     const menuBtn = document.getElementById('menuBtn');
     const menu = document.getElementById('hamburgerLinks');
-    const headerLogoutBtn = document.getElementById('headerLogoutBtn'); // Nuevo botón
+    const headerLogoutBtn = document.getElementById('headerLogoutBtn');
 
-    // Detectar si estamos en dashboard.html
     const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
     if (currentPage === "dashboard.html") {
         document.body.classList.add('on-dashboard');
@@ -33,7 +30,6 @@ function initHeaderLogic() {
         adminElements.forEach(el => el.remove());
     }
 
-    // Lógica de cierre de sesión unificada
     const handleLogout = (e) => {
         e.preventDefault();
         localStorage.removeItem('userData');
@@ -42,12 +38,7 @@ function initHeaderLogic() {
     };
 
     if (headerLogoutBtn) headerLogoutBtn.addEventListener('click', handleLogout);
-    
-    // El botón viejo dentro del menú (si existe)
-    const oldLogoutBtn = document.getElementById('logoutBtn');
-    if (oldLogoutBtn) oldLogoutBtn.addEventListener('click', handleLogout);
 
-    // Toggle Menú (solo si existe el botón)
     if (menuBtn) {
         menuBtn.addEventListener('click', () => {
             menu.classList.toggle('active');

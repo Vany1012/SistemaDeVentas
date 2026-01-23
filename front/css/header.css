@@ -62,13 +62,6 @@
   border-left: 4px solid var(--color-primario-hover);
 }
 
-#logoutBtn {
-  color: #ff4d4d;
-  border-top: 1px solid #333;
-  margin-top: auto;
-  font-weight: bold;
-}
-
 .logout-pill {
     background-color: #ff4d4d;
     color: white;
