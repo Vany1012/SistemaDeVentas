@@ -35,6 +35,12 @@ const eliminarProducto = async (id) => {
     }
 };
 
+// Función para Editar --- Aporte IMPORTANTE para redirigir a ventana editarProducto
+const editarProducto = (idProducto) => {
+    // Redirigir a la página de edición CON el ID en la URL
+    window.location.href = `editarProducto.html?id=${idProducto}`;
+};
+
 
 // Función para cargar productos
 const loadProducts = async () => {
