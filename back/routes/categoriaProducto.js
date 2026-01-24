@@ -8,7 +8,7 @@ categoriaProductoRouter.route('/crearCategoriaProducto')
     .post(protect, categoriaProductoController.createCategoria);
 
 categoriaProductoRouter.route('/eliminarCategoriaProducto')
-    .patch(protect, categoriaProductoController.eliminarCategoria);
+    .delete(protect, categoriaProductoController.eliminarCategoria);
 
 
 categoriaProductoRouter.route('/verCategoriasProducto')
