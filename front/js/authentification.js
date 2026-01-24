@@ -130,8 +130,15 @@ async function authFetch(url, options = {}) {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
-    window.location.href = 'index.html';
-}
+    
+    // Para obtener el nombre de la ruta actual
+    const currentPath = window.location.pathname;
+    
+    if (currentPath.includes('/views/') || currentPath.includes('/front/views/')) {
+        // Si estamos en una subcarpeta, subimos un nivel hasta el Login
+        window.location.href = '../index.html';
+    }
+};
 
 // funciones globales
 window.checkAuth = checkAuth;

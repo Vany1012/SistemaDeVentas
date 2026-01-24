@@ -2,13 +2,13 @@ const API_URL = 'http://localhost:3000/api';
 
 // Inicio de página autentificada
 function inicializarPagina() {
-    // Verificar que sea administrador usando la función centralizada
+    // Verificar que sea admin
     const usuario = checkAdminAuth();
     if (!usuario) return;
     
     console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);
     
-    // Mostramos nombre de usuario
+    // Nombre de usuario
     const titulo = document.querySelector('h2');
     if (titulo) {
         titulo.insertAdjacentHTML('afterend', `
