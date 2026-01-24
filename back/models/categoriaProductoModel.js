@@ -4,7 +4,6 @@ const Contador = require('./contadorModel');
 const categoriaProductoSchema = new mongoose.Schema({
     categoriaProducto: { type: String, unique: true, required: true},
     categoriaId: { type: String, unique: true },
-    activo: { type: Boolean, default: true }
 });
 
 categoriaProductoSchema.pre('save', async function() {

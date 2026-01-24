@@ -13,7 +13,7 @@ exports.createCategoria = async(req, res, next) =>{
                         return res.status(400).json({message:"La categoria es requerida"});
                     }
 
-                    const categoriaExist = await Categoria.findOne({categoriaProducto: categoria, activo: true});
+                    const categoriaExist = await Categoria.findOne({categoriaProducto: categoria});
                     if (categoriaExist){
                         return res.status(400).json({message: 'El nombre de la categoria ya existe en el sistema'})
                     }
@@ -36,7 +36,7 @@ exports.eliminarCategoria = async (req, res, next) => {
         if (!categoriaId || categoriaId ===''){
             return res.status(400).json({message: `Necesitas ingresar un ID de categoria`});
         }
-        const categoria = await Categoria.findOneAndUpdate({categoriaId:categoriaId},{activo:false},{new: true, runValidators: true})
+        const categoria = await Categoria.findOneAndDelete({categoriaId:categoriaId})
         if (!categoria){
             return res.status(404).json({message:`Categoria no encontrada por favor revisa si el ID de tu categoria es correcto`})
         }
@@ -52,7 +52,7 @@ exports.verCategorias = async (req, res, next) => {
         if(!req.vendedor){
             return res.status(401).json({message: 'No autorizado - Vendedor no encontrado'});
         }
-        const categorias =  await Categoria.find({activo:true});
+        const categorias =  await Categoria.find();
         res.status(200).json(categorias);
 
     }catch(err){
