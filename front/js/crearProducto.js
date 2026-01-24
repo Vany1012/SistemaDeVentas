@@ -126,7 +126,7 @@ const handleEliminarCategoria = async () => {
     try {
         // Tu backend espera ?categoriaId=XYZ en el query string
         const response = await fetch(`${API_CAT_URL}/eliminarCategoriaProducto?categoriaId=${idCategoria}`, {
-            method: 'PATCH', // Tu ruta usa PATCH
+            method: 'DELETE', // Tu ruta usa PATCH
             headers: {
                 'Authorization': `Bearer ${token}`
             }
