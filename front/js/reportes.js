@@ -441,14 +441,6 @@ function inicializarPagina() {
     
     console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);
     
-    // Mostrar nombre de usuario
-    const titulo = document.querySelector('h2');
-    if (titulo) {
-        titulo.insertAdjacentHTML('afterend', `
-            <p>Usuario: ${usuario.vendedorName} (${usuario.role})</p>
-        `);
-    }
-    
     // Configurar botones
     
     

@@ -1,7 +1,6 @@
 :root {
     --color-fondo: #213244;
     --color-card: #f8f8f8;
-    --color-card-oscuro: #cacaca;
     --color-primario: #415a77;
     --color-texto-oscuro: #0d1b2a;
     --color-success: #10b981;
@@ -9,10 +8,10 @@
     --color-warning: #f59e0b;
     --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
     --radius: 12px;
-    --color-topbar: #19232f; /* Agregado */
-    --color-menu: #141b24;   /* Agregado */
-    --color-texto-claro: #e0e1dd; /* Agregado */
-    --transition: 0.3s ease; /* Agregado */
+    --color-topbar: #19232f;
+    --color-menu: #141b24;
+    --color-texto-claro: #e0e1dd;
+    --transition: 0.3s ease;
 }
 
 * {
@@ -29,7 +28,7 @@ body {
 }
 
 .container {
-    background-color: var(--color-card-oscuro);
+    background-color: var(--color-card);
     border-radius: var(--radius);
     box-shadow: var(--sombra);
     margin: 100px auto 40px auto;
