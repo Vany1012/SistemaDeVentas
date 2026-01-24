@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="es-mx">
-
 <head>
   <meta charset="UTF-8">
   <title>Registar Usuario</title>
-  <link rel="stylesheet" href="css/crearProducto.css"> 
-  <script src="./js/registrarUsuario.js" defer></script>
+  <link rel="stylesheet" href="../css/crearProducto.css"> 
+  <link rel="stylesheet" href="../css/header.css"> 
+  <script src="../js/registrarUsuario.js" defer></script>
+  <script src="../js/header.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
   <header id="header-container"></header>
-  <!--Contenedor principal-->
+<!--Contenedor principal-->
   <main class="container">
     <h2>Registrar Usuario</h2>
     <!--Formulario-->
@@ -19,11 +21,11 @@
       <div class="form">
         <div class="res">
           <label>Nombre del usuario</label>
-          <input type="text" id="vendedorName" placeholder="" required>
+          <input type="text"  id="vendedorName" placeholder="" required>
         </div>
         <!--
         <div class="res">
-          <label>Vendedor ID</label>
+        <label>Vendedor ID</label>
           <input type="text" id="vendedorId" placeholder="" required>
         </div>
         -->
@@ -39,17 +41,12 @@
           <input type="email" id="email" placeholder="" required>
           <div id="email-alert" class="alert-msg"></div>
         </div>
-        
-        <div class="res">
-          <label>Contraseña</label>
-          <input type="password" id="password" placeholder="" required>
-        </div>
 
         <div class="res">
           <label>Role</label>
           <select id="role" name="role">
-            <option value="vendedor">vendedor</option>
-            <option value="admin">admin</option>
+              <option value="vendedor">vendedor</option>   
+              <option value="admin">admin</option>
           </select>
         </div>
 
@@ -69,5 +66,4 @@
   </main>
 
 </body>
-
 </html>

@@ -168,7 +168,7 @@ async function obtenerInventario() {
     return await response.json();
   } catch (error) {
     console.error(error);
-    alert("No se pudo cargar el inventario");
+    mostrarMensaje("No se pudo cargar el inventario. Verifique su conexión.", "error")
     return [];
   }
 }
@@ -230,7 +230,7 @@ btnAgregarProducto.addEventListener('click', () => {
     let val = parseInt(inputCantidad.value);
 
     if (val > maxStock) {
-      alert(`Solo hay ${maxStock} unidades disponibles.`);
+      mostrarMensaje(`Stock insuficiente: Solo hay ${maxStock} unidades.`, "error");
       inputCantidad.value = maxStock;
     }
     if (val < 1) {

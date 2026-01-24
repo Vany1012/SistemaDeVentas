@@ -17,17 +17,15 @@
   justify-content: space-between;
   background-color: var(--color-topbar);
   height: 60px;
-  padding: 0 25px;
+  padding: 0 15px;
+  gap: 10px;
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
   z-index: 1000;
   color: var(--color-texto-claro);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-#menuBtn:hover {
-  cursor: pointer;
 }
 
 #hamburgerLinks {
@@ -62,35 +60,78 @@
   border-left: 4px solid var(--color-primario-hover);
 }
 
+#user-role {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  font-size: 0.9rem;
+}
+
 .logout-pill {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-left: 15px;
-    transition: background 0.3s;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 15px;
+  transition: background 0.3s;
 }
 
 .logout-pill:hover {
-    background-color: #cc0000;
+  background-color: #cc0000;
 }
 
 .header-right {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 body.on-dashboard #menuBtn,
 body.on-dashboard #hamburgerLinks {
-    display: none !important;
+  display: none !important;
 }
 
-/* Regla para ocultar el link de la página actual */
 #hamburgerLinks a.current-page {
-    display: none;
+  display: none;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.home-link,
+#menuBtn {
+  color: var(--color-texto-claro);
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.home-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.home-text {
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: normal;
+  line-height: 1;
+}
+
+.home-link:hover,
+#menuBtn:hover {
+  color: var(--color-primario-hover);
+}
+
+body.on-dashboard #homeBtn {
+  display: none !important;
 }
 
 @media (max-width: 768px) {
@@ -101,5 +142,25 @@ body.on-dashboard #hamburgerLinks {
 
   #hamburgerLinks.active {
     left: 0;
+  }
+
+  .home-text,
+  .logout-text {
+    display: none;
+  }
+
+  .logout-pill {
+    padding: 8px 12px;
+    margin-left: 5px;
+  }
+
+  #user-role {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #user-role {
+    font-size: 0.7rem;
   }
 }
