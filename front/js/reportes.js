@@ -441,8 +441,6 @@ function inicializarPagina() {
     
     console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);
     
-    // Configurar botones
-    
     
     // Cargar reportes
     cargarReportes();

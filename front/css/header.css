@@ -27,10 +27,6 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-#menuBtn:hover {
-  cursor: pointer;
-}
-
 #hamburgerLinks {
   background-color: var(--color-menu);
   position: fixed;
@@ -64,34 +60,56 @@
 }
 
 .logout-pill {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-left: 15px;
-    transition: background 0.3s;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 15px;
+  transition: background 0.3s;
 }
 
 .logout-pill:hover {
-    background-color: #cc0000;
+  background-color: #cc0000;
 }
 
 .header-right {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 body.on-dashboard #menuBtn,
 body.on-dashboard #hamburgerLinks {
-    display: none !important;
+  display: none !important;
 }
 
-/* Regla para ocultar el link de la página actual */
 #hamburgerLinks a.current-page {
-    display: none;
+  display: none;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.home-link,
+#menuBtn {
+  color: var(--color-texto-claro);
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.home-link:hover,
+#menuBtn:hover {
+  color: var(--color-primario-hover);
+}
+
+body.on-dashboard #homeBtn {
+  display: none !important;
 }
 
 @media (max-width: 768px) {

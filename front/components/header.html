@@ -1,6 +1,11 @@
 <div class="top-bar">
-    <i class="fa fa-bars" id="menuBtn"></i>
-    <span id="user-role"></span>
+    <div class="header-left">
+        <i class="fa fa-bars" id="menuBtn"></i>
+        <a href="dashboard.html" class="home-link" id="homeBtn">
+            <i class="fa fa-home"></i>
+        </a>
+    </div>
+    
     <div class="header-right">
         <span id="user-role"></span>
         <button id="headerLogoutBtn" class="logout-pill">
@@ -10,7 +15,6 @@
 </div>
 
 <nav id="hamburgerLinks">
-    <a href="dashboard.html" data-page="dashboard.html">Menú Principal</a>
     <a class='admin-exclusive' href="crearProducto.html" data-page="crearProducto.html">Crear Producto</a>
     <a class='admin-exclusive' href="editarProducto.html" data-page="editarProducto.html">Editar Producto</a>
     <a href="inventario.html" data-page="inventario.html">Inventario</a>

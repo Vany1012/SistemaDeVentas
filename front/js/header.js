@@ -16,9 +16,10 @@ function initHeaderLogic() {
     const menuBtn = document.getElementById('menuBtn');
     const menu = document.getElementById('hamburgerLinks');
     const headerLogoutBtn = document.getElementById('headerLogoutBtn');
+    const path = window.location.pathname;
+    const currentPage = path.split("/").pop();
 
-    const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
-    if (currentPage === "dashboard.html") {
+    if (currentPage === "dashboard.html" || currentPage === "") {
         document.body.classList.add('on-dashboard');
     }
 
