@@ -34,7 +34,7 @@ exports.eliminarProducto = async (req, res, next) => {
             return res.status(401).json({message: 'No autorizado - Vendedor no encontrado'});
         }
         if(req.vendedor.role === req.role && req.role === "admin"){
-            const {idProducto} = req.query; //Obtenemos el id del producto
+            const {idProducto} = req.query;
             if (!idProducto || idProducto ===''){
                 return res.status(400).json({message: `Necesitas ingresar un ID de producto`});
             }
@@ -50,6 +50,33 @@ exports.eliminarProducto = async (req, res, next) => {
         }
     }catch(err){
         res.status(500).json({message: 'Error al eliminar producto', error: err.message});
+    }
+};
+
+exports.activarProducto = async (req, res, next) => {
+    try{
+        if(!req.vendedor){
+            return res.status(401).json({message: 'No autorizado - Vendedor no encontrado'});
+        }
+        if(req.vendedor.role === req.role && req.role === "admin"){
+            const {idProducto} = req.query;
+            if (!idProducto || idProducto ===''){
+                return res.status(400).json({message: `Necesitas ingresar un ID de producto`});
+            }
+            const productoExistente = await Producto.findOne({idProducto: idProducto});
+            if (!productoExistente){
+                return res.status(404).json({message:`Producto no encontrado por favor revisa si el ID de tu producto es correcto`});
+            }
+            if (productoExistente.activo === true){
+                return res.status(200).json({message: 'El producto ya está activo'});
+            }
+            const producto = await Producto.findOneAndUpdate({idProducto:idProducto, activo:false},{activo:true},{new: true, runValidators: true})
+            res.status(200).json({ message: 'Producto activado correctamente', producto: {nombre: producto.nombre, idProducto: producto.idProducto, cantidad: producto.stock, precio: producto.precio}});
+        }else{
+            res.status(403).json({message: 'El vendedor no es admin'});
+        }
+    }catch(err){
+        res.status(500).json({message: 'Error al activar producto', error: err.message});
     }
 };
 

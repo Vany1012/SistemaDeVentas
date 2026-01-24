@@ -9,6 +9,9 @@ inventarioRouter.route('/crearProducto')
 inventarioRouter.route('/eliminarProducto')
         .patch ( protect, inventarioController.eliminarProducto ); // Ruta para eliminar un producto por idProducto (requiere token)
 
+inventarioRouter.route('/activarProducto')
+        .patch ( protect, inventarioController.activarProducto ); // Ruta para activar un producto por idProducto (requiere token)
+
 inventarioRouter.route('/verInventario')
         .get ( protect, inventarioController.verInventario ); // Ruta para ver el inventario completo (requiere token)
 
