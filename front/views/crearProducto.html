@@ -30,11 +30,6 @@
           <input type="text"id="nombre"  placeholder="Ingrese el nombre" required>
           <span id="nombre-alert" class="error-msg"></span>
         </div>
-        <!--
-        <div class="res">
-        <label>Folio del producto</label>
-          <input type="text" id="idProducto" placeholder="Ingrese el folio" required>
-        </div> -->
 
         <div class="res">
           <label>Precio</label>
@@ -50,14 +45,24 @@
 
         <div class="res">
           <label>Categoría</label>
-          <input type="text" id="categoria" list="lista-categorias" placeholder="Escribe o selecciona" required>
-  
-          <datalist id="lista-categorias">
-            <option value="Bebidas"></option>
-            <option value="Alimentos"></option>
-            <option value="Otros"></option>
-          </datalist>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <select id="categoria-select" required style="flex-grow: 1; padding: 8px;">
+              <option value="" disabled selected>-- Selecciona --</option>
+            </select>
+            
+            <button type="button" id="btn-add-cat" title="Nueva Categoría" style="padding: 8px 12px; cursor: pointer; background-color: #28a745; color: white; border: none; border-radius: 4px;">
+              <i class="fa fa-plus"></i>
+            </button>
+            
+            <button type="button" id="btn-del-cat" title="Eliminar Categoría Seleccionada" style="padding: 8px 12px; cursor: pointer; background-color: #dc3545; color: white; border: none; border-radius: 4px;">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+
+          
+          <span id="categoria-alert" class="error-msg"></span>
         </div>
+
 
         <div class="res">
           <label>Activo</label>
@@ -67,8 +72,6 @@
           </select>
         </div>
       </div>
-
-      <div id="mensaje-Alert"></div>
 
       <div id="general-alert" class="status-msg"></div>
 

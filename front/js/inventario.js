@@ -4,6 +4,7 @@ const token = localStorage.getItem("token");
 const userData = JSON.parse(localStorage.getItem('userData'));
 const tbody = document.querySelector("tbody");
 
+
 // Función para eliminar producto
 const eliminarProducto = async (id) => {
     // Confirmación de seguridad

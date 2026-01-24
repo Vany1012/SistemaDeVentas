@@ -1,16 +1,28 @@
 
 const API_URL = 'http://localhost:3000/api/inventario';
+const API_CAT_URL = 'http://localhost:3000/api/categoriaProducto';
+
 const userData = JSON.parse(localStorage.getItem('userData'));
 const token = localStorage.getItem("token");
 
-
 const Productform = document.querySelector('#producto-form');
 const nombreInput = document.querySelector('#nombre');
-//const idProductoInput = document.querySelector('#idProducto');
 const precioInput = document.querySelector('#precio');
 const stockInput = document.querySelector('#stock');
 const categoriaInput = document.querySelector('#categoria');
 const activoInput = document.querySelector('#active');
+
+//Constantes para mensajes en "Categoria"
+const categoriaSelect = document.querySelector('#categoria-select'); 
+const btnAddCat = document.querySelector('#btn-add-cat');
+const btnDelCat = document.querySelector('#btn-del-cat');
+
+// Constantes para mensajes de Error
+const nombreAlert = document.querySelector('#nombre-alert');
+const precioAlert = document.querySelector('#precio-alert');
+const stockAlert = document.querySelector('#stock-alert');
+const categoriaAlert = document.querySelector('#categoria-alert')//se agrego
+const generalAlert = document.querySelector('#general-alert');
 
 // BLOQUEO DE SEGURIDAD
 // Si no hay token O el rol no es admin, lo sacamos de la página
@@ -18,17 +30,14 @@ if (!token || userData.role !== 'admin') {
     alert("Acceso denegado: Solo los administradores pueden ver esta página.");
     window.location.href = 'index.html';
 }
-// Constantes para mensajes de Error
-const nombreAlert = document.querySelector('#nombre-alert');
-const precioAlert = document.querySelector('#precio-alert');
-const stockAlert = document.querySelector('#stock-alert');
-const generalAlert = document.querySelector('#general-alert');
 
-// 2. Función para limpiar mensajes
+
+// Limpiar mensajes
 const limpiarMensajes = () => {
     if(nombreAlert) nombreAlert.textContent = '';
     if(precioAlert) precioAlert.textContent = '';
     if(stockAlert) stockAlert.textContent = '';
+    if(categoriaAlert) categoriaAlert.textContent = '';
     
     if(generalAlert) {
         generalAlert.textContent = '';
@@ -36,6 +45,113 @@ const limpiarMensajes = () => {
         generalAlert.removeAttribute('style');
     }
 };
+
+// Categorias, agregar-elimina-ver...
+
+// Cargar Categorías
+const cargarCategorias = async () => {
+    try {
+        const response = await fetch(`${API_CAT_URL}/verCategoriasProducto`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+            // Limpiar opciones
+            categoriaSelect.innerHTML = '<option value="" disabled selected>-- Selecciona --</option>';
+            
+            data.forEach(cat => {
+                const option = document.createElement('option');
+                // Guardamos el ID en el value para eliminar
+                option.value = cat.categoriaId; 
+                // Guardamos el Nombre en el texto y en un atributo data para crear producto
+                option.textContent = cat.categoriaProducto;
+                option.dataset.nombre = cat.categoriaProducto; 
+                categoriaSelect.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error cargando categorías:', error);
+    }
+};
+
+// B) Crear nueva categoría
+const handleCrearCategoria = async () => {
+    const nombreNueva = prompt("Ingresa el nombre de la nueva categoría:");
+    
+    if (!nombreNueva || nombreNueva.trim() === "") return;
+
+    try {
+        const response = await fetch(`${API_CAT_URL}/crearCategoriaProducto`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ categoria: nombreNueva.trim() })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert(`Categoría "${data.categoriaProducto}" creada con éxito.`);
+            await cargarCategorias(); // Recargar la lista
+            // Seleccionar la nueva categoria automaticamente
+            categoriaSelect.value = data.categoriaId;
+        } else {
+            alert(`Error: ${data.message}`);
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Error de conexión al crear categoría");
+    }
+};
+
+// C) Eliminar categoría
+const handleEliminarCategoria = async () => {
+    const idCategoria = categoriaSelect.value;
+    const nombreCategoria = categoriaSelect.options[categoriaSelect.selectedIndex]?.text;
+
+    if (!idCategoria) {
+        alert("Por favor, selecciona una categoría para eliminar.");
+        return;
+    }
+
+    const confirmacion = confirm(`¿Estás seguro que deseas eliminar la categoría "${nombreCategoria}"?`);
+    if (!confirmacion) return;
+
+    try {
+        // Tu backend espera ?categoriaId=XYZ en el query string
+        const response = await fetch(`${API_CAT_URL}/eliminarCategoriaProducto?categoriaId=${idCategoria}`, {
+            method: 'PATCH', // Tu ruta usa PATCH
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Categoría eliminada correctamente.");
+            await cargarCategorias(); // Recargar lista
+        } else {
+            alert(`Error: ${data.message}`);
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Error al intentar eliminar la categoría.");
+    }
+};
+
+// Inicializar eventos de categorías
+if(btnAddCat) btnAddCat.addEventListener('click', handleCrearCategoria);
+if(btnDelCat) btnDelCat.addEventListener('click', handleEliminarCategoria);
+// Cargar al inicio
+document.addEventListener('DOMContentLoaded', cargarCategorias);
+
 
 // Función principal para Crear Producto
 const createProduct = async () => {
@@ -47,6 +163,9 @@ const createProduct = async () => {
     const nombreValue = nombreInput.value.trim();
     const precioValue = parseFloat(precioInput.value);
     const stockValue = parseInt(stockInput.value);
+    const categoriaId = categoriaSelect.value; 
+    const selectedOption = categoriaSelect.options[categoriaSelect.selectedIndex];
+    const categoriaNombre = selectedOption ? selectedOption.dataset.nombre : null;
 
     // Validar Nombre
     if (!nombreValue) {
@@ -68,21 +187,22 @@ const createProduct = async () => {
         if(stockAlert) stockAlert.style.color = "red";
         hayErrores = true;
     }
+
+// 4. Validar Categoría
+    if (!categoriaId || !categoriaNombre) {
+        if(categoriaAlert) categoriaAlert.textContent = "Debes seleccionar una categoría.";
+        if(categoriaAlert) categoriaAlert.style.color = "red";
+        hayErrores = true;
+
+    }
     if (hayErrores) return; // Si hay errores, detenemos aquí.
-
-// Formatear Categoría
-    const categoriaRaw = categoriaInput.value.trim();
-    const categoriaFormateada = categoriaRaw 
-        ? categoriaRaw.charAt(0).toUpperCase() + categoriaRaw.slice(1).toLowerCase() 
-        : 'General';
-
+    
     // Preparar el Payload (Datos)
     const payload = {
-        //idProducto: idProductoInput.value.trim(),
         nombre: nombreInput.value.trim(),
         precio: Number(precioInput.value), // Convertir a Numero
         stock: Number(stockInput.value),   // Convertir a Numero
-        categoria: categoriaInput.value,
+        categoria: categoriaNombre, 
         activo: activoInput.value === 'true'
     };
     console.log("Enviando:", payload);
@@ -139,10 +259,10 @@ const createProduct = async () => {
             
             }
 
-
-
             Productform.reset()
+            categoriaSelect.value = "";
             setTimeout(() => { generalAlert.textContent = '';generalAlert.removeAttribute('style'); }, 5000);//Muestra el producto guardado y lo limpia despues de 5 seg
+            
         } else {
             // Error del servidor
             if(generalAlert) {
@@ -170,4 +290,5 @@ if (Productform) {
     nombreInput.addEventListener('input', () => { if(nombreAlert) nombreAlert.textContent = ''; });
     precioInput.addEventListener('input', () => { if(precioAlert) precioAlert.textContent = ''; });
     stockInput.addEventListener('input', () => { if(stockAlert) stockAlert.textContent = ''; });
+    categoriaSelect.addEventListener('change', () => { if(categoriaAlert) categoriaAlert.textContent = ''; });
 }
