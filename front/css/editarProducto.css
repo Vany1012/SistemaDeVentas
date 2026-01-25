@@ -92,13 +92,35 @@ label {
 input,
 select {
     width: 100%;
-    padding: 12px 12px 12px 40px;
+    padding: 12px 12px 12px 40px; /* Ajusta según si tiene ícono o no */
     background-color: var(--color-input-bg);
     border: 2px solid transparent;
     border-radius: var(--radius-s);
     color: var(--color-texto-oscuro);
     font-size: 1rem;
     transition: all 0.3s ease;
+    /* Para que se vea bien el dropdown */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+/* Para agregar una flecha personalizada al select */
+.input-wrapper.select-wrapper::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #546e7a;
+    pointer-events: none;
+}
+
+select:focus {
+    border-color: var(--color-primario);
+    background-color: white;
+    outline: none;
 }
 
 input:focus,

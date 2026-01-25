@@ -2,6 +2,7 @@ const API_URL = 'http://localhost:3000/api';
 
 // Variable para controlar si vino desde inventario
 let vieneDeInventario = false;
+let categoriasExistentes = []; // Para almacenar las categorías cargadas
 
 // Inicio de página autentificada
 function inicializarPagina() {
@@ -18,8 +19,10 @@ function inicializarPagina() {
     configurarFormulario();
     configurarBotonVolver();
     
-    // Verificar si hay un producto para editar desde la URL
+    // Verificar si hay un producto para editar desde la url
     cargarProductoDesdeURL();
+    // Validación de Existencia de elementos en Inventario
+    verificarInventarioVacio();
 }
 
 // Verificar si viene desde inventario (por el botón Editar)
@@ -30,7 +33,6 @@ function verificarOrigen() {
     
     if (desdeInventario && productoId) {
         vieneDeInventario = true;
-        console.log('Viene desde inventario para editar producto:', productoId);
     }
 }
 
@@ -101,7 +103,7 @@ function configurarEventosBusqueda() {
         
         mostrarMensaje('Buscando producto...', 'info');
         
-        const resultado = await buscarProductoPorIdentificador(query);
+        const resultado = await buscarProductoPorId(query);
         
         if (resultado.success) {
             cargarDatosEnFormulario(resultado.producto);
@@ -166,7 +168,7 @@ function configurarEventosBusqueda() {
                             suggestionsBox.style.display = 'none';
                             
                             mostrarMensaje('Cargando producto...', 'info');
-                            const resultado = await buscarProductoPorIdentificador(productId);
+                            const resultado = await buscarProductoPorId(productId);
                             
                             if (resultado.success) {
                                 cargarDatosEnFormulario(resultado.producto);
@@ -204,52 +206,34 @@ function configurarEventosBusqueda() {
 // Cargar categorías desde la base de datos
 async function cargarCategorias() {
     try {
-        const response = await authFetch('/categoria/verCategoriasProducto', {
+        const response = await authFetch('/categoriaProducto/verCategoriasProducto', {
             method: 'GET'
         });
         
         if (response.ok) {
             const data = await response.json();
             
-            // Verificar si data.categorias existe y es un array
+            // Extraer categorías del response
             let categorias = [];
-            if (Array.isArray(data.categorias)) {
-                categorias = data.categorias;
-            } else if (Array.isArray(data)) {
+            if (Array.isArray(data)) {
                 categorias = data;
-            } else if (data && typeof data === 'object') {
-                // Intentar extraer categorías del objeto
-                categorias = Object.values(data).filter(item => 
-                    item && typeof item === 'object' && item.categoriaProducto
-                );
+            } else if (data && data.categorias && Array.isArray(data.categorias)) {
+                categorias = data.categorias;
             }
             
-            // Crear datalist para categorías
-            const datalist = document.createElement('datalist');
-            datalist.id = 'categorias-list';
+            // Guardar categorías en variable global
+            categoriasExistentes = categorias.map(cat => 
+                typeof cat === 'string' ? cat : (cat.categoriaProducto || cat)
+            ).filter(Boolean);
             
-            // Agregar opciones al datalist
-            categorias.forEach(categoria => {
-                const option = document.createElement('option');
-                option.value = categoria.categoriaProducto || categoria;
-                datalist.appendChild(option);
-            });
-            
-            // Agregar datalist al cuerpo del documento
-            document.body.appendChild(datalist);
-            
-            // Configurar el input de categoría
-            const categoriaInput = document.getElementById('categoria');
-            if (categoriaInput) {
-                categoriaInput.setAttribute('list', 'categorias-list');
-                categoriaInput.placeholder = 'Selecciona o escribe una nueva categoría';
-                
-                // Validar en tiempo real
-                categoriaInput.addEventListener('input', validarCategoriaEnTiempoReal);
-            }
+            // Actualizar el select de categorías
+            actualizarSelectCategorias(categoriasExistentes);
             
         } else {
             console.error('Error al cargar categorías:', response.status);
+            // Usar categorías por defecto
+            const categoriasDefault = ['electronica', 'ropa', 'hogar', 'deportes', 'juguetes'];
+            actualizarSelectCategorias(categoriasDefault);
         }
     } catch (error) {
         console.error('Error al cargar categorías:', error);
@@ -257,36 +241,167 @@ async function cargarCategorias() {
         
         // Usar categorías por defecto
         const categoriasDefault = ['electronica', 'ropa', 'hogar', 'deportes', 'juguetes'];
-        const datalist = document.createElement('datalist');
-        datalist.id = 'categorias-list';
-        
-        categoriasDefault.forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat;
-            datalist.appendChild(option);
-        });
-        
-        document.body.appendChild(datalist);
-        
-        const categoriaInput = document.getElementById('categoria');
-        if (categoriaInput) {
-            categoriaInput.setAttribute('list', 'categorias-list');
-        }
+        actualizarSelectCategorias(categoriasDefault);
     }
 }
 
-// Validar categoría en tiempo real
-function validarCategoriaEnTiempoReal(e) {
+// Actualizar el select con las categorías
+function actualizarSelectCategorias(categorias) {
+    const selectCategoria = document.getElementById('categoria');
+    if (!selectCategoria) return;
+    
+    // Guardar el valor actual
+    const valorActual = selectCategoria.value;
+    
+    // Limpiar opciones existentes (excepto la primera si es placeholder)
+    while (selectCategoria.options.length > 0) {
+        selectCategoria.remove(0);
+    }
+    
+    // Agregar opción placeholder
+    const placeholderOption = document.createElement('option');
+    placeholderOption.value = '';
+    placeholderOption.textContent = '-- Selecciona una categoría --';
+    placeholderOption.disabled = true;
+    placeholderOption.selected = true;
+    selectCategoria.appendChild(placeholderOption);
+    
+    // Agregar opción para nueva categoría
+    const nuevaCategoriaOption = document.createElement('option');
+    nuevaCategoriaOption.value = '__nueva__';
+    nuevaCategoriaOption.textContent = '+ Agregar nueva categoría...';
+    selectCategoria.appendChild(nuevaCategoriaOption);
+    
+    // Separador
+    const separator = document.createElement('option');
+    separator.disabled = true;
+    separator.textContent = '──────────────';
+    selectCategoria.appendChild(separator);
+    
+    // Agregar categorías existentes
+    const categoriasUnicas = [...new Set(categorias.map(cat => cat.trim()))].sort();
+    categoriasUnicas.forEach(categoria => {
+        const option = document.createElement('option');
+        option.value = categoria;
+        option.textContent = categoria.charAt(0).toUpperCase() + categoria.slice(1);
+        selectCategoria.appendChild(option);
+    });
+    
+    // Restaurar valor anterior si existe
+    if (valorActual && categoriasUnicas.includes(valorActual)) {
+        selectCategoria.value = valorActual;
+    }
+    
+    // Configurar eventos para manejar la selección de nueva categoría
+    selectCategoria.addEventListener('change', function() {
+        if (this.value === '__nueva__') {
+            mostrarInputNuevaCategoria();
+        }
+    });
+}
+
+// Mostrar input para nueva categoría
+function mostrarInputNuevaCategoria() {
+    const selectCategoria = document.getElementById('categoria');
+    if (!selectCategoria) return;
+    
+    // Crear contenedor para input
+    const inputContainer = document.createElement('div');
+    inputContainer.id = 'nueva-categoria-container';
+    inputContainer.style.cssText = `
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        align-items: center;
+    `;
+    
+    // Verificar si ya existe un input
+    const existingInput = document.getElementById('nueva-categoria-input');
+    if (existingInput) {
+        existingInput.focus();
+        return;
+    }
+    
+    // Crear input para nueva categoría
+    const nuevaCategoriaInput = document.createElement('input');
+    nuevaCategoriaInput.type = 'text';
+    nuevaCategoriaInput.id = 'nueva-categoria-input';
+    nuevaCategoriaInput.placeholder = 'Escribe la nueva categoría...';
+    nuevaCategoriaInput.style.cssText = `
+        flex: 1;
+        padding: 10px 15px;
+        border: 2px solid #415a77;
+        border-radius: 8px;
+        font-size: 1rem;
+    `;
+    
+    // Crear botón para agregar
+    const agregarBtn = document.createElement('button');
+    agregarBtn.textContent = 'Agregar';
+    agregarBtn.style.cssText = `
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    `;
+    
+    // Crear botón para cancelar
+    const cancelarBtn = document.createElement('button');
+    cancelarBtn.textContent = 'Cancelar';
+    cancelarBtn.style.cssText = `
+        padding: 10px 20px;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    `;
+    
+    // Agregar elementos al contenedor
+    inputContainer.appendChild(nuevaCategoriaInput);
+    inputContainer.appendChild(agregarBtn);
+    inputContainer.appendChild(cancelarBtn);
+    
+    // Insertar después del select
+    selectCategoria.parentNode.insertBefore(inputContainer, selectCategoria.nextSibling);
+    
+    // Enfocar el input
+    nuevaCategoriaInput.focus();
+    
+    // Evento para agregar nueva categoría
+    agregarBtn.addEventListener('click', async () => {
+        await agregarNuevaCategoria(nuevaCategoriaInput.value.trim());
+    });
+    
+    // Evento para presionar Enter en el input
+    nuevaCategoriaInput.addEventListener('keypress', async (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            await agregarNuevaCategoria(nuevaCategoriaInput.value.trim());
+        }
+    });
+    
+    // Evento para cancelar
+    cancelarBtn.addEventListener('click', () => {
+        inputContainer.remove();
+        selectCategoria.value = '';
+    });
+    
+    // Validar en tiempo real
+    nuevaCategoriaInput.addEventListener('input', validarNuevaCategoriaEnTiempoReal);
+}
+
+// Validar nueva categoría en tiempo real
+function validarNuevaCategoriaEnTiempoReal(e) {
     const input = e.target;
     const categoria = input.value.trim();
-    const errorMsg = document.getElementById('categoria-error') || 
-                     crearElementoErrorCategoria(input);
     
     // Si está vacío, no mostrar error
     if (!categoria) {
-        errorMsg.textContent = '';
-        errorMsg.style.display = 'none';
-        input.style.borderColor = '';
+        input.style.borderColor = '#415a77';
         return;
     }
     
@@ -294,77 +409,63 @@ function validarCategoriaEnTiempoReal(e) {
     const regexCategoria = /^[A-Za-zÁáÉéÍíÓóÚúÜüÑñ\s]+$/;
     
     if (!regexCategoria.test(categoria)) {
-        const tieneNumeros = /\d/.test(categoria);
-        const tieneCaracteresEspeciales = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(categoria);
-        
-        if (tieneNumeros && tieneCaracteresEspeciales) {
-            errorMsg.textContent = 'La categoría no puede contener números ni caracteres especiales';
-        } else if (tieneNumeros) {
-            errorMsg.textContent = 'La categoría no puede contener números';
-        } else {
-            errorMsg.textContent = 'La categoría no puede contener caracteres especiales';
-        }
-        
-        errorMsg.style.display = 'block';
-        errorMsg.style.color = '#dc3545';
+        input.style.borderColor = '#dc3545';
+        input.style.borderWidth = '2px';
+    } else if (categoria.length < 2) {
+        input.style.borderColor = '#dc3545';
+        input.style.borderWidth = '2px';
+    } else if (categoria.length > 50) {
         input.style.borderColor = '#dc3545';
         input.style.borderWidth = '2px';
     } else {
-        // Validar longitud mínima
-        if (categoria.length < 2) {
-            errorMsg.textContent = 'La categoría debe tener al menos 2 caracteres';
-            errorMsg.style.display = 'block';
-            errorMsg.style.color = '#dc3545';
-            input.style.borderColor = '#dc3545';
-        } else if (categoria.length > 50) {
-            errorMsg.textContent = 'La categoría no puede tener más de 50 caracteres';
-            errorMsg.style.display = 'block';
-            errorMsg.style.color = '#dc3545';
-            input.style.borderColor = '#dc3545';
-        } else {
-            errorMsg.textContent = '✓ Categoría válida';
-            errorMsg.style.display = 'block';
-            errorMsg.style.color = '#28a745';
-            input.style.borderColor = '#28a745';
-        }
+        input.style.borderColor = '#28a745';
+        input.style.borderWidth = '2px';
     }
 }
 
-// Crear elemento de error para categoría
-function crearElementoErrorCategoria(input) {
-    const errorMsg = document.createElement('div');
-    errorMsg.id = 'categoria-error';
-    errorMsg.style.cssText = `
-        font-size: 13px;
-        margin-top: 5px;
-        display: none;
-    `;
+// Agregar nueva categoría a la base de datos
+async function agregarNuevaCategoria(nombreCategoria) {
+    const selectCategoria = document.getElementById('categoria');
+    const inputContainer = document.getElementById('nueva-categoria-container');
     
-    // Insertar después del input
-    if (input.parentNode) {
-        input.parentNode.appendChild(errorMsg);
+    // Validaciones
+    if (!nombreCategoria) {
+        mostrarMensaje('Por favor escribe un nombre para la categoría', 'error');
+        return;
     }
     
-    return errorMsg;
-}
-
-// Crear o verificar categoría en la base de datos
-async function crearNuevaCategoria(nombreCategoria) {
+    const regexCategoria = /^[A-Za-zÁáÉéÍíÓóÚúÜüÑñ\s]+$/;
+    if (!regexCategoria.test(nombreCategoria)) {
+        mostrarMensaje('La categoría solo puede contener letras y espacios', 'error');
+        return;
+    }
+    
+    if (nombreCategoria.length < 2) {
+        mostrarMensaje('La categoría debe tener al menos 2 caracteres', 'error');
+        return;
+    }
+    
+    if (nombreCategoria.length > 50) {
+        mostrarMensaje('La categoría no puede tener más de 50 caracteres', 'error');
+        return;
+    }
+    
+    // Verificar si ya existe
+    if (categoriasExistentes.includes(nombreCategoria.toLowerCase())) {
+        mostrarMensaje('Esta categoría ya existe', 'error');
+        selectCategoria.value = nombreCategoria;
+        if (inputContainer) inputContainer.remove();
+        return;
+    }
+    
+    mostrarMensaje('Creando nueva categoría...', 'info');
+    
     try {
-        // Validar categoría antes de enviar
-        const regexCategoria = /^[A-Za-zÁáÉéÍíÓóÚúÜüÑñ\s]+$/;
-        if (!regexCategoria.test(nombreCategoria) || nombreCategoria.length < 2) {
-            return {
-                success: false,
-                error: 'Categoría inválida. Solo letras y espacios, mínimo 2 caracteres'
-            };
-        }
-        
         const payload = {
-            categoriaProducto: nombreCategoria.trim()
+            categoriaProducto: nombreCategoria
         };
         
-        const response = await authFetch('/categoria/crearCategoriaProducto', {
+        const response = await authFetch('/categoriaProducto/crearCategoriaProducto', {
             method: 'POST',
             body: JSON.stringify(payload)
         });
@@ -372,38 +473,25 @@ async function crearNuevaCategoria(nombreCategoria) {
         const data = await response.json();
         
         if (response.ok) {
-            // Agregar la nueva categoría al datalist
-            const datalist = document.getElementById('categorias-list');
-            if (datalist) {
-                const option = document.createElement('option');
-                option.value = nombreCategoria;
-                datalist.appendChild(option);
-            }
+            // Agregar la nueva categoría a la lista
+            categoriasExistentes.push(nombreCategoria);
             
-            return {
-                success: true,
-                categoria: data.categoria || nombreCategoria
-            };
+            // Actualizar el select
+            actualizarSelectCategorias(categoriasExistentes);
+            
+            // Seleccionar la nueva categoría
+            selectCategoria.value = nombreCategoria;
+            
+            // Eliminar el input
+            if (inputContainer) inputContainer.remove();
+            
+            mostrarMensaje('✅ Categoría creada exitosamente', 'success');
         } else {
-            // Si la categoría ya existe, no es un error
-            if (data.message && data.message.toLowerCase().includes('ya existe')) {
-                return {
-                    success: true,
-                    categoria: nombreCategoria
-                };
-            }
-            
-            return {
-                success: false,
-                error: data.message || 'Error al crear categoría'
-            };
+            mostrarMensaje(`Error: ${data.message || 'No se pudo crear la categoría'}`, 'error');
         }
     } catch (error) {
         console.error('Error al crear categoría:', error);
-        return {
-            success: false,
-            error: 'Error de conexión al crear categoría'
-        };
+        mostrarMensaje('Error de conexión al crear categoría', 'error');
     }
 }
 
@@ -418,7 +506,7 @@ async function cargarProductoDesdeURL() {
         mostrarMensaje('Cargando producto...', 'info');
         
         // Buscar el producto por ID
-        const resultado = await buscarProductoPorIdentificador(productoId);
+        const resultado = await buscarProductoPorId(productoId);
         
         if (resultado.success) {
             cargarDatosEnFormulario(resultado.producto);
@@ -432,7 +520,7 @@ async function cargarProductoDesdeURL() {
 }
 
 // Buscar producto por ID o nombre
-async function buscarProductoPorIdentificador(identificador) {
+async function buscarProductoPorId(id) {
     try {
         const response = await authFetch('/inventario/verInventario', {
             method: 'GET'
@@ -443,8 +531,8 @@ async function buscarProductoPorIdentificador(identificador) {
             
             // Buscar el producto por ID (exacto) o nombre (parcial)
             const productoEncontrado = productos.find(p => 
-                p.idProducto === identificador.toString() || 
-                p.nombre.toLowerCase().includes(identificador.toLowerCase())
+                p.idProducto === id.toString() || 
+                p.nombre.toLowerCase().includes(id.toLowerCase())
             );
             
             if (productoEncontrado) {
@@ -473,20 +561,20 @@ async function buscarProductoPorIdentificador(identificador) {
     }
 }
 
-// Limpiar formulario (excepto el folio)
+// Limpiar formulario
 function limpiarFormulario() {
     document.getElementById('folio').disabled = false;
+    document.getElementById('folio').value = '';
     document.getElementById('nombre').value = '';
     document.getElementById('precio').value = '';
     document.getElementById('stock').value = '';
     document.getElementById('categoria').value = '';
     document.getElementById('activo').value = 'si';
     
-    // Limpiar mensaje de error de categoría
-    const categoriaError = document.getElementById('categoria-error');
-    if (categoriaError) {
-        categoriaError.textContent = '';
-        categoriaError.style.display = 'none';
+    // Eliminar input de nueva categoría si existe
+    const nuevaCategoriaContainer = document.getElementById('nueva-categoria-container');
+    if (nuevaCategoriaContainer) {
+        nuevaCategoriaContainer.remove();
     }
 }
 
@@ -498,10 +586,16 @@ function cargarDatosEnFormulario(producto) {
     document.getElementById('stock').value = producto.stock;
     
     // Establecer categoría
-    const categoriaInput = document.getElementById('categoria');
-    if (categoriaInput && producto.categoria) {
-        categoriaInput.value = producto.categoria;
-        validarCategoriaEnTiempoReal({ target: categoriaInput });
+    const categoriaSelect = document.getElementById('categoria');
+    if (categoriaSelect && producto.categoria) {
+        // Buscar si la categoría existe en las opciones
+        const categoriaNormalizada = producto.categoria.trim();
+        for (let option of categoriaSelect.options) {
+            if (option.value === categoriaNormalizada) {
+                categoriaSelect.value = categoriaNormalizada;
+                break;
+            }
+        }
     }
     
     document.getElementById('activo').value = producto.activo ? 'si' : 'no';
@@ -513,34 +607,47 @@ function cargarDatosEnFormulario(producto) {
 // Actualizar producto usando authFetch
 async function actualizarProducto(productoId, datosActualizados) {
     try {
-        // Verificar si la categoría es nueva y crearla si es necesario
-        if (datosActualizados.categoria && datosActualizados.categoria.trim() !== '') {
-            const resultadoCategoria = await crearNuevaCategoria(datosActualizados.categoria);
-            if (!resultadoCategoria.success) {
-                return {
-                    success: false,
-                    error: resultadoCategoria.error
-                };
-            }
+        // Verificar si la categoría está vacía
+        if (!datosActualizados.categoria || datosActualizados.categoria.trim() === '') {
+            console.error('❌ Error: Categoría vacía en datosActualizados');
+            return {
+                success: false,
+                error: 'La categoría es requerida'
+            };
         }
         
-        // Filtrar solo los campos que tienen valor
+        const categoriaActual = datosActualizados.categoria.trim();
+                
+        // Filtro solo los campos que tienen valor
         const camposParaActualizar = {};
         
         if (datosActualizados.nombre && datosActualizados.nombre.trim() !== '') {
-            camposParaActualizar.nombre = datosActualizados.nombre;
+            camposParaActualizar.nombre = datosActualizados.nombre.trim();
         }
         
         if (datosActualizados.precio !== undefined && datosActualizados.precio !== '') {
             camposParaActualizar.precio = parseFloat(datosActualizados.precio);
+            if (isNaN(camposParaActualizar.precio)) {
+                return {
+                    success: false,
+                    error: 'El precio debe ser un número válido'
+                };
+            }
         }
         
         if (datosActualizados.stock !== undefined && datosActualizados.stock !== '') {
             camposParaActualizar.stock = parseInt(datosActualizados.stock);
+            if (isNaN(camposParaActualizar.stock)) {
+                return {
+                    success: false,
+                    error: 'El stock debe ser un número válido'
+                };
+            }
         }
         
-        if (datosActualizados.categoria && datosActualizados.categoria.trim() !== '') {
-            camposParaActualizar.categoria = datosActualizados.categoria;
+        // SIEMPRE incluir la categoría si tiene valor
+        if (categoriaActual && categoriaActual !== '') {
+            camposParaActualizar.categoria = categoriaActual;
         }
         
         if (datosActualizados.activo !== undefined) {
@@ -554,7 +661,7 @@ async function actualizarProducto(productoId, datosActualizados) {
                 error: 'No hay campos para actualizar'
             };
         }
-        
+                
         const response = await authFetch(`/inventario/editarProductoPorId?idProducto=${productoId}`, {
             method: 'PUT',
             body: JSON.stringify(camposParaActualizar)
@@ -565,13 +672,13 @@ async function actualizarProducto(productoId, datosActualizados) {
         if (response.ok) {
             return {
                 success: true,
-                message: data.massage || 'Producto actualizado correctamente',
+                message: data.massage || data.message || 'Producto actualizado correctamente',
                 producto: data.producto
             };
         } else {
             return {
                 success: false,
-                error: data.message || 'Error al actualizar el producto'
+                error: data.message || data.massage || 'Error al actualizar el producto'
             };
         }
     } catch (error) {
@@ -579,6 +686,48 @@ async function actualizarProducto(productoId, datosActualizados) {
         return {
             success: false,
             error: error.message === 'No autenticado' ? 'Sesión expirada' : 'Error de conexión con el servidor'
+        };
+    }
+}
+
+// Crear nueva categoría en la base de datos
+async function crearNuevaCategoria(nombreCategoria) {
+    try {
+        const payload = {
+            categoriaProducto: nombreCategoria.trim()
+        };
+        
+        const response = await authFetch('/categoriaProducto/crearCategoriaProducto', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            return {
+                success: true,
+                categoria: nombreCategoria
+            };
+        } else {
+            // Si la categoría ya existe, no es un error
+            if (data.message && data.message.toLowerCase().includes('ya existe')) {
+                return {
+                    success: true,
+                    categoria: nombreCategoria
+                };
+            }
+            
+            return {
+                success: false,
+                error: data.message || 'Error al crear categoría'
+            };
+        }
+    } catch (error) {
+        console.error('Error al crear categoría:', error);
+        return {
+            success: false,
+            error: 'Error de conexión al crear categoría'
         };
     }
 }
@@ -673,12 +822,21 @@ function configurarFormulario() {
     formulario.addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        // CORRECCIÓN: Declara categoriaSelect primero
         const folio = document.getElementById('folio').value;
         const nombre = document.getElementById('nombre').value;
         const precio = document.getElementById('precio').value;
         const stock = document.getElementById('stock').value;
-        const categoria = document.getElementById('categoria').value;
+        const categoriaSelect = document.getElementById('categoria');
+        const categoria = categoriaSelect ? categoriaSelect.value : '';
         const activo = document.getElementById('activo').value;
+
+        // Depuración de opciones del select 
+        if (categoriaSelect) {
+            for (let i = 0; i < categoriaSelect.options.length; i++) {
+                const option = categoriaSelect.options[i];
+            }
+        }
         
         // Validaciones
         if (!folio) {
@@ -686,16 +844,26 @@ function configurarFormulario() {
             return;
         }
         
-        // Validar categoría
-        if (!categoria.trim()) {
-            mostrarMensaje('La categoría es requerida', 'error');
+        if (!categoria || categoria === '' || categoria === '-- Selecciona una categoría --') {
+            console.error('❌ Error de validación: Categoría inválida o no seleccionada');
+            mostrarMensaje('Por favor selecciona una categoría válida', 'error');
             return;
         }
         
-        const regexCategoria = /^[A-Za-zÁáÉéÍíÓóÚúÜüÑñ\s]+$/;
-        if (!regexCategoria.test(categoria) || categoria.length < 2) {
-            mostrarMensaje('La categoría solo puede contener letras y espacios (mínimo 2 caracteres)', 'error');
-            return;
+        // Comparación pa' ver si existe
+        const categoriaExiste = categoriasExistentes.some(cat => 
+            cat.toLowerCase() === categoria.toLowerCase()
+        );
+
+        if (categoria === '__nueva__') {
+            const nuevaCategoriaInput = document.getElementById('nueva-categoria-input');
+            if (nuevaCategoriaInput && nuevaCategoriaInput.value.trim() !== '') {
+                mostrarMensaje('Por favor haz clic en "Agregar" para confirmar la nueva categoría', 'error');
+                return;
+            } else {
+                mostrarMensaje('Por favor escribe y agrega una nueva categoría', 'error');
+                return;
+            }
         }
         
         if (precio && parseFloat(precio) < 0) {
@@ -707,7 +875,6 @@ function configurarFormulario() {
             mostrarMensaje('El stock no puede ser negativo', 'error');
             return;
         }
-        
         // Preparar datos para actualizar
         const datosActualizados = {
             nombre: nombre,
@@ -742,9 +909,6 @@ function configurarFormulario() {
                     setTimeout(() => {
                         botonSubmit.disabled = false;
                         botonSubmit.textContent = textoOriginal;
-                        
-                        // Opcional: limpiar formulario para nuevo producto
-                        // limpiarFormulario();
                     }, 1000);
                 }
             } else {
@@ -784,6 +948,171 @@ function configurarBotonVolver() {
     });
     
     document.body.appendChild(botonVolver);
+}
+
+async function verificarInventarioVacio() {
+    try {
+        const response = await authFetch('/inventario/verInventario', {
+            method: 'GET'
+        });
+        
+        if (response.ok) {
+            const productos = await response.json();
+            
+            if (!productos || productos.length === 0) {
+                deshabilitarFormularioPorInventarioVacio();
+            } else {
+                habilitarFormulario();
+            }
+        } else {
+            console.error('Error al verificar inventario:', response.status);
+        }
+    } catch (error) {
+        console.error('Error al verificar inventario:', error);
+        // Por precaución, deshabilitar el formulario si hay error
+        deshabilitarFormularioPorInventarioVacio();
+    }
+}
+
+function deshabilitarFormularioPorInventarioVacio() {
+    const formulario = document.getElementById('edit-product-form');
+    const searchContainer = document.getElementById('search-container');
+    const mensajeContainer = document.getElementById('inventario-vacio-mensaje');
+    
+    // Si ya existe un mensaje, no hacemo na'
+    if (mensajeContainer) return;
+    
+    // Deshabilitar el formulario
+    const inputs = formulario.querySelectorAll('input, select, button[type="submit"]');
+    inputs.forEach(input => {
+        input.disabled = true;
+        input.style.opacity = '0.6';
+        input.style.cursor = 'not-allowed';
+    });
+    
+    // Deshabilitar la barra de búsqueda si existe
+    if (searchContainer) {
+        const searchInputs = searchContainer.querySelectorAll('input, button');
+        searchInputs.forEach(input => {
+            input.disabled = true;
+            input.style.opacity = '0.6';
+            input.style.cursor = 'not-allowed';
+        });
+    }
+    
+    // Mensaje informativo
+    const mensajeDiv = document.createElement('div');
+    mensajeDiv.id = 'inventario-vacio-mensaje';
+    mensajeDiv.style.cssText = `
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    `;
+    
+    mensajeDiv.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 15px;">
+            <span style="font-size: 2rem; color: #ff9800;">⚠️</span>
+            <div style="text-align: left;">
+                <h3 style="margin: 0; color: #856404; font-size: 1.3rem;">Inventario Vacío</h3>
+                <p style="margin: 5px 0 0 0; color: #856404;">
+                    No hay productos disponibles para editar. 
+                    Primero debes agregar productos al inventario.
+                </p>
+            </div>
+        </div>
+        <div style="margin-top: 15px;">
+            <button id="btn-ir-a-crear" style="
+                padding: 10px 25px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+            ">
+                ➕ Ir a Crear Producto
+            </button>
+            <button id="btn-recargar" style="
+                padding: 10px 25px;
+                background-color: #17a2b8;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 1rem;
+                margin-left: 10px;
+                transition: all 0.3s ease;
+            ">
+                🔄 Recargar Inventario
+            </button>
+        </div>
+    `;
+    
+    // Insertar mensaje después del formulario
+    formulario.parentNode.insertBefore(mensajeDiv, formulario.nextSibling);
+    
+    // Agregar eventos a los botones
+    document.getElementById('btn-ir-a-crear').addEventListener('click', function() {
+        window.location.href = 'crearProducto.html'; // Ajusta esta ruta según tu aplicación
+    });
+    
+    document.getElementById('btn-recargar').addEventListener('click', function() {
+        this.disabled = true;
+        this.textContent = 'Verificando...';
+        verificarInventarioVacio();
+    });
+    
+    // 4. También deshabilitar el botón de volver si existe
+    const volverBtn = document.getElementById('volverBtn');
+    if (volverBtn) {
+        volverBtn.style.backgroundColor = '#95a5a6';
+    }
+    
+    // Mostrar mensaje en consola
+    mostrarMensaje('⚠️ El inventario está vacío. Agrega productos primero.', 'error');
+}
+
+// Habilitar formulario cuando sí hay productos
+function habilitarFormulario() {
+    const formulario = document.getElementById('edit-product-form');
+    const searchContainer = document.getElementById('search-container');
+    const mensajeContainer = document.getElementById('inventario-vacio-mensaje');
+    
+    // formulario
+    const inputs = formulario.querySelectorAll('input, select, button[type="submit"]');
+    inputs.forEach(input => {
+        input.disabled = false;
+        input.style.opacity = '1';
+        input.style.cursor = '';
+    });
+    
+    // barra de búsqueda (si existe)
+    if (searchContainer) {
+        const searchInputs = searchContainer.querySelectorAll('input, button');
+        searchInputs.forEach(input => {
+            input.disabled = false;
+            input.style.opacity = '1';
+            input.style.cursor = '';
+        });
+    }
+    
+    // Eliminar mensaje si existe
+    if (mensajeContainer) {
+        mensajeContainer.remove();
+    }
+    
+    // Restaurar botón de volver
+    const volverBtn = document.getElementById('volverBtn');
+    if (volverBtn) {
+        volverBtn.style.backgroundColor = '#607d8b';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', inicializarPagina);

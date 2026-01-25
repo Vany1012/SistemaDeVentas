@@ -3,11 +3,28 @@ const token = localStorage.getItem("token");
 const userData = JSON.parse(localStorage.getItem('userData'));
 
 const tbody = document.querySelector("tbody");
+const generalAlert = document.querySelector('#general-alert');
+//Ocultar boton de agregar producto
+document.addEventListener("DOMContentLoaded", () => {
+    const btnAgregar = document.querySelector('.btn-agregar');
+    if (userData.role !== 'admin' && btnAgregar) {
+        btnAgregar.parentElement.style.display = 'none';
+    }
+    loadProducts();
+});
 
+//mensajes
+const mostrarMensajeFila = (idProducto, mensaje, color) => {
+    const celdaMensaje = document.getElementById(`msg-${idProducto}`);
+    if (celdaMensaje) {
+        celdaMensaje.textContent = mensaje;
+        celdaMensaje.style.color = color;
+        celdaMensaje.style.fontWeight = "bold";
+    }
+};
 
 // Función para eliminar producto
 const eliminarProducto = async (id) => {
-    // Confirmación de seguridad
     const confirmar = confirm(`¿Estás seguro de que deseas eliminar el producto con ID: ${id}?`);
     if (!confirmar) return;
 
@@ -27,12 +44,13 @@ const eliminarProducto = async (id) => {
             throw new Error(data.message || data.massage || "Error al eliminar");
         }
 
-        alert("Producto eliminado correctamente");
-        loadProducts(); // Recargar tabla actualizada
+        mostrarMensajeFila(id, "Producto eliminado", "red");
+        setTimeout(() => {generalAlert.textContent = '';loadProducts();}, 1500);
 
     } catch (error) {
         console.error("Error:", error);
-        alert(error.message);
+        mostrarMensajeFila(id, error.message, "red");
+        setTimeout(() => {generalAlert.textContent = '';loadProducts();}, 5000);
     }
 };
 
@@ -44,10 +62,7 @@ const editarProducto = (idProducto) => {
 
 // Función para activar producto
 const activarProducto = async (id) => {
-    // Confirmación opcional
-    const confirmar = confirm(`¿Deseas reactivar el producto con ID: ${id}?`);
-    if (!confirmar) return;
-
+    
     try {
         const res = await fetch(`${API_URL}/inventario/activarProducto?idProducto=${id}`, {
             method: "PATCH", 
@@ -63,15 +78,15 @@ const activarProducto = async (id) => {
             throw new Error(data.message || "Error al activar");
         }
 
-        alert("Producto activado correctamente");
-        loadProducts(); // Recargar tabla para ver el cambio y que aparezca el botón Editar
+        mostrarMensajeFila(id, "Producto activado correctamente","green");
+        setTimeout(() => {generalAlert.textContent = '';loadProducts();}, 1500);
 
     } catch (error) {
         console.error("Error:", error);
-        alert(error.message);
+        mostrarMensajeFila(id, error.message,"red");
+        setTimeout(() => {generalAlert.textContent = '';loadProducts();}, 5000);
     }
 };
-
 // Función para cargar productos
 const loadProducts = async () => {
     try {
@@ -87,9 +102,7 @@ const loadProducts = async () => {
     if (!res.ok) {
         throw new Error("Error al obtener los datos");
     }
-
     const products = await res.json();
-    console.log(products);
 
     tbody.innerHTML = "";//Limpiar la tabla
 
@@ -97,7 +110,7 @@ const loadProducts = async () => {
     if (!products || products.length === 0) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td colspan="7" style="text-align: center; padding: 20px;">
+            <td colspan="8" style="text-align: center; padding: 20px;">
                 No hay productos en el inventario
             </td>
         `;
@@ -109,12 +122,10 @@ const loadProducts = async () => {
     products.forEach(product => {
         const tr = document.createElement("tr");
 
-      //vista para el campo booleano
         const estadoTexto = product.activo ? 'Activo' : 'Inactivo';
         const estadoColor = product.activo ? 'green' : 'red';
 
-
-      // Lógica de botones modificada
+      //Lógica de botones
         let accionesAdmin = '';
       
         if (userData.role === 'admin') {
@@ -128,7 +139,6 @@ const loadProducts = async () => {
                 `;
             } else {
                 //Producto INACTIVO
-                //Estilo para diferenciarlo visualmente
                 accionesAdmin = `
                     <div id="btn">
                         <button class="btn-activar" onclick="activarProducto('${product.idProducto}')" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;">Activar</button>
@@ -146,9 +156,8 @@ const loadProducts = async () => {
             <td>${product.stock}</td>
             <td>${product.categoria}</td>
             <td style="color: ${estadoColor}; font-weight: bold;">${estadoTexto}</td>
-            <td>
-            ${accionesAdmin}
-            </td>
+            <td>${accionesAdmin}</td>
+            <td id="msg-${product.idProducto}" style="font-size: 0.9em;"></td>
         `;
         
         tbody.appendChild(tr);
@@ -156,7 +165,8 @@ const loadProducts = async () => {
 
         } catch (error) {
             console.error("Error cargando inventario:", error);
-            alert("No se pudo cargar el inventario. Revisa tu conexión o sesión.");
+            generalAlert.textContent="No se pudo cargar el inventario. Revisa tu conexión o sesión.";
+            generalAlert.style.color = "red";
         }
 };
 

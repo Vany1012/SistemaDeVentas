@@ -2,21 +2,15 @@
 function checkAuth() {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('userData');
-
-    console.log('Verificando autenticación...');
-    console.log('Token:', token ? 'Presente' : 'Ausente');
-    console.log('UserData:', userData ? 'Presente' : 'Ausente');
     
     if (!token || !userData) {
         // Si no hay sesión, redirigir al login
-        console.log('❌ No autenticado, redirigiendo a login...');
         window.location.href = 'index.html';
         return null;
     }
     
     try {
         const user = JSON.parse(userData);
-        console.log('✅ Usuario autenticado:', user.vendedorName, '- Rol:', user.role);
         return user;
     } catch (error) {
         console.error('❌ Error parseando userData:', error);
