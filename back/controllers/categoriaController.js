@@ -13,6 +13,12 @@ exports.createCategoria = async(req, res, next) =>{
                         return res.status(400).json({message:"La categoria es requerida"});
                     }
 
+                    // Validar que solo contenga letras y espacios
+                    const soloLetrasYEspacios = /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]+$/;
+                    if (!soloLetrasYEspacios.test(categoria.trim())) {
+                        return res.status(400).json({message:"El nombre de la categoría solo puede contener letras, no números ni caracteres especiales"});
+                    }
+
                     const categoriaExist = await Categoria.findOne({categoriaProducto: categoria});
                     if (categoriaExist){
                         return res.status(400).json({message: 'El nombre de la categoria ya existe en el sistema'})
