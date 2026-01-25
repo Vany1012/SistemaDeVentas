@@ -64,12 +64,12 @@ function actualizarSubtotalDevolucion(input) {
 function actualizarTotalDevolucion() {
     const subtotales = document.querySelectorAll('.subtotal-devolucion');
     let total = 0;
-    
+
     subtotales.forEach(subtotalElement => {
         const valor = parseFloat(subtotalElement.textContent.replace('$', '')) || 0;
         total += valor;
     });
-    
+
     const totalElement = document.getElementById('total-devolucion');
     if (totalElement) {
         totalElement.textContent = `$${total.toFixed(2)}`;
@@ -79,19 +79,19 @@ function actualizarTotalDevolucion() {
 function mostrarDetallesVenta(venta) {
     ventaSeleccionadaActual = venta;
     let detallesDiv = document.getElementById('detalles-venta');
-    
+
     if (!detallesDiv) {
         detallesDiv = document.createElement('div');
         detallesDiv.id = 'detalles-venta';
         detallesDiv.className = 'detalles-venta-container';
         formulario.insertAdjacentElement('afterend', detallesDiv);
     }
-    
+
     const fecha = new Date(venta.fecha).toLocaleDateString('es-MX', {
         year: 'numeric', month: 'long', day: 'numeric',
         hour: '2-digit', minute: '2-digit'
     });
-    
+
     let productosHTML = '';
     venta.productosVendidos.forEach(producto => {
         const subtotal = producto.cantidad * producto.precioUnitario;
@@ -113,7 +113,7 @@ function mostrarDetallesVenta(venta) {
             </tr>
         `;
     });
-    
+
     detallesDiv.innerHTML = `
         <div class="venta-detalles">
             <h3>Detalles de la Venta</h3>
@@ -140,9 +140,9 @@ function mostrarDetallesVenta(venta) {
         </div>
     `;
     devolucionForm.style.display = 'block';
-    
+
     detallesDiv.querySelectorAll('.cantidad-devolver-input').forEach(input => {
-        input.addEventListener('input', function() { validarContador(this, parseInt(this.dataset.max)); });
+        input.addEventListener('input', function () { validarContador(this, parseInt(this.dataset.max)); });
     });
 }
 
@@ -175,7 +175,7 @@ function obtenerDatosDevolucion() {
     }
 
     return {
-        ventaId: ventaSeleccionadaActual.ventaId, 
+        ventaId: ventaSeleccionadaActual.ventaId,
         vendedor: ventaSeleccionadaActual.vendedor,
         productosDevueltos,
         totalProductosDevueltos,
@@ -192,16 +192,16 @@ async function enviarDevolucionAlBackend(datosDevolucion) {
         },
         body: JSON.stringify(datosDevolucion)
     });
-    
+
     const data = await response.json();
     if (!response.ok) throw new Error(data.message || 'Error en el servidor');
     return data;
 }
 
 
-devolucionForm.addEventListener('submit', async function(event) {
+devolucionForm.addEventListener('submit', async function (event) {
     event.preventDefault();
-    
+
     const datosDevolucion = obtenerDatosDevolucion();
     if (!datosDevolucion) return;
 
@@ -210,15 +210,15 @@ devolucionForm.addEventListener('submit', async function(event) {
         pendienteConfirmacion = true;
         boton.textContent = `¿Confirmar $${datosDevolucion.totalReembolsado.toFixed(2)}?`;
         boton.style.backgroundColor = "#e67e22";
-        
+
         setTimeout(() => {
             if (pendienteConfirmacion) {
                 pendienteConfirmacion = false;
                 boton.textContent = 'Registrar Devolución';
-                boton.style.backgroundColor = ""; 
+                boton.style.backgroundColor = "";
             }
         }, 3000);
-        
+
         return;
     }
 
@@ -228,27 +228,27 @@ devolucionForm.addEventListener('submit', async function(event) {
         boton.disabled = true;
 
         await enviarDevolucionAlBackend(datosDevolucion);
-        
+
         mostrarMensaje('Devolución registrada exitosamente');
-        
+
         ventaInput.value = '';
         const detallesDiv = document.getElementById('detalles-venta');
         if (detallesDiv) detallesDiv.remove();
         devolucionForm.style.display = 'none';
-        
+
         ventasGlobal = await obtenerVentas();
-        
+
     } catch (error) {
         mostrarMensaje(error.message, true);
         boton.disabled = false;
         boton.textContent = 'Registrar Devolución';
         boton.style.backgroundColor = "";
+        pendienteConfirmacion = false;
     } finally {
-        if (devolucionForm.style.display !== 'none') {
-            boton.disabled = false;
-            boton.textContent = 'Registrar Devolución';
-            boton.style.backgroundColor = "";
-        }
+        boton.disabled = false;
+        boton.textContent = 'Registrar Devolución';
+        boton.style.backgroundColor = "";
+        pendienteConfirmacion = false;
     }
 });
 
