@@ -65,20 +65,21 @@ const cargarCategorias = async () => {
             
             data.forEach(cat => {
                 const option = document.createElement('option');
-                // Guardamos el ID en el value para eliminar
+                // Guardamos el ID para eliminar
                 option.value = cat.categoriaId; 
-                // Guardamos el Nombre en el texto y en un atributo data para crear producto
+                // Guardamos el Nombre para crear producto
                 option.textContent = cat.categoriaProducto;
                 option.dataset.nombre = cat.categoriaProducto; 
                 categoriaSelect.appendChild(option);
             });
         }
     } catch (error) {
-        console.error('Error cargando categorías:', error);
+        generalAlert.textContent= "Error cargando categorías:",error;
+        generalAlert.style.color = "red";
     }
 };
 
-// B) Crear nueva categoría
+//Crear nueva categoría
 const handleCrearCategoria = async () => {
     const nombreNueva = prompt("Ingresa el nombre de la nueva categoría:");
     
@@ -97,26 +98,31 @@ const handleCrearCategoria = async () => {
         const data = await response.json();
 
         if (response.ok) {
-            alert(`Categoría "${data.categoriaProducto}" creada con éxito.`);
+            generalAlert.textContent= `Categoría "${data.categoriaProducto}" creada con éxito.`;
+            generalAlert.style.color = "green";
             await cargarCategorias(); // Recargar la lista
             // Seleccionar la nueva categoria automaticamente
             categoriaSelect.value = data.categoriaId;
         } else {
-            alert(`Error: ${data.message}`);
+            generalAlert.textContent= `Error: ${data.message}`;
+            generalAlert.style.color = "red";
+            
         }
     } catch (error) {
         console.error(error);
-        alert("Error de conexión al crear categoría");
+        generalAlert.textContent= "Error de conexión al crear categoría";
+        generalAlert.style.color = "red";
     }
 };
 
-// C) Eliminar categoría
+//Eliminar categoría
 const handleEliminarCategoria = async () => {
     const idCategoria = categoriaSelect.value;
     const nombreCategoria = categoriaSelect.options[categoriaSelect.selectedIndex]?.text;
 
     if (!idCategoria) {
-        alert("Por favor, selecciona una categoría para eliminar.");
+        generalAlert.textContent= "Por favor, selecciona una categoría para eliminar.";
+        generalAlert.style.color = "red";
         return;
     }
 
@@ -124,7 +130,7 @@ const handleEliminarCategoria = async () => {
     if (!confirmacion) return;
 
     try {
-        // Tu backend espera ?categoriaId=XYZ en el query string
+
         const response = await fetch(`${API_CAT_URL}/eliminarCategoriaProducto?categoriaId=${idCategoria}`, {
             method: 'DELETE',
             headers: {
@@ -135,14 +141,17 @@ const handleEliminarCategoria = async () => {
         const data = await response.json();
 
         if (response.ok) {
-            alert("Categoría eliminada correctamente.");
+            generalAlert.textContent="Categoría eliminada correctamente.";
+            generalAlert.style.color = "red";
             await cargarCategorias(); // Recargar lista
         } else {
-            alert(`Error: ${data.message}`);
+            generalAlert.textContent= `Error: ${data.message}`;
+            generalAlert.style.color = "red";
         }
     } catch (error) {
         console.error(error);
-        alert("Error al intentar eliminar la categoría.");
+        generalAlert.textContent= "Error al intentar eliminar la categoría.";
+        generalAlert.style.color = "red";
     }
 };
 
@@ -152,10 +161,8 @@ if(btnDelCat) btnDelCat.addEventListener('click', handleEliminarCategoria);
 // Cargar al inicio
 document.addEventListener('DOMContentLoaded', cargarCategorias);
 
-
-// Función principal para Crear Producto
+// Crear Producto
 const createProduct = async () => {
-    //Limpiar mensajes
     limpiarMensajes(); // Limpiamos errores previos
 
     // --- Validaciones Locales ---
@@ -170,6 +177,11 @@ const createProduct = async () => {
     // Validar Nombre
     if (!nombreValue) {
         if(nombreAlert) nombreAlert.textContent = "El nombre es obligatorio.";
+        if(nombreAlert) nombreAlert.style.color = "red";
+        hayErrores = true;
+    }
+    if (nombreValue && /^\d+$/.test(nombreValue)) {
+        if(nombreAlert) nombreAlert.textContent = "El nombre no puede consistir únicamente de números.";
         if(nombreAlert) nombreAlert.style.color = "red";
         hayErrores = true;
     }
@@ -188,7 +200,7 @@ const createProduct = async () => {
         hayErrores = true;
     }
 
-// 4. Validar Categoría
+    //Validar Categoría
     if (!categoriaId || !categoriaNombre) {
         if(categoriaAlert) categoriaAlert.textContent = "Debes seleccionar una categoría.";
         if(categoriaAlert) categoriaAlert.style.color = "red";
@@ -197,7 +209,7 @@ const createProduct = async () => {
     }
     if (hayErrores) return; // Si hay errores, detenemos aquí.
     
-    // Preparar el Payload (Datos)
+    //Preparar el Payload (Datos)
     const payload = {
         nombre: nombreInput.value.trim(),
         precio: Number(precioInput.value), // Convertir a Numero
@@ -205,7 +217,9 @@ const createProduct = async () => {
         categoria: categoriaNombre, 
         activo: activoInput.value === 'true'
     };
-    console.log("Enviando:", payload);
+    //console.log("Enviando:", payload);
+    generalAlert.textContent= "Enviando:", payload;
+    generalAlert.style.color = "blue";
 
 
     // Procesando
@@ -276,7 +290,9 @@ const createProduct = async () => {
         }
     } catch (error) {
         console.error('Error de red:', error);
-        alert('Hubo un problema conectando con el servidor.');
+        //alert('Hubo un problema conectando con el servidor.');
+        generalAlert.textContent= 'Hubo un problema conectando con el servidor.';
+        generalAlert.style.color = "red";
     }
 };
 
