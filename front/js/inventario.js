@@ -102,7 +102,7 @@ const loadProducts = async () => {
     if (!res.ok) {
         throw new Error("Error al obtener los datos");
     }
-
+    const products = await res.json();
 
     tbody.innerHTML = "";//Limpiar la tabla
 
