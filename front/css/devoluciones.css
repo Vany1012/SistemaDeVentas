@@ -150,3 +150,10 @@ button:hover {
     font-weight: bold;
     margin-left: 10px;
 }
+
+#devolucion-form {
+    margin-top: 40px;
+    text-align: center;
+    padding-bottom: 20px;
+    display: block;
+}
