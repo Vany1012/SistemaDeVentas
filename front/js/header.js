@@ -16,11 +16,22 @@ function initHeaderLogic() {
     const menuBtn = document.getElementById('menuBtn');
     const menu = document.getElementById('hamburgerLinks');
     const headerLogoutBtn = document.getElementById('headerLogoutBtn');
+    const path = window.location.pathname;
+    const currentPage = path.split("/").pop();
 
-    const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
-    if (currentPage === "dashboard.html") {
+    if (currentPage === "dashboard.html" || currentPage === "") {
         document.body.classList.add('on-dashboard');
     }
+
+    const menuLinks = document.querySelectorAll('#hamburgerLinks a');
+    menuLinks.forEach(link => {
+        // Obtenemos el nombre del archivo del atributo href o data-page
+        const linkPage = link.getAttribute('href');
+        
+        if (linkPage === currentPage) {
+            link.style.display = 'none'; // Oculta el enlace si coincide
+        }
+    });
 
     if (userData && userNameElement) {
         userNameElement.textContent = `Bienvenido, ${userData.vendedorName}`;

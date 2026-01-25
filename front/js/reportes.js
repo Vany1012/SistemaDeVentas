@@ -2,28 +2,13 @@ console.log('reportes.js cargado');
 
 const API_URL = 'http://localhost:3000/api';
 
-// Verificar autenticación
-function checkAuth() {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('userData');
-    
-    if (!token || !userData) {
-        console.log('❌ No autenticado');
-        return { authenticated: false, user: null };
-    }
-    
-    try {
-        const user = JSON.parse(userData);
-        console.log('✅ Usuario:', user.vendedorName, 'Rol:', user.role);
-        return { authenticated: true, user: user };
-    } catch (error) {
-        console.error('❌ Error parseando userData:', error);
-        return { authenticated: false, user: null };
-    }
-}
 
 // Obtener estadísticas del inventario
 async function obtenerEstadisticasInventario() {
+    // Verificar autenticación
+    const usuario = checkAdminAuth();
+    if (!usuario) return;
+
     try {
         const token = localStorage.getItem('token');
         
@@ -440,16 +425,6 @@ function inicializarPagina() {
     if (!usuario) return;
     
     console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);
-    
-    // Mostrar nombre de usuario
-    const titulo = document.querySelector('h2');
-    if (titulo) {
-        titulo.insertAdjacentHTML('afterend', `
-            <p>Usuario: ${usuario.vendedorName} (${usuario.role})</p>
-        `);
-    }
-    
-    // Configurar botones
     
     
     // Cargar reportes
