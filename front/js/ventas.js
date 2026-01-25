@@ -1,17 +1,25 @@
 const API_URL = 'http://localhost:3000/api';
 const contenedorProductos = document.getElementById("productos-vendidos");
 const btnAgregarProducto = document.getElementById("btn-agregar-producto");
+const inputFecha = document.getElementById('fecha-venta');
+const inputVendedor = document.getElementById('vendedor');
 const token = localStorage.getItem('token');
 const userData = JSON.parse(localStorage.getItem('userData'));
+const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 let inventarioGlobal = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const hoy = new Date().toISOString().split('T')[0];
-  const inputFecha = document.getElementById('fecha-venta');
-  inputFecha.value = hoy;
+  const now = new Date();
+  const offset = now.getTimezoneOffset();
+  const localDate = new Date(now.getTime() - (offset * 60 * 1000));
+  const dia = localDate.getDate().toString().padStart(2, '0');
+  const anio = localDate.getFullYear();
+  const mesNombre = meses[localDate.getMonth()];
 
-  const nombreVendedor = userData.vendedorName;
-  const inputVendedor = document.getElementById('vendedor');
+  const fechaFormateada = `${dia} - ${mesNombre} - ${anio}`;
+  inputFecha.value = fechaFormateada;
+
+  const nombreVendedor = userData ? userData.vendedorName : "Desconocido";
   inputVendedor.value = nombreVendedor;
 
   inventarioGlobal = await obtenerInventario();
@@ -22,12 +30,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function formatearMoneda(valor) {
-    if (valor === "N/A" || valor === undefined || valor === null) return "N/A";
-    const numero = typeof valor === 'string' 
-        ? parseFloat(valor.replace(/[^0-9.-]+/g, "")) 
-        : valor;
-    
-    return `$${numero.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  if (valor === "N/A" || valor === undefined || valor === null) return "N/A";
+  const numero = typeof valor === 'string'
+    ? parseFloat(valor.replace(/[^0-9.-]+/g, ""))
+    : valor;
+
+  return `$${numero.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 function mostrarMensaje(message, type = 'success') {
@@ -45,46 +53,46 @@ function mostrarMensaje(message, type = 'success') {
 }
 
 function generarPDF(datosTicket) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: 'mm', format: [80, 160] }); 
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: [80, 160] });
 
-    doc.setFontSize(14);
-    doc.text("REGISTRO DE VENTA", 40, 10, { align: "center" });
-    doc.setFontSize(8);
-    doc.text(`Ticket: ${datosTicket.ventaId}`, 10, 18);
-    doc.text(`Fecha: ${new Date(datosTicket.fecha).toLocaleString()}`, 10, 23);
-    doc.text(`Vendedor: ${datosTicket.vendedor}`, 10, 28);
-    doc.text("-".repeat(45), 10, 32);
+  doc.setFontSize(14);
+  doc.text("REGISTRO DE VENTA", 40, 10, { align: "center" });
+  doc.setFontSize(8);
+  doc.text(`Ticket: ${datosTicket.ventaId}`, 10, 18);
+  doc.text(`Fecha: ${new Date(datosTicket.fecha).toLocaleString()}`, 10, 23);
+  doc.text(`Vendedor: ${datosTicket.vendedor}`, 10, 28);
+  doc.text("-".repeat(45), 10, 32);
 
-    const filas = datosTicket.productosVendidos.map(p => [
-        p.nombre,
-        p.cantidad,
-        formatearMoneda(p.cantidad * p.precioUnitario)
-    ]);
+  const filas = datosTicket.productosVendidos.map(p => [
+    p.nombre,
+    p.cantidad,
+    formatearMoneda(p.cantidad * p.precioUnitario)
+  ]);
 
-    doc.autoTable({
-        startY: 35,
-        head: [['Producto', 'Cant.', 'Subt.']],
-        body: filas,
-        theme: 'plain',
-        styles: { fontSize: 7, cellPadding: 1 },
-        columnStyles: { 2: { halign: 'right' } },
-        margin: { left: 5, right: 5 }
-    });
+  doc.autoTable({
+    startY: 35,
+    head: [['Producto', 'Cant.', 'Subt.']],
+    body: filas,
+    theme: 'plain',
+    styles: { fontSize: 7, cellPadding: 1 },
+    columnStyles: { 2: { halign: 'right' } },
+    margin: { left: 5, right: 5 }
+  });
 
-    const finalY = doc.lastAutoTable.finalY + 8;
-    doc.setFontSize(10);
-    doc.setFont(undefined, 'bold');
-    doc.text(`TOTAL: ${formatearMoneda(datosTicket.total)}`, 10, finalY);
-    
-    doc.setFontSize(8);
-    doc.setFont(undefined, 'normal');
-    doc.text(`Método de Pago: ${datosTicket.metodoPago.toUpperCase()}`, 10, finalY + 6);
-    doc.text(`Cambio: ${formatearMoneda(datosTicket.cambio)}`, 10, finalY + 10);
-    
-    doc.text("¡Gracias por su preferencia!", 40, finalY + 20, { align: "center" });
+  const finalY = doc.lastAutoTable.finalY + 8;
+  doc.setFontSize(10);
+  doc.setFont(undefined, 'bold');
+  doc.text(`TOTAL: ${formatearMoneda(datosTicket.total)}`, 10, finalY);
 
-    doc.save(`Ticket_${datosTicket.ventaId}.pdf`);
+  doc.setFontSize(8);
+  doc.setFont(undefined, 'normal');
+  doc.text(`Método de Pago: ${datosTicket.metodoPago.toUpperCase()}`, 10, finalY + 6);
+  doc.text(`Cambio: ${formatearMoneda(datosTicket.cambio)}`, 10, finalY + 10);
+
+  doc.text("¡Gracias por su preferencia!", 40, finalY + 20, { align: "center" });
+
+  doc.save(`Ticket_${datosTicket.ventaId}.pdf`);
 }
 
 function configurarMetodoPago() {
@@ -102,7 +110,10 @@ function configurarMetodoPago() {
     }
   });
 
-  inputRecibido.addEventListener('input', actualizarCambio);
+  inputRecibido.addEventListener('input', (e) => {
+    if (e.target.value < 0) e.target.value = 0;
+    actualizarCambio();
+  });
 }
 
 function actualizarCambio() {
@@ -142,7 +153,9 @@ function actualizarTotales() {
   filas.forEach(fila => {
     const inputNombre = fila.querySelector('.input-producto-search');
     const inputCant = fila.querySelector('.input-cantidad');
-    const cantidad = parseInt(inputCant.value) || 0;
+
+    let cantidad = parseInt(inputCant.value) || 0;
+    if (cantidad < 0) cantidad = 0;
 
     const productoEncontrado = inventarioGlobal.find(p => p.nombre === inputNombre.value);
 
@@ -167,7 +180,6 @@ async function obtenerInventario() {
     if (!response.ok) throw new Error('Error al obtener inventario');
     return await response.json();
   } catch (error) {
-    console.error(error);
     mostrarMensaje("No se pudo cargar el inventario. Verifique su conexión.", "error")
     return [];
   }
@@ -188,6 +200,22 @@ btnAgregarProducto.addEventListener('click', () => {
   inputCantidad.min = '1';
   inputCantidad.className = 'input-cantidad';
   inputCantidad.disabled = true;
+
+  inputCantidad.addEventListener('keydown', (e) => {
+    if (['-', '+', 'e', '.'].includes(e.key)) {
+      e.preventDefault();
+    }
+  });
+
+  inputCantidad.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const textoPegado = (e.clipboardData || window.clipboardData).getData('text');
+    // Solo permitir dígitos
+    if (/^\d+$/.test(textoPegado)) {
+      inputCantidad.value = textoPegado;
+      actualizarTotales(); // Asegúrate de llamar a actualizar si pegan datos
+    }
+  });
 
   const displayPrecio = document.createElement('span');
   displayPrecio.className = 'precio-unitario';
@@ -229,13 +257,16 @@ btnAgregarProducto.addEventListener('click', () => {
     const maxStock = parseInt(inputCantidad.max);
     let val = parseInt(inputCantidad.value);
 
+    if (val < 0) {
+      inputCantidad.value = 1;
+      val = 1;
+    }
+
     if (val > maxStock) {
       mostrarMensaje(`Stock insuficiente: Solo hay ${maxStock} unidades.`, "error");
       inputCantidad.value = maxStock;
     }
-    if (val < 1) {
-      // Permitir vacio mientras escribe, pero logica requiere min 1
-    }
+
     actualizarTotales();
   });
 
@@ -249,22 +280,45 @@ btnAgregarProducto.addEventListener('click', () => {
 document.querySelector("#btn-registrar-venta").addEventListener('click', async () => {
   const filas = document.querySelectorAll('.fila-producto');
   const productosVendidos = [];
+  let hayErrores = false;
 
-  filas.forEach(fila => {
+  filas.forEach((fila, index) => {
+    if (hayErrores) return;
+
     const inputNombre = fila.querySelector('.input-producto-search');
     const inputCant = fila.querySelector('.input-cantidad');
+    const nombreIngresado = inputNombre.value.trim();
     const cantidad = parseInt(inputCant.value) || 0;
-    const productoObj = inventarioGlobal.find(p => p.nombre === inputNombre.value);
 
-    if (productoObj && cantidad > 0) {
-      productosVendidos.push({
-        idProducto: productoObj.idProducto,
-        nombre: productoObj.nombre,
-        cantidad: cantidad,
-        precioUnitario: parseFloat(productoObj.precio)
-      });
+    if (!nombreIngresado) return;
+
+    const productoObj = inventarioGlobal.find(p => p.nombre === nombreIngresado);
+
+    if (!productoObj) {
+      mostrarMensaje(`Error en fila ${index + 1}: El producto "${nombreIngresado}" no existe.`, "error");
+      hayErrores = true;
+      inputNombre.style.borderColor = "red";
+      return;
+    } else {
+      inputNombre.style.borderColor = "#cbd5e1";
     }
+
+
+    if (cantidad <= 0) {
+      mostrarMensaje(`Error en fila ${index + 1}: La cantidad debe ser mayor a 0.`, "error");
+      hayErrores = true;
+      return;
+    }
+
+    productosVendidos.push({
+      idProducto: productoObj.idProducto,
+      nombre: productoObj.nombre,
+      cantidad: cantidad,
+      precioUnitario: parseFloat(productoObj.precio)
+    });
   });
+
+  if (hayErrores) return;
 
   if (productosVendidos.length === 0) {
     return mostrarMensaje("Debes agregar al menos un producto válido.", "error");
@@ -296,18 +350,27 @@ document.querySelector("#btn-registrar-venta").addEventListener('click', async (
       },
       body: JSON.stringify(ventaData)
     });
-    const result = await response.json();
 
-    if (response.ok) {
-      mostrarMensaje("Venta registrada con éxito. Generando ticket...");
-      generarPDF(result.TicketDeVenta);
-      console.log(result.TicketDeVenta)
-      setTimeout(() => window.location.reload(), 3000);
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      const result = await response.json();
+
+      if (response.ok) {
+        mostrarMensaje("Venta registrada con éxito. Generando ticket...");
+        generarPDF(result.TicketDeVenta);
+        setTimeout(() => window.location.reload(), 3000);
+      } else {
+        mostrarMensaje(result.message || "Error al procesar la venta.", "error");
+      }
     } else {
-      const errorData = await response.json();
-      mostrarMensaje(errorData.message || "Error al registrar", "error");
+      throw new Error("Respuesta inválida del servidor");
     }
+
   } catch (error) {
-    mostrarMensaje("Error de conexión con el servidor", "error");
+    if (error.message === "Failed to fetch") {
+      mostrarMensaje("Error de conexión: No se pudo contactar al servidor.", "error");
+    } else {
+      mostrarMensaje("Ocurrió un error inesperado al registrar la venta.", "error");
+    }
   }
 });

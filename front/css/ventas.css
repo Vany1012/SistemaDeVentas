@@ -10,10 +10,10 @@
   --sombra: 0 10px 25px rgba(0, 0, 0, 0.4);
   --radius: 12px;
   --radius-m: 12px;
-  --color-topbar: #19232f; /* Agregado */
-  --color-menu: #141b24;   /* Agregado */
-  --color-texto-claro: #e0e1dd; /* Agregado */
-  --transition: 0.3s ease; /* Agregado */ 
+  --color-topbar: #19232f;
+  --color-menu: #141b24;
+  --color-texto-claro: #e0e1dd;
+  --transition: 0.3s ease;
 }
 
 * {
@@ -57,7 +57,6 @@ section {
   gap: 20px;
 }
 
-/* Estilos para la nueva sección de pago */
 .pago-section label {
   font-weight: bold;
   color: var(--color-primario);
@@ -149,7 +148,6 @@ section {
   border: 1px solid #cbd5e1;
   font-size: 0.95rem;
   width: 100%;
-  /* Asegura que ocupen el ancho de la celda */
 }
 
 .precio-unitario {
@@ -162,8 +160,8 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
-  color: white;
+  background: var(--color-card);
+  color: var(--color-primario);
   padding: 20px 30px;
 }
 
@@ -175,7 +173,6 @@ section {
 
 .total-label {
   font-size: 0.8rem;
-  opacity: 0.8;
 }
 
 .total-value {

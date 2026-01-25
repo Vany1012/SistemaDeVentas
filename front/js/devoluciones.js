@@ -29,7 +29,6 @@ async function obtenerVentas() {
         const data = await response.json();
         return data.ventas;
     } catch (error) {
-        console.error("Error al cargar ventas:", error);
         return [];
     }
 }
@@ -39,8 +38,11 @@ function buscarVentaPorId(ventaId) {
 }
 
 function validarContador(input, cantidadMaxima) {
-    let valor = parseInt(input.value) || 0;
-    
+    input.value = input.value.replace(/[^0-9]/g, '');
+    let valor = parseInt(input.value);
+    if (isNaN(valor)) {
+        valor = 0;
+    }
     if (valor < 0) {
         input.value = 0;
     } else if (valor > cantidadMaxima) {
