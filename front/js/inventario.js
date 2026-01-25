@@ -1,4 +1,3 @@
-
 const API_URL = 'http://localhost:3000/api'; 
 const token = localStorage.getItem("token");
 const userData = JSON.parse(localStorage.getItem('userData'));
@@ -43,8 +42,6 @@ const editarProducto = (idProducto) => {
     window.location.href = `editarProducto.html?id=${idProducto}`;
 };
 
-
-
 // Función para activar producto
 const activarProducto = async (id) => {
     // Confirmación opcional
@@ -74,13 +71,6 @@ const activarProducto = async (id) => {
         alert(error.message);
     }
 };
-
-
-
-
-
-
-
 
 // Función para cargar productos
 const loadProducts = async () => {
@@ -123,26 +113,6 @@ const loadProducts = async () => {
       const estadoTexto = product.activo ? 'Activo' : 'Inactivo';
       const estadoColor = product.activo ? 'green' : 'red';
 
-/*
-      //Ocultar/Mostrar botones
-      let accionesAdmin = '';
-      
-      // Se muestran los botones si el usuario es 'admin'
-      if (userData.role === 'admin') {
-        const botonEliminarHTML = product.activo 
-            ? `<button class="btn-eliminar" onclick="eliminarProducto('${product.idProducto}')">Eliminar</button>` 
-            : '';
-          accionesAdmin = `
-            <div id="btn">
-                <a href="editarProducto.html?id=${product.idProducto}" class="btn-editar" style="margin-right: 5px;">Editar</a>
-                ${botonEliminarHTML}
-            </div>
-          `;
-      } else {
-          // Si no es admin
-          accionesAdmin = `<span style="color: gray;">Sin permisos</span>`;
-      }*/
-     // ... dentro del forEach en loadProducts ...
 
       // Lógica de botones modificada
       let accionesAdmin = '';

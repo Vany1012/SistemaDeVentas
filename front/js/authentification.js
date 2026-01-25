@@ -139,7 +139,6 @@ function logout() {
         window.location.href = '../index.html';
     }
 };
-
 // funciones globales
 window.checkAuth = checkAuth;
 window.getAuthToken = getAuthToken;
