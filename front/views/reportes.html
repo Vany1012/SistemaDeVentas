@@ -10,7 +10,7 @@
     <script src="../js/header.js" defer></script>
     <script src="../js/authentification.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Reportes</title>
+    <title>Reportes del Sistema</title>
     <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
 </head>
 
@@ -19,33 +19,51 @@
     <main>
         <section class="container">
             <div id="head">
-                <h2>Reportes del Sistema</h2>
+                <h2> Reportes del Sistema</h2>
+                <p class="subtitle">Vista general de ventas e inventario</p>
             </div>
             <div class="cards-container">
                 <div class="report-card">
                     <div class="card-header">
-                        <span class="card-icon">💰</span>
-                        <h3>Ventas Mes</h3>
+                        <div>
+                            <h3>Ventas del Mes</h3>
+                            <div class="card-subtitle">Total acumulado</div>
+                        </div>
                     </div>
                     <div class="card-number"></div>
                 </div>
 
                 <div class="report-card">
                     <div class="card-header">
-                        <span class="card-icon">📦</span>
-                        <h3>Unidades Vendidas</h3>
+                        <div>
+                            <h3>Ventas del Día</h3>
+                            <div class="card-subtitle">Hoy</div>
+                        </div>
                     </div>
                     <div class="card-number"></div>
                 </div>
 
                 <div class="report-card">
                     <div class="card-header">
-                        <span class="card-icon">📋</span>
-                        <h3>Stock</h3>
+                        <div>
+                            <h3>Stock Inventario</h3>
+                            <div class="card-subtitle">Unidades totales</div>
+                        </div>
+                    </div>
+                    <div class="card-number"></div>
+                </div>
+
+                <div class="report-card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Valor Inventario</h3>
+                            <div class="card-subtitle">Valor total</div>
+                        </div>
                     </div>
                     <div class="card-number"></div>
                 </div>
             </div>
+            
         </section>
     </main>
 </body>
