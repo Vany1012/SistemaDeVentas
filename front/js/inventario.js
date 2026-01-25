@@ -2,7 +2,9 @@
 const API_URL = 'http://localhost:3000/api'; 
 const token = localStorage.getItem("token");
 const userData = JSON.parse(localStorage.getItem('userData'));
+
 const tbody = document.querySelector("tbody");
+
 
 // Función para eliminar producto
 const eliminarProducto = async (id) => {
@@ -40,6 +42,44 @@ const editarProducto = (idProducto) => {
     // Redirigir a la página de edición CON el ID en la URL
     window.location.href = `editarProducto.html?id=${idProducto}`;
 };
+
+
+
+// Función para activar producto
+const activarProducto = async (id) => {
+    // Confirmación opcional
+    const confirmar = confirm(`¿Deseas reactivar el producto con ID: ${id}?`);
+    if (!confirmar) return;
+
+    try {
+        const res = await fetch(`${API_URL}/inventario/activarProducto?idProducto=${id}`, {
+            method: "PATCH", 
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || "Error al activar");
+        }
+
+        alert("Producto activado correctamente");
+        loadProducts(); // Recargar tabla para ver el cambio y que aparezca el botón Editar
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert(error.message);
+    }
+};
+
+
+
+
+
+
 
 
 // Función para cargar productos
@@ -83,7 +123,7 @@ const loadProducts = async () => {
       const estadoTexto = product.activo ? 'Activo' : 'Inactivo';
       const estadoColor = product.activo ? 'green' : 'red';
 
-
+/*
       //Ocultar/Mostrar botones
       let accionesAdmin = '';
       
@@ -100,6 +140,32 @@ const loadProducts = async () => {
           `;
       } else {
           // Si no es admin
+          accionesAdmin = `<span style="color: gray;">Sin permisos</span>`;
+      }*/
+     // ... dentro del forEach en loadProducts ...
+
+      // Lógica de botones modificada
+      let accionesAdmin = '';
+      
+      if (userData.role === 'admin') {
+        if (product.activo) {
+            // Producto ACTIVO
+            accionesAdmin = `
+                <div id="btn">
+                    <a href="editarProducto.html?id=${product.idProducto}" class="btn-editar" style="margin-right: 5px;">Editar</a>
+                    <button class="btn-eliminar" onclick="eliminarProducto('${product.idProducto}')">Eliminar</button>
+                </div>
+            `;
+        } else {
+            //Producto INACTIVO
+            //Estilo para diferenciarlo visualmente
+            accionesAdmin = `
+                <div id="btn">
+                    <button class="btn-activar" onclick="activarProducto('${product.idProducto}')" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;">Activar</button>
+                </div>
+            `;
+        }
+      } else {
           accionesAdmin = `<span style="color: gray;">Sin permisos</span>`;
       }
 
