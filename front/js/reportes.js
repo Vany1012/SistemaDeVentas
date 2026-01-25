@@ -1,5 +1,3 @@
-console.log('reportes.js cargado');
-
 const API_URL = 'http://localhost:3000/api';
 
 
@@ -395,7 +393,6 @@ async function cargarReportes() {
             crearTablaInventario(resultadoInventario.estadisticas);
             
             // Mostrar mensaje de éxito
-            console.log('Reportes cargados exitosamente');
         } else {
             console.error('Error al cargar reportes:', resultadoInventario.error, resultadoVentas.error);
             
@@ -422,10 +419,7 @@ async function cargarReportes() {
 // Inicializar la página
 function inicializarPagina() {
     const usuario = checkAuth();
-    if (!usuario) return;
-    
-    console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);
-    
+    if (!usuario) return;    
     
     // Cargar reportes
     cargarReportes();

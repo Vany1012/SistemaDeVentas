@@ -10,7 +10,107 @@ function inicializarPagina() {
     configurarFormulario();
 }
 
-// Función mejorada para validar email con mensajes específicos
+// Función para validar nombre del usuario (solo letras, espacios y ñ/Ñ)
+function validarNombreUsuario(nombre) {
+    const nombreValue = nombre.trim();
+    
+    // Verificar si está vacío
+    if (!nombreValue) {
+        return {
+            valido: false,
+            mensaje: 'El nombre del usuario es requerido'
+        };
+    }
+    
+    // Verificar longitud mínima
+    if (nombreValue.length < 2) {
+        return {
+            valido: false,
+            mensaje: 'El nombre debe tener al menos 2 caracteres'
+        };
+    }
+    
+    // Verificar longitud máxima (opcional)
+    if (nombreValue.length > 50) {
+        return {
+            valido: false,
+            mensaje: 'El nombre es demasiado largo (máximo 50 caracteres)'
+        };
+    }
+    
+    // Verificación que solo contenga letras (incluyendo acentos y ñ), espacios y apóstrofes
+    const regexNombre = /^[A-Za-zÁáÉéÍíÓóÚúÜüÑñ'\s]+$/;
+    
+    if (!regexNombre.test(nombreValue)) {
+        const tieneNumeros = /\d/.test(nombreValue);
+        const tieneCaracteresEspeciales = /[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]/.test(nombreValue);
+        
+        if (tieneNumeros && tieneCaracteresEspeciales) {
+            return {
+                valido: false,
+                mensaje: 'El nombre no puede contener números ni caracteres especiales'
+            };
+        } else if (tieneNumeros) {
+            return {
+                valido: false,
+                mensaje: 'El nombre no puede contener números'
+            };
+        } else if (tieneCaracteresEspeciales) {
+            return {
+                valido: false,
+                mensaje: 'El nombre no puede contener caracteres especiales'
+            };
+        } else {
+            return {
+                valido: false,
+                mensaje: 'Nombre inválido. Solo se permiten letras, espacios y apóstrofes'
+            };
+        }
+    }
+    
+    // Verificar que no tenga espacios múltiples consecutivos
+    if (/\s{2,}/.test(nombreValue)) {
+        return {
+            valido: false,
+            mensaje: 'El nombre no puede tener espacios múltiples consecutivos'
+        };
+    }
+    
+    // Verificar que no empiece o termine con espacio
+    if (nombreValue.startsWith(' ') || nombreValue.endsWith(' ')) {
+        return {
+            valido: false,
+            mensaje: 'El nombre no puede empezar ni terminar con espacios'
+        };
+    }
+    
+    // Verificar formato del nombre (debe tener al menos un espacio para nombre y apellido)
+    const palabras = nombreValue.split(' ').filter(palabra => palabra.length > 0);
+    if (palabras.length < 2) {
+        return {
+            valido: true, // Permitir nombres de una palabra pero mostrar sugerencia
+            mensaje: '✓ Nombre válido (sugerencia: incluir apellido)'
+        };
+    }
+    
+    // Verificación de cada palabra con al menos 2 caracteres
+    for (let palabra of palabras) {
+        if (palabra.length < 2) {
+            return {
+                valido: false,
+                mensaje: 'Cada palabra del nombre debe tener al menos 2 caracteres'
+            };
+        }
+    }
+    
+    // Si pasa todas las validaciones
+    return {
+        valido: true,
+        mensaje: '✓ Nombre válido'
+    };
+}
+
+// Función mejorada para validar email
 function validarEmailConMensaje(email) {
     const emailValue = email.trim();
     
@@ -356,23 +456,23 @@ function configurarFormulario() {
                 const idGenerado = data.vendedorId || (data.user && data.user.vendedorId) || (data.vendedor && data.vendedor.vendedorId);
                 
                 if(idGenerado){
-                  generalAlert.innerHTML = `
-                    <div style="text-align: left;" >
-                      <h3 style="margin: 0 0 10px 0;">¡Usuario registrado exitosamente!</h3>
-                      <strong>ID Vendedor:</strong> ${idGenerado}<br>
-                      <strong>Nombre:</strong> ${payload.vendedorName}<br>
-                      <strong>Email:</strong> ${payload.email}<br>
-                      <strong>Rol:</strong> ${payload.role}<br>
-                      <strong>Estado:</strong> ${payload.active === 'true' || payload.active === true ? 'Activo' : 'Inactivo'}
-                    </div>`;
-                  generalAlert.style.color = "#155724";            
-                  generalAlert.style.backgroundColor = "#d4edda";  
-                  generalAlert.style.borderColor = "#c3e6cb";      
-                  generalAlert.style.borderWidth = "1px";
-                  generalAlert.style.borderStyle = "solid";
-                  generalAlert.style.padding = "15px";
-                  generalAlert.style.borderRadius = "5px";
-                  generalAlert.style.marginTop = "15px";
+                    generalAlert.innerHTML = `
+                        <div style="text-align: left;" >
+                        <h3 style="margin: 0 0 10px 0;">¡Usuario registrado exitosamente!</h3>
+                        <strong>ID Vendedor:</strong> ${idGenerado}<br>
+                        <strong>Nombre:</strong> ${payload.vendedorName}<br>
+                        <strong>Email:</strong> ${payload.email}<br>
+                        <strong>Rol:</strong> ${payload.role}<br>
+                        <strong>Estado:</strong> ${payload.active === 'true' || payload.active === true ? 'Activo' : 'Inactivo'}
+                        </div>`;
+                    generalAlert.style.color = "#155724";            
+                    generalAlert.style.backgroundColor = "#d4edda";  
+                    generalAlert.style.borderColor = "#c3e6cb";      
+                    generalAlert.style.borderWidth = "1px";
+                    generalAlert.style.borderStyle = "solid";
+                    generalAlert.style.padding = "15px";
+                    generalAlert.style.borderRadius = "5px";
+                    generalAlert.style.marginTop = "15px";
                 }userForm.reset();
                 
                 // Borrar mensaje de éxito después de 8 segundos
