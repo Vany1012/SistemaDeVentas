@@ -16,6 +16,19 @@ exports.registrarDevolucion = async (req, res) => {
                 return res.status(404).json({ message: 'Venta no encontrada' });
             }
 
+            // Devoluciones anteriores de esta venta
+            const devolucionesAnteriores = await Devolucion.find({ ventaId });
+            
+            const productosYaDevueltos = {};
+            for (const devolucion of devolucionesAnteriores) {
+                for (const producto of devolucion.productosDevueltos) {
+                    if (!productosYaDevueltos[producto.idProducto]) {
+                        productosYaDevueltos[producto.idProducto] = 0;
+                    }
+                    productosYaDevueltos[producto.idProducto] += producto.cantidad;
+                }
+            }
+
             let totalReembolsado = 0;
             let totalProductosDevueltos = 0;
             const productosParaDevolucion = [];
@@ -32,8 +45,19 @@ exports.registrarDevolucion = async (req, res) => {
                     return res.status(400).json({ message: `Producto ${idProducto} no fue vendido en esta venta` });
                 }
 
-                if (productoVendido.cantidad < cantidad) {
-                    return res.status(400).json({ message: `Cantidad a devolver excede la vendida para ${productoVendido.nombre}` });
+                const cantidadYaDevuelta = productosYaDevueltos[idProducto] || 0;
+                const cantidadDisponibleParaDevolver = productoVendido.cantidad - cantidadYaDevuelta;
+
+                if (cantidadDisponibleParaDevolver <= 0) {
+                    return res.status(400).json({ 
+                        message: `Ya se ha devuelto la totalidad del producto ${productoVendido.nombre}. No hay más unidades para devolver` 
+                    });
+                }
+
+                if (cantidadDisponibleParaDevolver < cantidad) {
+                    return res.status(400).json({ 
+                        message: `La cantidad a devolver para ${productoVendido.nombre} excede lo disponible. Disponible: ${cantidadDisponibleParaDevolver}, Solicitado: ${cantidad}` 
+                    });
                 }
 
                 productosParaDevolucion.push({
