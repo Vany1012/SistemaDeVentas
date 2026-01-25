@@ -5,38 +5,9 @@ function inicializarPagina() {
     // Verificar que solo admin pueda acceder
     const usuario = checkAdminAuth();
     if (!usuario) return;
-    
-    console.log('Admin autenticado:', usuario.vendedorName);
-    
-    // Configurar el formulario
+        
+    // Formulario
     configurarFormulario();
-    
-    // Mostrar información del admin actual
-    mostrarInfoAdmin(usuario);
-}
-
-// Mostrar información del administrador actual
-function mostrarInfoAdmin(usuario) {
-    const infoAdmin = document.createElement('div');
-    infoAdmin.style.cssText = `
-        background-color: #e8f4fd;
-        border-left: 4px solid #2196F3;
-        padding: 10px 15px;
-        margin-bottom: 20px;
-        border-radius: 5px;
-        font-size: 14px;
-    `;
-    
-    infoAdmin.innerHTML = `
-        <strong>👤 Administrador actual:</strong> ${usuario.vendedorName} (${usuario.vendedorId || 'N/A'})<br>
-        <small>Solo administradores pueden registrar nuevos usuarios</small>
-    `;
-    
-    // Insertar al inicio del contenedor principal
-    const container = document.querySelector('.container');
-    if (container) {
-        container.insertBefore(infoAdmin, container.firstChild);
-    }
 }
 
 // Función mejorada para validar email con mensajes específicos
@@ -236,7 +207,7 @@ function configurarFormulario() {
         return err;
     };
     
-    // Validar formulario completo
+    // Validar formulario
     const validarFormulario = () => {
         let hayErrores = false;
         
@@ -247,7 +218,7 @@ function configurarFormulario() {
             return false;
         }
         
-        // Validar email con la nueva función
+        // Validar email
         const resultadoEmail = validarEmailConMensaje(userEmail.value);
         if (!resultadoEmail.valido) {
             mostrarMensajeEmail(resultadoEmail.mensaje, true);
@@ -358,8 +329,6 @@ function configurarFormulario() {
             active: userActive.value === 'true' || userActive.value === 'si' || userActive.value === '1'
         };
         
-        console.log('Enviando payload:', payload);
-        
         // Mostrar mensaje de procesamiento
         if (generalAlert) {
             generalAlert.textContent = "Procesando registro...";
@@ -381,7 +350,6 @@ function configurarFormulario() {
             });
             
             const data = await response.json();
-            console.log('Respuesta del servidor:', data);
             
             if (response.ok) {
                 // Éxito al crear usuario

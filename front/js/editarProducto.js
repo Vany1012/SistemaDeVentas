@@ -6,18 +6,6 @@ function inicializarPagina() {
     const usuario = checkAdminAuth();
     if (!usuario) return;
     
-    console.log('Usuario autenticado:', usuario.vendedorName, '- Rol:', usuario.role);
-    
-    // Nombre de usuario
-    const titulo = document.querySelector('h2');
-    if (titulo) {
-        titulo.insertAdjacentHTML('afterend', `
-            <p style="text-align: center; color: #666; margin-top: -10px; margin-bottom: 20px;">
-                Usuario: ${usuario.vendedorName} (${usuario.role})
-            </p>
-        `);
-    }
-    
     // Cargar categorías disponibles
     cargarCategorias();
     
@@ -84,9 +72,7 @@ async function cargarProductoDesdeURL() {
     const urlParams = new URLSearchParams(window.location.search);
     const productoId = urlParams.get('id');
     
-    if (productoId) {
-        console.log('Cargando producto desde URL:', productoId);
-        
+    if (productoId) {        
         // Mostrar mensaje de carga
         mostrarMensaje('Cargando producto...', 'info');
         

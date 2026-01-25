@@ -74,13 +74,13 @@ const activarProducto = async (id) => {
 
 // Función para cargar productos
 const loadProducts = async () => {
-  try {
+    try {
     const res = await fetch(`${API_URL}/inventario/verInventario`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}` // Token para el middleware 'protect'
-      }
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` // Token para el middleware 'protect'
+        }   
     });
 
     // Verificamos si la respuesta es correcta
@@ -107,57 +107,57 @@ const loadProducts = async () => {
 
     //Iterar y crear filas
     products.forEach(product => {
-      const tr = document.createElement("tr");
+        const tr = document.createElement("tr");
 
       //vista para el campo booleano
-      const estadoTexto = product.activo ? 'Activo' : 'Inactivo';
-      const estadoColor = product.activo ? 'green' : 'red';
+        const estadoTexto = product.activo ? 'Activo' : 'Inactivo';
+        const estadoColor = product.activo ? 'green' : 'red';
 
 
       // Lógica de botones modificada
-      let accionesAdmin = '';
+        let accionesAdmin = '';
       
-      if (userData.role === 'admin') {
-        if (product.activo) {
-            // Producto ACTIVO
-            accionesAdmin = `
-                <div id="btn">
-                    <a href="editarProducto.html?id=${product.idProducto}" class="btn-editar" style="margin-right: 5px;">Editar</a>
-                    <button class="btn-eliminar" onclick="eliminarProducto('${product.idProducto}')">Eliminar</button>
-                </div>
-            `;
+        if (userData.role === 'admin') {
+            if (product.activo) {
+                // Producto ACTIVO
+                    accionesAdmin = `
+                    <div id="btn">
+                        <a href="editarProducto.html?id=${product.idProducto}" class="btn-editar" style="margin-right: 5px;">Editar</a>
+                        <button class="btn-eliminar" onclick="eliminarProducto('${product.idProducto}')">Eliminar</button>
+                    </div>
+                `;
+            } else {
+                //Producto INACTIVO
+                //Estilo para diferenciarlo visualmente
+                accionesAdmin = `
+                    <div id="btn">
+                        <button class="btn-activar" onclick="activarProducto('${product.idProducto}')" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;">Activar</button>
+                    </div>
+                `;
+            }
         } else {
-            //Producto INACTIVO
-            //Estilo para diferenciarlo visualmente
-            accionesAdmin = `
-                <div id="btn">
-                    <button class="btn-activar" onclick="activarProducto('${product.idProducto}')" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;">Activar</button>
-                </div>
-            `;
+            accionesAdmin = `<span style="color: gray;">Sin permisos</span>`;
         }
-      } else {
-          accionesAdmin = `<span style="color: gray;">Sin permisos</span>`;
-      }
 
-      tr.innerHTML = `
-        <td>${product.idProducto}</td>
-        <td>${product.nombre}</td>
-        <td>$${product.precio}</td>
-        <td>${product.stock}</td>
-        <td>${product.categoria}</td>
-        <td style="color: ${estadoColor}; font-weight: bold;">${estadoTexto}</td>
-        <td>
-          ${accionesAdmin}
-        </td>
-      `;
-      
-      tbody.appendChild(tr);
-    });
+        tr.innerHTML = `
+            <td>${product.idProducto}</td>
+            <td>${product.nombre}</td>
+            <td>$${product.precio}</td>
+            <td>${product.stock}</td>
+            <td>${product.categoria}</td>
+            <td style="color: ${estadoColor}; font-weight: bold;">${estadoTexto}</td>
+            <td>
+            ${accionesAdmin}
+            </td>
+        `;
+        
+        tbody.appendChild(tr);
+});
 
-  } catch (error) {
-    console.error("Error cargando inventario:", error);
-    alert("No se pudo cargar el inventario. Revisa tu conexión o sesión.");
-  }
+        } catch (error) {
+            console.error("Error cargando inventario:", error);
+            alert("No se pudo cargar el inventario. Revisa tu conexión o sesión.");
+        }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
